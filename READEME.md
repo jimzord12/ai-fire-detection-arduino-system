@@ -1,3 +1,13 @@
+# AI Fire Detection System Using Arduino UNO R4 WiFi
+
+This project utilizes the Arduino UNO R4 WiFi microcontroller in conjunction with various DFRobot sensors to create an AI-powered fire detection system. The system leverages the HuskyLens AI Machine Vision Sensor for real-time object recognition and tracking, alongside multiple environmental sensors to monitor smoke, flame, VOCs, CO levels, temperature, and humidity.
+
+## Setup and Configuration
+
+1. **Arduino IDE Installation**: Ensure you have the latest version of the Arduino IDE installed on your computer. You can download it from the [official Arduino website](https://www.arduino.cc/en/software).
+
+2. **Library Installation**: Install the necessary libraries for the sensors used in this project. You can find these libraries in the Arduino Library Manager or download them from the DFRobot GitHub repository.
+
 ## Project Component Inventory
 
 Based on the provided image, the following electronic components and sensors are present:
