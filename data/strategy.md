@@ -329,6 +329,114 @@ Three scenarios with high sensor activation but NO fire hazard.
 - **Visual inspection** of raw CSV in Edge Impulse (plot sensor ranges; detect anomalies)
 - **Re-collect** any scenario with <25 complete samples or obvious sensor malfunction
 
+### 5.4 Automated Data Collection Script 🔧
+
+We provide a simple Bash script to automate repetitive sample captures: `scripts/automated_data_collection.sh`. The script repeatedly reads a fixed-duration stream from the Arduino serial port and writes timestamped CSV files under `data/<label>/` or `data/<label>/<scenario>/`.
+
+**Setup (run once):**
+```bash
+chmod +x scripts/automated_data_collection.sh
+```
+
+**Usage:**
+```bash
+scripts/automated_data_collection.sh <label> <num_samples> <duration_seconds> [scenario]
+```
+
+**Examples:**
+
+1. **Basic collection** (flat structure):
+   ```bash
+   scripts/automated_data_collection.sh fire 30 10
+   ```
+   - Collects 30 samples of 10 seconds each
+   - Saves to: `data/fire/fire_YYYYMMDD_HHMMSS_N.csv`
+
+2. **With scenario** (organized structure):
+   ```bash
+   scripts/automated_data_collection.sh no_fire 30 10 base_room_air
+   ```
+   - Collects 30 samples of 10 seconds each
+   - Saves to: `data/no_fire/base_room_air/no_fire__base_room_air_YYYYMMDD_HHMMSS_N.csv`
+
+3. **Full collection workflow** (example: Scenario A1 from Section 3.1.1):
+   ```bash
+   # Set up ignition source, wait for flame to stabilize
+   scripts/automated_data_collection.sh fire 30 10 close_low_vent
+   ```
+
+**Configuration notes:**
+- **Serial port:** Defaults to `/dev/ttyACM0`. Edit `SERIAL_PORT` variable in script if your Arduino uses a different port.
+- **CSV format:** Header is added automatically: `timestamp,voc,smoke,flame,co,temp,humid` (timestamp in ms, required by Edge Impulse for time-series data)
+- **Data validation:** The script filters out partial/malformed lines, keeping only valid 6-column rows and adding timestamps at 100ms intervals.
+- **Fail-safes:** Files with no data are removed; 2-second pause between samples.
+
+**Tip:** The scenario parameter aligns with the collection protocol outlined in Section 3, making it easy to organize data by experimental conditions.
+
+### 5.5 Uploading to Edge Impulse Cloud 📤
+
+A companion script `scripts/upload_to_edge_impulse.sh` simplifies uploading collected samples to your Edge Impulse project.
+
+**Setup (run once):**
+```bash
+# 1. Make script executable
+chmod +x scripts/upload_to_edge_impulse.sh
+
+# 2. Install Edge Impulse CLI (if not already installed)
+npm install -g edge-impulse-cli
+
+# 3. Log in to your Edge Impulse account
+edge-impulse-login
+```
+
+**Usage:**
+```bash
+scripts/upload_to_edge_impulse.sh <label> [scenario] [category]
+```
+
+**Parameters:**
+- `label` - Class name (required): `fire`, `no_fire`, or `false_alarm`
+- `scenario` - Scenario subdirectory (optional): e.g., `base_room_air`, `close_low_vent`
+- `category` - Dataset split (optional): `training` (default) or `testing`
+
+**Examples:**
+
+1. **Upload all files from a label** (flat structure):
+   ```bash
+   scripts/upload_to_edge_impulse.sh fire
+   ```
+   - Uploads all CSV files from `data/fire/` to training set
+
+2. **Upload specific scenario** (organized structure):
+   ```bash
+   scripts/upload_to_edge_impulse.sh no_fire base_room_air
+   ```
+   - Uploads files from `data/no_fire/base_room_air/` to training set
+
+3. **Upload to testing dataset:**
+   ```bash
+   scripts/upload_to_edge_impulse.sh false_alarm cooking testing
+   ```
+   - Uploads files from `data/false_alarm/cooking/` to testing set
+
+4. **Complete workflow example:**
+   ```bash
+   # Collect data
+   scripts/automated_data_collection.sh fire 30 10 close_low_vent
+
+   # Review files (optional)
+   ls -lh data/fire/close_low_vent/
+
+   # Upload to Edge Impulse
+   scripts/upload_to_edge_impulse.sh fire close_low_vent
+   ```
+
+**Script features:**
+- Validates directory existence and file count before upload
+- Prompts for confirmation to prevent accidental uploads
+- Automatically applies correct label for classification
+- Provides direct link to Edge Impulse Studio after successful upload
+
 ---
 
 ## 6. Storage & Organization

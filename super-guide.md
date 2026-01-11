@@ -38,9 +38,16 @@ You will need the following components for this project:[1]
 Before starting, you must install the following software on your computer:
 
 - **Arduino IDE 2.x** or later (download from arduino.cc/en/software)
-- **Node.js** version 14 or higher (required for Edge Impulse CLI)
+- **Node.js** version 20 or higher (required for Edge Impulse CLI)
 - **Edge Impulse CLI tools** (installed via npm after Node.js)
 - A modern web browser (Chrome, Firefox, or Edge)
+
+### 1.3 Operation System Requirements
+
+The following operating systems are supported:
+- Windows 10 or later ONLY via Windows Subsystem for Linux 2 (WSL2)
+- macOS 10.15 (Catalina) or later
+- Linux distributions (Ubuntu 20.04 or later recommended)
 
 ### 1.3 Knowledge Prerequisites
 
@@ -426,7 +433,7 @@ You'll see several questions:
 
 **Prompt 5**: "6 sensor axes detected. What do you want to call them?"
 
-- This is **critical**. Type exactly: `smoke, flame, temp, hum, voc, co`
+- This is **critical**. Type exactly: `smoke, voc, co, flame, temp, humid`
 - Press Enter
 
 **Prompt 6**: "What name do you want to give this device?"
@@ -445,124 +452,9 @@ Waiting for data...
 
 Now data is streaming to Edge Impulse! Leave this terminal window open.
 
-### 6.3 Collecting "Idle" Class Data
+### 6.3 Data Collection Strategy
 
-This represents normal, safe conditions with no fire:[8]
-
-1. Place your Arduino and sensors on a desk in a quiet room
-2. Ensure no smoke, flames, or strong odors nearby
-3. In your web browser, go to Edge Impulse Studio
-4. Click on **Data acquisition** tab (left sidebar)
-5. You should see your device `Arduino_R4_Fire` listed under "Devices"
-6. Set these parameters:
-   - **Label**: Type `Idle`
-   - **Sample length**: `60000` ms (60 seconds)
-   - **Sensor**: Should show "6 axes" (your sensors)
-   - **Category**: Leave as "Training"
-7. Click **Start sampling**
-8. Wait 60 seconds while data is collected
-9. The sample will appear in the "Collected data" section below
-10. Repeat this **5 times** to get 5 minutes of Idle data
-
-**Tips**:
-
-- Keep sensors stationary
-- Avoid touching them during collection
-- Room should have normal temperature (20-25°C) and humidity (30-60%)
-
-### 6.4 Collecting "Fire" Class Data
-
-This represents actual fire conditions. **SAFETY FIRST!**[9][8]
-
-#### Safety Precautions
-
-- Perform outdoors or in a well-ventilated area
-- Have a fire extinguisher or water bucket nearby
-- Never leave fire unattended
-- Keep flammable materials away
-- Have an adult present if you're under 18
-
-#### Collection Procedure
-
-**Setup**:
-
-1. Place Arduino on a stable, fire-resistant surface (concrete, metal table)
-2. Position sensors 20-30 cm away from where you'll place the fire
-3. Prepare a small, controlled fire source:
-   - Option A: Candle in a metal container
-   - Option B: Small piece of paper in an aluminum pan
-   - Option C: Incense stick (for smoke)
-
-**Collection**:
-
-1. In Edge Impulse Studio, **Data acquisition** tab
-2. Set parameters:
-   - **Label**: `Fire`
-   - **Sample length**: `60000` ms (60 seconds)
-   - **Sensor**: 6 axes
-   - **Category**: Training
-3. **Start the fire source first** (light candle/paper)
-4. **Then immediately click** "Start sampling"
-5. Let it record for 60 seconds
-6. After recording, **extinguish the fire safely**
-7. Wait 2-3 minutes for sensors to return to baseline
-8. Repeat **5 times** with variations:
-   - Different fire sizes (small candle vs. larger flame)
-   - Different positions (left, right, above sensors)
-   - Different materials (paper, wood, wax)
-
-**What You're Capturing**:
-
-- **Flame sensor**: Detects infrared radiation from flame
-- **Smoke sensor**: Detects particles in air
-- **CO sensor**: Detects carbon monoxide from combustion
-- **VOC sensor**: Detects organic gases from burning materials
-- **Temperature**: Rises from heat
-- **Humidity**: Often drops when temperature rises
-
-### 6.5 Collecting "Noise" Class Data
-
-This represents scenarios that might trigger false alarms:[11][12]
-
-1. **Steam**: Boil water in a kettle near sensors (60 seconds)
-2. **Cooking**: Fry food on a pan (smoke without fire) (60 seconds)
-3. **Aerosols**: Spray air freshener or deodorant near sensors (60 seconds)
-4. **Bright Light**: Shine a flashlight or lighter (no flame) at flame sensor (60 seconds)
-5. **Hair Dryer**: Blow hot air at sensors (60 seconds)
-
-For each scenario:
-
-1. In Data acquisition tab
-2. Label: `Noise`
-3. Sample length: 60000 ms
-4. Category: Training
-5. Start sampling
-6. Perform the activity
-7. Wait for completion
-
-**Goal**: The model learns these patterns are **not fire**, reducing false positives.
-
-### 6.6 Data Collection Summary
-
-After completing all collections, you should have:
-
-- **Idle**: 5 samples × 60 seconds = 5 minutes
-- **Fire**: 5 samples × 60 seconds = 5 minutes
-- **Noise**: 5 samples × 60 seconds = 5 minutes
-- **Total**: 15 minutes of labeled time-series data
-
-### 6.7 Splitting Data into Train/Test Sets
-
-Edge Impulse needs separate training and testing data:[13][14][15]
-
-1. Go to **Data acquisition** tab
-2. Scroll down to see all your samples
-3. Find 1-2 samples from **each class** (Idle, Fire, Noise)
-4. Click the **three dots (- - - )** on the right side of each sample
-5. Select **Move to test set**
-6. Verify: You should now have ~80% in "Training data" and ~20% in "Test data"
-
-**Why?** The model trains on training data, but we validate performance on test data it has never seen before. This prevents overfitting.[14][16]
+See here: [data/strategy.md](data/strategy.md)
 
 ---
 
