@@ -1,0 +1,56 @@
+➜  npm install -g edge-impulse-cli
+npm warn deprecated npmlog@4.1.2: This package is no longer supported.
+npm warn deprecated har-validator@5.1.5: this library is no longer supported
+npm warn deprecated are-we-there-yet@1.1.7: This package is no longer supported.
+npm warn deprecated uuid@3.4.0: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+npm warn deprecated gauge@2.7.4: This package is no longer supported.
+npm warn deprecated request@2.88.2: request has been deprecated, see https://github.com/request/request/issues/3142
+npm warn deprecated @zeit/dockerignore@0.0.5: "@zeit/dockerignore" is no longer maintained
+npm warn cleanup Failed to remove some directories [
+npm warn cleanup   [
+npm warn cleanup     'C:\\Users\\jimzord12\\AppData\\Roaming\\fnm\\node-versions\\v20.19.4\\installation\\node_modules\\edge-impulse-cli',
+npm warn cleanup     [Error: EPERM: operation not permitted, rmdir 'C:\Users\jimzord12\AppData\Roaming\fnm\node-versions\v20.19.4\installation\node_modules\edge-impulse-cli\node_modules\@aws-sdk\middleware-sdk-s3\node_modules'] {
+npm warn cleanup       errno: -4048,
+npm warn cleanup       code: 'EPERM',
+npm warn cleanup       syscall: 'rmdir',
+npm warn cleanup       path: 'C:\\Users\\jimzord12\\AppData\\Roaming\\fnm\\node-versions\\v20.19.4\\installation\\node_modules\\edge-impulse-cli\\node_modules\\@aws-sdk\\middleware-sdk-s3\\node_modules'
+npm warn cleanup     }
+npm warn cleanup   ]
+npm warn cleanup ]
+npm error code 1
+npm error path C:\Users\jimzord12\AppData\Roaming\fnm\node-versions\v20.19.4\installation\node_modules\edge-impulse-cli\node_modules\@serialport\bindings
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c prebuild-install --tag-prefix @serialport/bindings@ || node-gyp rebuild
+npm error gyp info it worked if it ends with ok
+npm error gyp info using node-gyp@11.2.0
+npm error gyp info using node@20.19.4 | win32 | x64
+npm error gyp info find Python using Python version 3.13.9 found at "C:\Users\jimzord12\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\python.exe"
+npm error gyp ERR! find VS
+npm error gyp ERR! find VS msvs_version not set from command line or npm config
+npm error gyp ERR! find VS VCINSTALLDIR not set, not running in VS Command Prompt
+npm error gyp ERR! find VS could not use PowerShell to find Visual Studio 2017 or newer, try re-running with '--loglevel silly' for more details.
+npm error gyp ERR! find VS
+npm error gyp ERR! find VS Failure details: undefined
+npm error gyp ERR! find VS checking VS2022 (17.14.36518.9) found at:
+npm error gyp ERR! find VS "C:\Program Files\Microsoft Visual Studio\2022\Community"
+npm error gyp ERR! find VS - found "Visual Studio C++ core features"
+npm error gyp ERR! find VS - found VC++ toolset: v143
+npm error gyp ERR! find VS - missing any Windows SDK
+npm error gyp ERR! find VS could not find a version of Visual Studio 2017 or newer to use
+npm error gyp ERR! find VS could not use PowerShell to find Visual Studio 2017 or newer, try re-running with '--loglevel silly' for more details.
+npm error gyp ERR! find VS
+npm error gyp ERR! find VS Failure details: undefined
+npm error gyp ERR! find VS unsupported version "17.14.36518.9" found at "C:\Program Files\Microsoft Visual Studio\2022\Community"
+npm error gyp ERR! find VS could not find a version of Visual Studio 2017 or newer to use
+npm error gyp ERR! find VS not looking for VS2015 as it is only supported up to Node.js 18
+npm error gyp ERR! find VS not looking for VS2013 as it is only supported up to Node.js 8
+npm error gyp ERR! find VS
+npm error gyp ERR! find VS **************************************************************
+npm error gyp ERR! find VS You need to install the latest version of Visual Studio
+npm error gyp ERR! find VS including the "Desktop development with C++" workload.
+npm error gyp ERR! find VS For more information consult the documentation at:
+npm error gyp ERR! find VS https://github.com/nodejs/node-gyp#on-windows
+npm error gyp ERR! find VS **************************************************************
+npm error gyp ERR! find VS
+npm error gyp ERR! configure error
+npm error gyp ERR! stack Error: Could not find any Visual Studio installation to use

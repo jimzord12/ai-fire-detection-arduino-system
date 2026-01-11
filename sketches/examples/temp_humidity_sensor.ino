@@ -1,177 +1,73 @@
-#include <Arduino.h>
+/*!
+ * @file readAHT20.ino
+ * @brief AHT20 is used to read the temperature and humidity of the current environment.
+ *
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT License (MIT)
+ * @author Arya
+ * @version  V1.0
+ * @date  2022-02-08
+ * @url https://github.com/DFRobot/DFRobot_AHT20
+ */
+
+
 #include "DFRobot_AHT20.h"
 
-// ================================
-// Types first (so functions compile)
-// ================================
-enum SensorType {
-  SENSOR_ANALOG,
-  SENSOR_I2C_TEMP
-};
 
-struct Sensor {
-  const char* name;
-  SensorType type;   // How to read the sensor
-  int pin1;          // Analog pin OR SCL
-  int pin2;          // -1 OR SDA
-  float threshold1;
-  float threshold2;
-};
+DFRobot_AHT20 sensor;
 
-// ================================
-// Globals
-// ================================
-DFRobot_AHT20 tempHumidSensor;
 
-// Name,   Type,           Pin1, Pin2, Threshold
-const Sensor sensors[] = {
-  {"VOC",   SENSOR_ANALOG,   A5,  -1,   300, -1},
-  {"Smoke", SENSOR_ANALOG,   A4,  -1,   900, -1},
-  {"Flame", SENSOR_ANALOG,   A3,  -1,   512, -1},
-  {"CO",    SENSOR_ANALOG,   A2,  -1,   250, -1},
-  {"AHT20", SENSOR_I2C_TEMP, SCL, SDA,  50.0, 20.0}, // Threshold is Deg C (example)
-};
+void setup(){
+  Serial.begin(115200);
 
-template <size_t N>
-constexpr uint8_t getLength(const Sensor (&)[N]) {
-  return (uint8_t)N;
+
+  while(!Serial){
+    //Wait for USB serial port to connect. Needed for native USB port only
+  }
+
+  /**
+   * @fn begin
+   * @brief Initialize AHT20 sensor
+   * @return Init status value
+   * @n      0    Init succeeded
+   * @n      1    _pWire is NULL, please check if the constructor DFRobot_AHT20 has correctly uploaded a TwoWire class object reference
+   * @n      2    Device not found, please check if the connection is correct
+   * @n      3    If the sensor init fails, please check if there is any problem with the sensor, you can call the reset function and re-initialize after restoring the sensor
+   */
+  uint8_t status;
+  while((status = sensor.begin()) != 0){
+    Serial.print("AHT20 sensor initialization failed. error status : ");
+    Serial.println(status);
+    delay(1000);
+  }
+
+
 }
 
-// ================================
-// Helper functions
-// ================================
-void powerLed(bool state) {
-  digitalWrite(LED_BUILTIN, state ? HIGH : LOW);
-}
 
-using TimeoutCallback = void (*)();
-
-struct TimeoutTimer {
-  uint32_t startMs = 0;
-  uint32_t timeoutMs = 0;
-  TimeoutCallback cb = nullptr;
-  bool armed = false;
-  bool fired = false;
-
-  void start(uint32_t durationMs, TimeoutCallback callback) {
-    startMs = millis();
-    timeoutMs = durationMs;
-    cb = callback;
-    armed = true;
-    fired = false;
+void loop(){
+  /**
+   * @fn startMeasurementReady
+   * @brief Start measurement and determine if it's completed.
+   * @param crcEn Whether to enable check during measurement
+   * @n     false  Measure without check (by default)
+   * @n     true   Measure with check
+   * @return Whether the measurement is done
+   * @n     true  If the measurement is completed, call a related function such as get* to obtain the measured data.
+   * @n     false If the measurement failed, the obtained data is the data of last measurement or the initial value 0 if the related function such as get* is called at this time.
+   */
+  if (sensor.startMeasurementReady(/* crcEn = */true)) {
+    Serial.print("temperature(-40~85 C): ");
+    // Get temp in Celsius (℃), range -40-80℃
+    Serial.print(sensor.getTemperature_C());
+    Serial.print(" C, ");
+    // Get temp in Fahrenheit (F)
+    Serial.print(sensor.getTemperature_F());
+    Serial.print(" F\t");
+    Serial.print("humidity(0~100): ");
+    // Get relative humidity (%RH), range 0-100℃
+    Serial.print(sensor.getHumidity_RH());
+    Serial.println(" %RH");
+    delay(1000);
   }
-
-  void cancel() {
-    armed = false;
-  }
-
-  void update() {
-    if (!armed || fired || cb == nullptr) return;
-
-    // rollover-safe elapsed check (millis() subtraction pattern)
-    if ((uint32_t)(millis() - startMs) >= timeoutMs) {  // [web:8]
-      fired = true;
-      armed = false;     // one-shot
-      cb();              // call the user function
-    }
-  }
-};
-
-
-
-int isAht20Ready = -1;
-
-void setupAHT20() {
-
-  isAht20Ready = tempHumidSensor.begin();
-
-  if (isAht20Ready != 0) {
-    Serial.print("AHT20 sensor initialization failed. error status: ");
-    Serial.println(isAht20Ready);
-  }
-}
-
-void csvLogger(const Sensor& s, int sensorValue1, int sensorValue2) {
-  unsigned long t = millis();
-  Serial.print(t);
-  Serial.print(',');
-  Serial.print(s.name);
-  Serial.print(',');
-
-  if (sensorValue2 != -1) {
-    // I2C Sensor (Temp & Humidity)
-    Serial.print("temp");
-    Serial.print(',');
-    Serial.print("humidity");
-    Serial.print(',');
-  }
-
-  Serial.print(sensorValue1);
-
-  if (sensorValue2 != -1) {
-    Serial.print(',');
-    Serial.print(sensorValue2);
-  }
-
-  Serial.println(); // end the CSV line
-}
-
-TimeoutTimer t;
-
-void onTimeout() {
-  powerLed(false);
-}
-
-// ================================
-// Arduino entry points
-// ================================
-void setup() {
-  Serial.begin(9600);
-  pinMode(LED_BUILTIN, OUTPUT);
-}
-
-void loop() {
-  t.update(); // <-- otherwise timer does not work
-
-  bool areWeOnFire = false;
-  if (isAht20Ready != 0) {
-    setupAHT20(); // IMPORTANT: initialize AHT20
-  }
-
-  const uint8_t SENSOR_COUNT = getLength(sensors);
-
-  for (uint8_t i = 0; i < SENSOR_COUNT; i++) {
-    const Sensor& s = sensors[i];
-
-    if (s.type == SENSOR_ANALOG && s.pin2 == -1) {
-      int sensorValue = analogRead(s.pin1);
-      csvLogger(s, sensorValue, -1);
-
-      if (sensorValue > s.threshold1) {
-        areWeOnFire = true;
-      }
-    }
-
-    if (s.type == SENSOR_I2C_TEMP && isAht20Ready == 0 && s.pin2 != -1) {
-      int temp = (int)tempHumidSensor.getTemperature_C();
-      int humidity = (int)tempHumidSensor.getHumidity_RH();
-      csvLogger(s, temp, humidity);
-
-      if (temp > s.threshold1 || humidity > s.threshold2) {
-        areWeOnFire = true;
-      }
-    }
-
-  }
-
-  if (areWeOnFire == true) {
-    if (t.armed == true) {
-      t.cancel();
-    }
-
-    powerLed(true);
-    t.start(2000, onTimeout);  // fire once after 2 seconds
-  }
-
-  delay(1000);
 }

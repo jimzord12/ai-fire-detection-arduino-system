@@ -20,14 +20,13 @@ Based on the provided image, the following electronic components and sensors are
 
 ### Sensors (DFRobot)
 
-| Model/ID    | Component Name                              | Description                                                                                  |
-| :---------- | :------------------------------------------ | :------------------------------------------------------------------------------------------- |
-| **SEN0305** | HuskyLens AI Machine Vision Sensor          | AI camera capable of face recognition, object tracking, and line following [web:11, web:17]. |
-| **SEN0570** | Fermion: MEMS Smoke Sensor                  | Module designed for smoke detection in fire alarm systems [web:2].                           |
-| **DFR0076** | Flame Sensor                                | IR sensor used to detect fire sources or light in the 760nm-1100nm range [web:7].            |
-| **SEN0566** | Fermion: MEMS VOC Sensor                    | Gas sensor for detecting Volatile Organic Compounds (VOCs) in the air [web:8].               |
-| **SEN0564** | Fermion: MEMS CO Sensor                     | Sensor specifically designed for detecting Carbon Monoxide levels [web:9].                   |
-| **SEN0527** | Fermion: MEMS Temperature & Humidity Sensor | Environmental sensor for precise ambient temperature and humidity readings [web:10].         |
+| Model/ID    | Component Name                              | Description                                                                          |
+| :---------- | :------------------------------------------ | :----------------------------------------------------------------------------------- |
+| **SEN0570** | Fermion: MEMS Smoke Sensor                  | Module designed for smoke detection in fire alarm systems [web:2].                   |
+| **DFR0076** | Flame Sensor                                | IR sensor used to detect fire sources or light in the 760nm-1100nm range [web:7].    |
+| **SEN0566** | Fermion: MEMS VOC Sensor                    | Gas sensor for detecting Volatile Organic Compounds (VOCs) in the air [web:8].       |
+| **SEN0564** | Fermion: MEMS CO Sensor                     | Sensor specifically designed for detecting Carbon Monoxide levels [web:9].           |
+| **SEN0527** | Fermion: MEMS Temperature & Humidity Sensor | Environmental sensor for precise ambient temperature and humidity readings [web:10]. |
 
 ### Prototyping Accessories
 
