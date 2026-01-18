@@ -19,12 +19,41 @@ if [ -z "$LABEL" ] || [ -z "$NUM_SAMPLES" ] || [ -z "$DURATION" ]; then
     exit 1
 fi
 
+# Verify Serial Port
+if [ ! -e "$SERIAL_PORT" ]; then
+    echo "❌ Error: Serial port '$SERIAL_PORT' not found."
+    echo "   -> Please check if the Arduino is connected via USB."
+    echo "   -> If it's on a different port, update the SERIAL_PORT variable in this script."
+    exit 1
+fi
+
+if [ ! -r "$SERIAL_PORT" ]; then
+    echo "❌ Error: No permission to read '$SERIAL_PORT'."
+    echo "   -> Try running: sudo chmod a+rw $SERIAL_PORT"
+    echo "   -> Or add your user to the dialout group: sudo usermod -a -G dialout $USER (requires logout)"
+    exit 1
+fi
+
+# Check if port is accessible (not busy)
+if ! stty -F "$SERIAL_PORT" &>/dev/null; then
+    echo "⚠️  Warning: Unable to access '$SERIAL_PORT'. It might be busy (e.g., Serial Monitor open)."
+    read -p "   Continue anyway? (y/n) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "Aborted."
+        exit 1
+    fi
+fi
+
+# Set Baud Rate and raw mode
+stty -F "$SERIAL_PORT" 115200 raw -echo
+
 # Create data directory relative to script location
 if [ -n "$SCENARIO" ]; then
-    DATA_DIR="${SCRIPT_DIR}/../data/${LABEL}/${SCENARIO}"
+    DATA_DIR="${SCRIPT_DIR}/../../data/${LABEL}/${SCENARIO}"
     FILE_PREFIX="${LABEL}__${SCENARIO}"
 else
-    DATA_DIR="${SCRIPT_DIR}/../data/${LABEL}"
+    DATA_DIR="${SCRIPT_DIR}/../../data/${LABEL}"
     FILE_PREFIX="${LABEL}"
 fi
 mkdir -p "$DATA_DIR"
@@ -50,10 +79,10 @@ for i in $(seq 1 $NUM_SAMPLES); do
     timeout ${DURATION}s cat $SERIAL_PORT > "$TEMP_FILE"
 
     # Add CSV header with timestamp (Edge Impulse requires timestamp for time-series)
-    echo "timestamp,voc,smoke,flame,co,temp,humid" > "$FILENAME"
+    echo "timestamp,smoke,flame,co,voc,temp,humid" > "$FILENAME"
 
-    # Skip first line (likely partial), keep only valid 6-column rows, and add timestamp (100ms intervals)
-    tail -n +2 "$TEMP_FILE" | awk -F',' 'NF==6 {printf "%d,%s\n", (NR-1)*100, $0}' >> "$FILENAME"
+    # Skip first line (likely partial), keep only valid 7-column rows (timestamp + 6 sensors)
+    tail -n +2 "$TEMP_FILE" | awk -F',' 'NF==7 {printf "%s\n", $0}' >> "$FILENAME"
 
     rm "$TEMP_FILE"
 
@@ -77,10 +106,8 @@ echo "Location: $DATA_DIR"
 echo ""
 if [ -n "$SCENARIO" ]; then
     echo "Upload to Edge Impulse with:"
-    echo "  cd $SCRIPT_DIR"
-    echo "  edge-impulse-uploader --category training --label $LABEL data/$LABEL/$SCENARIO/*.csv"
+    echo "  ${SCRIPT_DIR}/../upload_to_edge_impulse/upload_to_edge_impulse.sh $LABEL $SCENARIO"
 else
     echo "Upload to Edge Impulse with:"
-    echo "  cd $SCRIPT_DIR"
-    echo "  edge-impulse-uploader --category training --label $LABEL data/$LABEL/*.csv"
+    echo "  ${SCRIPT_DIR}/../upload_to_edge_impulse/upload_to_edge_impulse.sh $LABEL"
 fi

@@ -34,9 +34,9 @@ fi
 
 # Determine data directory
 if [ -n "$SCENARIO" ]; then
-    DATA_DIR="${SCRIPT_DIR}/../data/${LABEL}/${SCENARIO}"
+    DATA_DIR="${SCRIPT_DIR}/../../data/${LABEL}/${SCENARIO}"
 else
-    DATA_DIR="${SCRIPT_DIR}/../data/${LABEL}"
+    DATA_DIR="${SCRIPT_DIR}/../../data/${LABEL}"
 fi
 
 # Check if directory exists
@@ -101,5 +101,4 @@ elif [ -n "$SUCCESS_LINE" ]; then
 else
     echo "⚠️  Upload status unclear. Check the output above."
     exit 1
-fi
 fi
