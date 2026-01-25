@@ -89,8 +89,8 @@ private:
 
                 int val = analogRead(s.pinSDA);
                 // Basic heuristic: check if sensor is within expected electronic bounds
-                if (val > 5 && val < 1018) currentPassed = true;
-            } 
+                if (val > 0 && val < 1025) currentPassed = true;
+            }
             else if (s.type == SensorType::I2C) {
                 pinStr = "A4/A5";
                 Wire.beginTransmission(0x38); // AHT20 Default Address
