@@ -4,7 +4,7 @@ This guide provides step-by-step instructions for collecting training data for t
 
 **Prerequisites:**
 1.  **Arduino UNO R4** connected via USB (`/dev/ttyACM0`).
-2.  **Flash** the `sketches/fireDetectionSystemV2.ino` sketch.
+2.  **Flash** the `firmware/fireDetectionSystemV2.ino` sketch.
 3.  **Terminal** open at the project root: `/home/jimzord12/projects/ai-fire-detection-arduino-system`.
 4.  **Close** any other Serial Monitors (Arduino IDE, etc.).
 5. **Ensure** that the sensor are warmed up for at least 30 minutes before starting data collection.
@@ -24,7 +24,7 @@ This guide provides step-by-step instructions for collecting training data for t
 *   **Execution:**
     Run this command in your terminal:
     ```bash
-    scripts/automated_data_collection/automated_data_collection.sh fire 30 10 close_low_vent
+    tools/collection/automated_data_collection.sh fire 30 10 close_low_vent
     ```
 *   **Verification:**
     *   Check folder: `data/fire/close_low_vent/`
@@ -39,7 +39,7 @@ This guide provides step-by-step instructions for collecting training data for t
 *   **Execution:**
     Run this command:
     ```bash
-    scripts/automated_data_collection/automated_data_collection.sh fire 30 10 medium_normal_vent
+    tools/collection/automated_data_collection.sh fire 30 10 medium_normal_vent
     ```
 *   **Verification:**
     *   Check folder: `data/fire/medium_normal_vent/`
@@ -52,7 +52,7 @@ This guide provides step-by-step instructions for collecting training data for t
 *   **Execution:**
     Run this command:
     ```bash
-    scripts/automated_data_collection/automated_data_collection.sh fire 30 10 smoldering
+    tools/collection/automated_data_collection.sh fire 30 10 smoldering
     ```
 
 ---
@@ -68,7 +68,7 @@ This guide provides step-by-step instructions for collecting training data for t
 *   **Execution:**
     Run this command:
     ```bash
-    scripts/automated_data_collection/automated_data_collection.sh no_fire 30 10 base_room_air
+    tools/collection/automated_data_collection.sh no_fire 30 10 base_room_air
     ```
 *   **Verification:**
     *   Check folder: `data/no_fire/base_room_air/`
@@ -81,7 +81,7 @@ This guide provides step-by-step instructions for collecting training data for t
 *   **Execution:**
     Run this command:
     ```bash
-    scripts/automated_data_collection/automated_data_collection.sh no_fire 30 10 hvac_transient
+    tools/collection/automated_data_collection.sh no_fire 30 10 hvac_transient
     ```
 *   **Verification:**
     *   Check folder: `data/no_fire/hvac_transient/`
@@ -100,7 +100,7 @@ This guide provides step-by-step instructions for collecting training data for t
 *   **Execution:**
     Run this command:
     ```bash
-    scripts/automated_data_collection/automated_data_collection.sh false_alarm 30 10 cooking
+    tools/collection/automated_data_collection.sh false_alarm 30 10 cooking
     ```
 *   **Verification:**
     *   Check folder: `data/false_alarm/cooking/`
@@ -113,7 +113,7 @@ This guide provides step-by-step instructions for collecting training data for t
 *   **Execution:**
     Run this command:
     ```bash
-    scripts/automated_data_collection/automated_data_collection.sh false_alarm 30 10 steam
+    tools/collection/automated_data_collection.sh false_alarm 30 10 steam
     ```
 *   **Verification:**
     *   Check folder: `data/false_alarm/steam/`
@@ -126,7 +126,7 @@ This guide provides step-by-step instructions for collecting training data for t
 *   **Execution:**
     Run this command:
     ```bash
-    scripts/automated_data_collection/automated_data_collection.sh false_alarm 30 10 spray
+    tools/collection/automated_data_collection.sh false_alarm 30 10 spray
     ```
 *   **Verification:**
     *   Check folder: `data/false_alarm/spray/`

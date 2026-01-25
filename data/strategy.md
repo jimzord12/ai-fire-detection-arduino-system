@@ -331,30 +331,30 @@ Three scenarios with high sensor activation but NO fire hazard.
 
 ### 5.4 Automated Data Collection Script 🔧
 
-We provide a simple Bash script to automate repetitive sample captures: `scripts/automated_data_collection.sh`. The script repeatedly reads a fixed-duration stream from the Arduino serial port and writes timestamped CSV files under `data/<label>/` or `data/<label>/<scenario>/`.
+We provide a simple Bash script to automate repetitive sample captures: `tools/collection/automated_data_collection.sh`. The script repeatedly reads a fixed-duration stream from the Arduino serial port and writes timestamped CSV files under `data/<label>/` or `data/<label>/<scenario>/`.
 
 **Setup (run once):**
 ```bash
-chmod +x scripts/automated_data_collection.sh
+chmod +x tools/collection/automated_data_collection.sh
 ```
 
 **Usage:**
 ```bash
-scripts/automated_data_collection.sh <label> <num_samples> <duration_seconds> [scenario]
+tools/collection/automated_data_collection.sh <label> <num_samples> <duration_seconds> [scenario]
 ```
 
 **Examples:**
 
 1. **Basic collection** (flat structure):
    ```bash
-   scripts/automated_data_collection.sh fire 30 10
+   tools/collection/automated_data_collection.sh fire 30 10
    ```
    - Collects 30 samples of 10 seconds each
    - Saves to: `data/fire/fire_YYYYMMDD_HHMMSS_N.csv`
 
 2. **With scenario** (organized structure):
    ```bash
-   scripts/automated_data_collection.sh no_fire 30 10 base_room_air
+   tools/collection/automated_data_collection.sh no_fire 30 10 base_room_air
    ```
    - Collects 30 samples of 10 seconds each
    - Saves to: `data/no_fire/base_room_air/no_fire__base_room_air_YYYYMMDD_HHMMSS_N.csv`
@@ -362,7 +362,7 @@ scripts/automated_data_collection.sh <label> <num_samples> <duration_seconds> [s
 3. **Full collection workflow** (example: Scenario A1 from Section 3.1.1):
    ```bash
    # Set up ignition source, wait for flame to stabilize
-   scripts/automated_data_collection.sh fire 30 10 close_low_vent
+   tools/collection/automated_data_collection.sh fire 30 10 close_low_vent
    ```
 
 **Configuration notes:**
@@ -375,12 +375,12 @@ scripts/automated_data_collection.sh <label> <num_samples> <duration_seconds> [s
 
 ### 5.5 Uploading to Edge Impulse Cloud 📤
 
-A companion script `scripts/upload_to_edge_impulse.sh` simplifies uploading collected samples to your Edge Impulse project.
+A companion script `tools/integration/upload_to_edge_impulse.sh` simplifies uploading collected samples to your Edge Impulse project.
 
 **Setup (run once):**
 ```bash
 # 1. Make script executable
-chmod +x scripts/upload_to_edge_impulse.sh
+chmod +x tools/integration/upload_to_edge_impulse.sh
 
 # 2. Install Edge Impulse CLI (if not already installed)
 npm install -g edge-impulse-cli
@@ -391,7 +391,7 @@ edge-impulse-login
 
 **Usage:**
 ```bash
-scripts/upload_to_edge_impulse.sh <label> [scenario] [category]
+tools/integration/upload_to_edge_impulse.sh <label> [scenario] [category]
 ```
 
 **Parameters:**
@@ -403,32 +403,32 @@ scripts/upload_to_edge_impulse.sh <label> [scenario] [category]
 
 1. **Upload all files from a label** (flat structure):
    ```bash
-   scripts/upload_to_edge_impulse.sh fire
+   tools/integration/upload_to_edge_impulse.sh fire
    ```
    - Uploads all CSV files from `data/fire/` to training set
 
 2. **Upload specific scenario** (organized structure):
    ```bash
-   scripts/upload_to_edge_impulse.sh no_fire base_room_air
+   tools/integration/upload_to_edge_impulse.sh no_fire base_room_air
    ```
    - Uploads files from `data/no_fire/base_room_air/` to training set
 
 3. **Upload to testing dataset:**
    ```bash
-   scripts/upload_to_edge_impulse.sh false_alarm cooking testing
+   tools/integration/upload_to_edge_impulse.sh false_alarm cooking testing
    ```
    - Uploads files from `data/false_alarm/cooking/` to testing set
 
 4. **Complete workflow example:**
    ```bash
    # Collect data
-   scripts/automated_data_collection.sh fire 30 10 close_low_vent
+   tools/collection/automated_data_collection.sh fire 30 10 close_low_vent
 
    # Review files (optional)
    ls -lh data/fire/close_low_vent/
 
    # Upload to Edge Impulse
-   scripts/upload_to_edge_impulse.sh fire close_low_vent
+   tools/integration/upload_to_edge_impulse.sh fire close_low_vent
    ```
 
 **Script features:**
