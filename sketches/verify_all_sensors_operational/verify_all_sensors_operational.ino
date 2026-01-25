@@ -61,7 +61,7 @@ void setup() {
 
         if (s.type == SensorType::ANALOG) {
             int val = analogRead(s.pinD);
-            if (val > 10 && val < 1010) currentPassed = true;
+            if (val > 1 && val < 1024) currentPassed = true;
         }
         else if (s.type == SensorType::I2C) {
             Wire.begin();
