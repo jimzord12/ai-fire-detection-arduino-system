@@ -30,6 +30,15 @@ static const SensorConfig SENSOR_MAP[] = {
     {"AHT20", SensorType::I2C,    A4, A5, 50.0f,  20.0f} // A4=SDA, A5=SCL
 };
 
+// CSV column mapping (order):
+// timestamp (ms) - millis()
+// smoke - analog A0
+// voc - analog A1
+// co - analog A2
+// flame - analog A3
+// temperature - AHT20 (°C)
+// humidity - AHT20 (RH %)
+
 const int BAUD_RATE = 115200;
 const int I2C_Stability_Wait = 500;
 
@@ -133,16 +142,20 @@ private:
         digitalWrite(LED_BUILTIN, (currentMillis / 100) % 2);
     }
 
+    /**
+     * @brief Logs sensor data in CSV format to Serial.
+     * CSV Columns: timestamp, smoke, voc, co, flame, temperature, humidity
+     */
     void logData() {
         Serial.print(millis());
         Serial.print(",");
         Serial.print(analogRead(A0));  // Smoke
         Serial.print(",");
-        Serial.print(analogRead(A3));  // Flame
+        Serial.print(analogRead(A1));  // VOC
         Serial.print(",");
         Serial.print(analogRead(A2));  // CO
         Serial.print(",");
-        Serial.print(analogRead(A1));  // VOC
+        Serial.print(analogRead(A3));  // Flame
         Serial.print(",");
         if (_ahtInitialized && _aht.startMeasurementReady(/*crcEn=*/true)) {
             Serial.print(_aht.getTemperature_C(), 2);
