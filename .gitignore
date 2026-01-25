@@ -1,1 +1,33 @@
-/logger/__pycache__
+# Environment
+.env
+.venv
+env/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.python-version
+
+# Arduino / Embedded
+build/
+bin/
+*.hex
+*.elf
+*.bin
+
+# Data
+# Ignore CSV files in data/raw but keep the directory structure
+data/raw/**/*.csv
+!data/raw/**/.gitkeep
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
