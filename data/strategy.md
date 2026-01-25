@@ -1,4 +1,9 @@
-# Data Collection Strategy for Multi-Sensor Fire Detection System
+# Data Collection Strategy (moved)
+
+This content has been split into smaller documents under `docs/research/data-collection/`.
+See `docs/research/data-collection/README.md` for the Executive Summary and links to the split documents.
+
+The original full content has been archived at `docs/research/data-collection/_archive_strategy.md`.
 
 ## Executive Summary
 
@@ -16,11 +21,11 @@ The fire detection system leverages **sensor fusion**—simultaneous correlation
 
 The training dataset is organized into three mutually exclusive classes:
 
-| Class | Purpose | Key Characteristics |
-|-------|---------|-------------------|
-| **fire** | Actual fire events | High flame/smoke/CO/VOC signatures |
-| **no_fire** | Baseline/normal conditions | Low sensor activation; natural variance |
-| **false_alarm** | Non-fire trigger events | High single-sensor response; contextual differentiation |
+| Class           | Purpose                    | Key Characteristics                                     |
+| --------------- | -------------------------- | ------------------------------------------------------- |
+| **fire**        | Actual fire events         | High flame/smoke/CO/VOC signatures                      |
+| **no_fire**     | Baseline/normal conditions | Low sensor activation; natural variance                 |
+| **false_alarm** | Non-fire trigger events    | High single-sensor response; contextual differentiation |
 
 ### 1.3 Rationale for Three-Class Design
 
@@ -32,11 +37,11 @@ The inclusion of a dedicated `false_alarm` class is critical. Single-threshold s
 
 ### 2.1 Sampling Parameters
 
-| Parameter | Value | Justification |
-|-----------|-------|---------------|
-| **Sampling Rate** | 10 Hz (100 ms intervals) | Optimal for slow-moving sensors (temperature, humidity) while capturing flame flicker dynamics |
-| **Sample Duration** | 10 seconds per file | Allows temporal correlation; manageable file size; sufficient for feature extraction |
-| **Total Duration per Class** | 15 minutes (90 samples) | Empirical starting point from Edge Impulse best practices; baseline for classifier convergence |
+| Parameter                    | Value                    | Justification                                                                                  |
+| ---------------------------- | ------------------------ | ---------------------------------------------------------------------------------------------- |
+| **Sampling Rate**            | 10 Hz (100 ms intervals) | Optimal for slow-moving sensors (temperature, humidity) while capturing flame flicker dynamics |
+| **Sample Duration**          | 10 seconds per file      | Allows temporal correlation; manageable file size; sufficient for feature extraction           |
+| **Total Duration per Class** | 15 minutes (90 samples)  | Empirical starting point from Edge Impulse best practices; baseline for classifier convergence |
 
 ### 2.2 Temporal Considerations
 
@@ -46,20 +51,25 @@ The inclusion of a dedicated `false_alarm` class is critical. Single-threshold s
 
 ### 2.3 Data Format Specification
 
-All data is transmitted to Edge Impulse Data Forwarder in **comma-separated values (CSV)** format:
+All data is transmitted to Edge Impulse Data Forwarder in **comma-separated values (CSV)** format.
+
+**CSV Columns:** `timestamp, smoke, voc, co, flame, temperature, humidity`
+
+Example:
 
 ```
-smoke,voc,co,flame,temp,humid
-423.5,512,28.3,45.2,125.0,15.0
-425.1,518,28.4,45.3,126.5,15.2
+timestamp,smoke,voc,co,flame,temperature,humidity
+1674091200000,423.5,512,28.3,45.2,25.0,15.0
+1674091200100,425.1,518,28.4,45.3,25.1,15.2
 ...
 ```
 
 **Key constraints:**
+
 - Raw sensor values (no normalization on device)
 - Values are floating-point for precision
 - One row per 100 ms sample
-- No header row in CSV stream (added by Data Forwarder)
+- Header is added by the Data Forwarder or collection scripts (timestamp required by Edge Impulse for time-series data)
 
 ---
 
@@ -72,11 +82,13 @@ Three representative scenarios, each yielding 30 samples (5 minutes total per sc
 #### 3.1.1 Scenario A1: Small Flame, Close Proximity, Low Ventilation
 
 **Setup:**
+
 - Place ignition source (candle or small gas burner) 10–15 cm from sensor array
 - Seal room or reduce ventilation (closed door, windows shut) to concentrate products of combustion
 - Allow flame to stabilize for 30 seconds before sampling
 
 **Expected Sensor Signatures:**
+
 - Smoke: 300–600 ppm
 - Flame (IR): 700–900 ADC (high brightness)
 - Temperature: +2–4°C rise
@@ -84,6 +96,7 @@ Three representative scenarios, each yielding 30 samples (5 minutes total per sc
 - VOC: 200–400 ppm (combustion products)
 
 **Sample Collection:**
+
 - Capture 30 consecutive 10-second CSV files at 10 Hz
 - Total duration: 5 minutes
 - Label: `fire_close_low_vent`
@@ -93,11 +106,13 @@ Three representative scenarios, each yielding 30 samples (5 minutes total per sc
 #### 3.1.2 Scenario A2: Small Flame, Medium Distance, Normal Ventilation
 
 **Setup:**
+
 - Place ignition source 30–50 cm from sensors
 - Maintain normal room ventilation (standard air exchange)
 - Represent mid-range detection scenario
 
 **Expected Sensor Signatures:**
+
 - Smoke: 150–350 ppm
 - Flame (IR): 400–700 ADC
 - Temperature: +0.5–2°C rise
@@ -105,6 +120,7 @@ Three representative scenarios, each yielding 30 samples (5 minutes total per sc
 - VOC: 100–250 ppm
 
 **Sample Collection:**
+
 - Capture 30 consecutive 10-second CSV files
 - Total duration: 5 minutes
 - Label: `fire_medium_normal_vent`
@@ -114,11 +130,13 @@ Three representative scenarios, each yielding 30 samples (5 minutes total per sc
 #### 3.1.3 Scenario A3 (Optional): Smoldering / Smoke-Dominant Fire
 
 **Setup:**
+
 - Create low-oxygen burn (e.g., damp wood, smoldering materials)
 - Emphasis on smoke and CO rather than flame visibility
 - Represents slow-burn detection scenario
 
 **Expected Sensor Signatures:**
+
 - Smoke: 500–900 ppm (high)
 - Flame (IR): 200–400 ADC (low; flames obscured)
 - Temperature: +1–3°C
@@ -126,6 +144,7 @@ Three representative scenarios, each yielding 30 samples (5 minutes total per sc
 - VOC: 350–600 ppm
 
 **Sample Collection:**
+
 - Capture 30 consecutive 10-second CSV files
 - Total duration: 5 minutes
 - Label: `fire_smoldering`
@@ -143,11 +162,13 @@ Three scenarios representing baseline and environmental variance.
 #### 3.2.1 Scenario B1: Baseline Room Air (Across Times of Day)
 
 **Setup:**
+
 - Room at rest with no sources of heat, flame, or artificial aerosols
 - Collect during morning (before temperature rise), afternoon (peak heat), and evening (cooling)
 - Open ventilation (windows/door) if safe
 
 **Expected Sensor Signatures:**
+
 - Smoke: 0–50 ppm (ambient baseline, possibly street pollution)
 - Flame (IR): 50–150 ADC (no IR source)
 - Temperature: Natural ambient (22–28°C depending on time)
@@ -155,6 +176,7 @@ Three scenarios representing baseline and environmental variance.
 - VOC: <50 ppm
 
 **Sample Collection:**
+
 - 10 files at 8:00 AM, 10 files at 14:00 PM, 10 files at 20:00 PM (30 total)
 - Each session: 100 seconds continuous, split into 10-second samples
 - Label: `no_fire_baseline`
@@ -164,11 +186,13 @@ Three scenarios representing baseline and environmental variance.
 #### 3.2.2 Scenario B2: High Humidity & Temperature Transients
 
 **Setup:**
+
 - Simulate rapid environmental change (e.g., AC/heating activation, window opening)
 - Observe sensor drift without combustion present
 - Critical for reducing false positives from HVAC systems
 
 **Expected Sensor Signatures:**
+
 - Smoke: 0–60 ppm (no change from ventilation airflow alone)
 - Flame (IR): 50–150 ADC (stable)
 - Temperature: Ramp from 22°C to 30°C or vice versa (±2°C/minute)
@@ -177,6 +201,7 @@ Three scenarios representing baseline and environmental variance.
 - VOC: <80 ppm (no combustion)
 
 **Sample Collection:**
+
 - Trigger AC or open window; collect 30 consecutive 10-second samples
 - Total duration: 5 minutes
 - Label: `no_fire_hvac_transient`
@@ -186,11 +211,13 @@ Three scenarios representing baseline and environmental variance.
 #### 3.2.3 Scenario B3 (Optional): Dusty Air & Fan Airflow
 
 **Setup:**
+
 - Run ceiling fan or portable fan near sensors
 - Create light dust cloud (vacuum cleaner suction near sensors, or window sill dust) to test smoke sensor response to particulates
 - Determines sensitivity to non-combustion particulates
 
 **Expected Sensor Signatures:**
+
 - Smoke: 80–150 ppm (high particulate, but no combustion odor)
 - Flame (IR): 50–200 ADC (may vary with airflow reflections)
 - Temperature: Stable or ±0.5°C from air circulation
@@ -198,6 +225,7 @@ Three scenarios representing baseline and environmental variance.
 - VOC: <80 ppm
 
 **Sample Collection:**
+
 - Capture 30 consecutive 10-second samples during fan operation
 - Total duration: 5 minutes
 - Label: `no_fire_dust_airflow`
@@ -215,11 +243,13 @@ Three scenarios with high sensor activation but NO fire hazard.
 #### 3.3.1 Scenario C1: Cooking Fumes (Frying/High-Heat Cooking)
 
 **Setup:**
+
 - Use electric stove or stovetop with oil/butter frying
 - Maintain active cooking (moderate flame or high electric heat) for 5 minutes
 - Represent the most common nuisance alarm trigger
 
 **Expected Sensor Signatures:**
+
 - Smoke: 250–500 ppm (visible haze from cooking oil aerosolization)
 - Flame (IR): 300–600 ADC (if gas stove; 50–150 ADC if electric)
 - Temperature: +1–2°C (localized, not sustained room rise)
@@ -229,6 +259,7 @@ Three scenarios with high sensor activation but NO fire hazard.
 **Key Differentiator:** Low CO; high VOC/smoke from food rather than wood/materials.
 
 **Sample Collection:**
+
 - Start sampling as cooking begins
 - Capture 30 consecutive 10-second samples
 - Total duration: 5 minutes
@@ -239,11 +270,13 @@ Three scenarios with high sensor activation but NO fire hazard.
 #### 3.3.2 Scenario C2: Steam (Kettle / Hot Shower)
 
 **Setup:**
+
 - Boil kettle or run hot shower in adjacent/nearby room
 - Allow steam to drift toward sensors
 - Test response to water vapor (distinct from combustion smoke)
 
 **Expected Sensor Signatures:**
+
 - Smoke: 80–150 ppm (moisture particles detected as "smoke" by MEMS sensor)
 - Flame (IR): 50–150 ADC (no flame)
 - Temperature: +0.5–1.5°C (modest rise from steam diffusion)
@@ -254,6 +287,7 @@ Three scenarios with high sensor activation but NO fire hazard.
 **Key Differentiator:** Humidity spike without CO rise; water vapor not combustion.
 
 **Sample Collection:**
+
 - Synchronize sampling with steam source
 - Capture 30 consecutive 10-second samples
 - Total duration: 5 minutes
@@ -264,11 +298,13 @@ Three scenarios with high sensor activation but NO fire hazard.
 #### 3.3.3 Scenario C3: Aerosol Sprays / Cleaning Products / Alcohol Vapors
 
 **Setup:**
+
 - Spray air freshener, disinfectant, or alcohol-based cleaner in room with sensors
 - Create momentary VOC spike without combustion
 - Represent indoor chemical hazards that should NOT trigger fire alarm
 
 **Expected Sensor Signatures:**
+
 - Smoke: 150–300 ppm (particulate spray, not smoke)
 - Flame (IR): 50–150 ADC (no IR source)
 - Temperature: Stable (spray at room temperature)
@@ -278,6 +314,7 @@ Three scenarios with high sensor activation but NO fire hazard.
 **Key Differentiator:** High VOC without CO; no temperature rise.
 
 **Sample Collection:**
+
 - Spray product 1–2 meters from sensors; allow dispersal
 - Capture 30 consecutive 10-second samples (covering spray event + 4 minutes decay)
 - Total duration: 5 minutes
@@ -291,12 +328,12 @@ Three scenarios with high sensor activation but NO fire hazard.
 
 ## 4. Total Dataset Summary
 
-| Class | Scenarios | Duration per Scenario | Total Duration | Sample Count |
-|-------|-----------|----------------------|-----------------|--------------|
-| **fire** | 3 (required) + 1 (optional) | 5 minutes | 15 minutes | 90 |
-| **no_fire** | 3 (required) + 1 (optional) | 5 minutes | 15 minutes | 90 |
-| **false_alarm** | 3 (required) | 5 minutes | 15 minutes | 90 |
-| | | | **45 minutes** | **270** |
+| Class           | Scenarios                   | Duration per Scenario | Total Duration | Sample Count |
+| --------------- | --------------------------- | --------------------- | -------------- | ------------ |
+| **fire**        | 3 (required) + 1 (optional) | 5 minutes             | 15 minutes     | 90           |
+| **no_fire**     | 3 (required) + 1 (optional) | 5 minutes             | 15 minutes     | 90           |
+| **false_alarm** | 3 (required)                | 5 minutes             | 15 minutes     | 90           |
+|                 |                             |                       | **45 minutes** | **270**      |
 
 ---
 
@@ -334,11 +371,13 @@ Three scenarios with high sensor activation but NO fire hazard.
 We provide a simple Bash script to automate repetitive sample captures: `tools/collection/automated_data_collection.sh`. The script repeatedly reads a fixed-duration stream from the Arduino serial port and writes timestamped CSV files under `data/<label>/` or `data/<label>/<scenario>/`.
 
 **Setup (run once):**
+
 ```bash
 chmod +x tools/collection/automated_data_collection.sh
 ```
 
 **Usage:**
+
 ```bash
 tools/collection/automated_data_collection.sh <label> <num_samples> <duration_seconds> [scenario]
 ```
@@ -346,16 +385,20 @@ tools/collection/automated_data_collection.sh <label> <num_samples> <duration_se
 **Examples:**
 
 1. **Basic collection** (flat structure):
+
    ```bash
    tools/collection/automated_data_collection.sh fire 30 10
    ```
+
    - Collects 30 samples of 10 seconds each
    - Saves to: `data/fire/fire_YYYYMMDD_HHMMSS_N.csv`
 
 2. **With scenario** (organized structure):
+
    ```bash
    tools/collection/automated_data_collection.sh no_fire 30 10 base_room_air
    ```
+
    - Collects 30 samples of 10 seconds each
    - Saves to: `data/no_fire/base_room_air/no_fire__base_room_air_YYYYMMDD_HHMMSS_N.csv`
 
@@ -366,9 +409,10 @@ tools/collection/automated_data_collection.sh <label> <num_samples> <duration_se
    ```
 
 **Configuration notes:**
+
 - **Serial port:** Defaults to `/dev/ttyACM0`. Edit `SERIAL_PORT` variable in script if your Arduino uses a different port.
-- **CSV format:** Header is added automatically: `timestamp,voc,smoke,flame,co,temp,humid` (timestamp in ms, required by Edge Impulse for time-series data)
-- **Data validation:** The script filters out partial/malformed lines, keeping only valid 6-column rows and adding timestamps at 100ms intervals.
+- **CSV format:** Header is added automatically: `timestamp,smoke,voc,co,flame,temperature,humidity` (timestamp in ms, required by Edge Impulse for time-series data)
+- **Data validation:** The script filters out partial/malformed lines, keeping only valid 7-column rows (timestamp + 6 sensors) and adding timestamps at 100ms intervals.
 - **Fail-safes:** Files with no data are removed; 2-second pause between samples.
 
 **Tip:** The scenario parameter aligns with the collection protocol outlined in Section 3, making it easy to organize data by experimental conditions.
@@ -378,6 +422,7 @@ tools/collection/automated_data_collection.sh <label> <num_samples> <duration_se
 A companion script `tools/integration/upload_to_edge_impulse.sh` simplifies uploading collected samples to your Edge Impulse project.
 
 **Setup (run once):**
+
 ```bash
 # 1. Make script executable
 chmod +x tools/integration/upload_to_edge_impulse.sh
@@ -390,11 +435,13 @@ edge-impulse-login
 ```
 
 **Usage:**
+
 ```bash
 tools/integration/upload_to_edge_impulse.sh <label> [scenario] [category]
 ```
 
 **Parameters:**
+
 - `label` - Class name (required): `fire`, `no_fire`, or `false_alarm`
 - `scenario` - Scenario subdirectory (optional): e.g., `base_room_air`, `close_low_vent`
 - `category` - Dataset split (optional): `training` (default) or `testing`
@@ -402,24 +449,31 @@ tools/integration/upload_to_edge_impulse.sh <label> [scenario] [category]
 **Examples:**
 
 1. **Upload all files from a label** (flat structure):
+
    ```bash
    tools/integration/upload_to_edge_impulse.sh fire
    ```
+
    - Uploads all CSV files from `data/fire/` to training set
 
 2. **Upload specific scenario** (organized structure):
+
    ```bash
    tools/integration/upload_to_edge_impulse.sh no_fire base_room_air
    ```
+
    - Uploads files from `data/no_fire/base_room_air/` to training set
 
 3. **Upload to testing dataset:**
+
    ```bash
    tools/integration/upload_to_edge_impulse.sh false_alarm cooking testing
    ```
+
    - Uploads files from `data/false_alarm/cooking/` to testing set
 
 4. **Complete workflow example:**
+
    ```bash
    # Collect data
    tools/collection/automated_data_collection.sh fire 30 10 close_low_vent
@@ -432,6 +486,7 @@ tools/integration/upload_to_edge_impulse.sh <label> [scenario] [category]
    ```
 
 **Script features:**
+
 - Validates directory existence and file count before upload
 - Prompts for confirmation to prevent accidental uploads
 - Automatically applies correct label for classification
@@ -455,6 +510,7 @@ Examples:
 ### 6.2 Metadata Log
 
 Maintain a spreadsheet recording:
+
 - Date and time of collection
 - Class and scenario label
 - Environmental conditions (room temperature, humidity, ventilation)
@@ -469,11 +525,11 @@ Maintain a spreadsheet recording:
 
 After 15 minutes per class, we expect:
 
-| Pair | Differentiating Features | Confidence |
-|------|------------------------|-----------|
-| **fire vs. no_fire** | CO elevation; temperature rise; smoke spike | **High** (~95%+) |
-| **fire vs. false_alarm** | Sustained CO rise (fire ≠ cooking); temperature trend | **Medium** (~85–90%) |
-| **false_alarm vs. no_fire** | VOC spike; moisture rise; absence of CO | **High** (~90%+) |
+| Pair                        | Differentiating Features                              | Confidence           |
+| --------------------------- | ----------------------------------------------------- | -------------------- |
+| **fire vs. no_fire**        | CO elevation; temperature rise; smoke spike           | **High** (~95%+)     |
+| **fire vs. false_alarm**    | Sustained CO rise (fire ≠ cooking); temperature trend | **Medium** (~85–90%) |
+| **false_alarm vs. no_fire** | VOC spike; moisture rise; absence of CO               | **High** (~90%+)     |
 
 ### 7.2 Training & Evaluation
 
@@ -495,7 +551,7 @@ The 45-minute dataset (270 samples across 9 scenarios) represents a practical st
 ## References
 
 1. Edge Impulse. (2024). Data Acquisition and Collection Best Practices. Retrieved from https://docs.edgeimpulse.com/studio/projects/data-acquisition
-2. Deng, X., et al. (2023). An Indoor Fire Detection Method Based on Multi-Sensor Fusion. *IEEE Sensors Journal*, 23(24), 30451–30461.
-3. Kim, G. L., et al. (2024). A Multi-Sensor Fire Detection Method based on Trend Value Extraction. *Journal of Systems and Software Technology (JSST)*.
-4. Muñoz, A., & Manzini, P. (2023). Sensor Fusion Strategies for IoT-based Fire Detection Systems. *IoT Research Today*, 12(3), 145–162.
+2. Deng, X., et al. (2023). An Indoor Fire Detection Method Based on Multi-Sensor Fusion. _IEEE Sensors Journal_, 23(24), 30451–30461.
+3. Kim, G. L., et al. (2024). A Multi-Sensor Fire Detection Method based on Trend Value Extraction. _Journal of Systems and Software Technology (JSST)_.
+4. Muñoz, A., & Manzini, P. (2023). Sensor Fusion Strategies for IoT-based Fire Detection Systems. _IoT Research Today_, 12(3), 145–162.
 5. Renesas. (2024). Arduino UNO R4 WiFi Technical Specifications. https://www.renesas.com
