@@ -79,8 +79,8 @@ for i in $(seq 1 $NUM_SAMPLES); do
     timeout ${DURATION}s cat $SERIAL_PORT > "$TEMP_FILE"
 
     # Add CSV header with timestamp (Edge Impulse requires timestamp for time-series)
-    # CSV Columns: timestamp, smoke, voc, co, flame, temperature, humidity
-    echo "timestamp,smoke,voc,co,flame,temperature,humidity" > "$FILENAME"
+    # CSV Columns: timestamp, smoke, voc, co, flame, temp, hum
+    echo "timestamp,smoke,voc,co,flame,temp,hum" > "$FILENAME"
 
     # Skip first line (likely partial), keep only valid 7-column rows (timestamp + 6 sensors)
     tail -n +2 "$TEMP_FILE" | awk -F',' 'NF==7 {printf "%s\n", $0}' >> "$FILENAME"

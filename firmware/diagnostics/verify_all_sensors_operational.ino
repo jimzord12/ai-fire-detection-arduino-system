@@ -15,10 +15,10 @@ struct SensorConfig {
 
 // Configuration for Arduino UNO R4 WiFi
 static const SensorConfig SENSOR_MAP[] = {
-    {"ANALOG", "VOC",   SensorType::ANALOG, 15, "A1"},
     {"ANALOG", "Smoke", SensorType::ANALOG, 14, "A0"},
-    {"ANALOG", "Flame", SensorType::ANALOG, 17, "A3"},
+    {"ANALOG", "VOC",   SensorType::ANALOG, 15, "A1"},
     {"ANALOG", "CO",    SensorType::ANALOG, 16, "A2"},
+    {"ANALOG", "Flame", SensorType::ANALOG, 17, "A3"},
     {"I2C",    "AHT20", SensorType::I2C,    18, "A4/A5"}
 };
 

@@ -85,19 +85,19 @@ Connect each sensor as follows. **Important**: Double-check polarity before powe
 
 - **VCC** → Arduino **5V**
 - **GND** → Arduino **GND**
-- **AOUT** → Arduino **A1**
+- **AOUT** → Arduino **A3**
 
 #### VOC Sensor (Volatile Organic Compounds)
 
 - **VCC** → Arduino **5V**
 - **GND** → Arduino **GND**
-- **AOUT** → Arduino **A2**
+- **AOUT** → Arduino **A1**
 
 #### CO Sensor (Carbon Monoxide)
 
 - **VCC** → Arduino **5V**
 - **GND** → Arduino **GND**
-- **AOUT** → Arduino **A3**
+- **AOUT** → Arduino **A2**
 
 #### AHT20 Temperature/Humidity Sensor
 
@@ -250,9 +250,9 @@ Copy this entire sketch into Arduino IDE:
 // ========== PIN DEFINITIONS ==========
 // Analog sensors connected to Arduino analog pins
 const int PIN_SMOKE = A0;  // MEMS Smoke sensor analog output
-const int PIN_FLAME = A1;  // Flame sensor analog output
-const int PIN_VOC   = A2;  // VOC sensor analog output
-const int PIN_CO    = A3;  // CO sensor analog output
+const int PIN_VOC   = A1;  // VOC sensor analog output
+const int PIN_CO    = A2;  // CO sensor analog output
+const int PIN_FLAME = A3;  // Flame sensor analog output
 
 // ========== SENSOR OBJECTS ==========
 DFRobot_AHT20 aht20;  // Temperature/Humidity sensor object
@@ -275,7 +275,7 @@ void setup() {
   }
 
   // Optional: Print header row for debugging (comment out for data forwarder)
-  // Serial.println("smoke,flame,temp,hum,voc,co");
+  // Serial.println("timestamp,smoke,voc,co,flame,temp,hum");
 }
 
 void loop() {
@@ -288,9 +288,9 @@ void loop() {
     // analogRead() returns 0-1023 (10-bit ADC on Arduino R4)
     // These are RAW values; Edge Impulse will normalize them
     int smoke = analogRead(PIN_SMOKE);
-    int flame = analogRead(PIN_FLAME);
     int voc   = analogRead(PIN_VOC);
     int co    = analogRead(PIN_CO);
+    int flame = analogRead(PIN_FLAME);
 
     // ========== READ I2C SENSOR ==========
     float temp = 0.0;
@@ -306,16 +306,16 @@ void loop() {
 
     // ========== OUTPUT DATA ==========
     // Edge Impulse Data Forwarder expects comma-separated values
-    // Format: smoke,flame,temp,hum,voc,co
+    // Format: timestamp,smoke,voc,co,flame,temp,hum
     // IMPORTANT: No spaces, and newline at the end
+    Serial.print(millis()); Serial.print(",");
     Serial.print(smoke); Serial.print(",");
+    Serial.print(voc);   Serial.print(",");
+    Serial.print(co);    Serial.print(",");
     Serial.print(flame); Serial.print(",");
     Serial.print(temp, 2);  // Print temp with 2 decimal places
     Serial.print(",");
-    Serial.print(hum, 2);   // Print humidity with 2 decimal places
-    Serial.print(",");
-    Serial.print(voc);   Serial.print(",");
-    Serial.println(co);  // println adds newline character
+    Serial.println(hum, 2);   // Print humidity with 2 decimal places
   }
 
   // Loop continues immediately - no delay()!
@@ -352,10 +352,11 @@ We send raw `analogRead()` values (0-1023) instead of converting to ppm (parts p
 #### Why This Specific Data Format?
 
 ```cpp
+Serial.print(millis()); Serial.print(",");
 Serial.print(smoke); Serial.print(",");
 ```
 
-The Edge Impulse Data Forwarder expects **comma-separated values** with **no spaces** and a **newline at the end**. This CSV format is standard for time-series data ingestion.[3][4]
+The Edge Impulse Data Forwarder expects **comma-separated values** with **no spaces** and a **newline at the end**. We include the `millis()` timestamp as the first column to provide temporal context for time-series data ingestion.[3][4]
 
 ### 5.3 Uploading the Sketch
 
@@ -431,9 +432,9 @@ You'll see several questions:
 - Select the port showing your Arduino (same as in Arduino IDE)
 - Press Enter
 
-**Prompt 5**: "6 sensor axes detected. What do you want to call them?"
+**Prompt 5**: "7 sensor axes detected. What do you want to call them?"
 
-- This is **critical**. Type exactly: `smoke, voc, co, flame, temp, humid`
+- This is **critical**. Type exactly: `timestamp, smoke, voc, co, flame, temp, humid`
 - Press Enter
 
 **Prompt 6**: "What name do you want to give this device?"
@@ -660,9 +661,9 @@ Now create a new sketch that runs inference:
 
 // Sensor pins
 const int PIN_SMOKE = A0;
-const int PIN_FLAME = A1;
-const int PIN_VOC   = A2;
-const int PIN_CO    = A3;
+const int PIN_VOC   = A1;
+const int PIN_CO    = A2;
+const int PIN_FLAME = A3;
 
 DFRobot_AHT20 aht20;
 
@@ -684,22 +685,25 @@ void setup() {
 void loop() {
   // Read sensors (same as before)
   int smoke = analogRead(PIN_SMOKE);
+  int voc = analogRead(PIN_VOC);
+  int co = analogRead(PIN_CO);
   int flame = analogRead(PIN_FLAME);
   float temp = 0, hum = 0;
   if (aht20.startMeasurement()) {
     temp = aht20.getTemperature_C();
     hum = aht20.getHumidity_RH();
   }
-  int voc = analogRead(PIN_VOC);
-  int co = analogRead(PIN_CO);
 
-  // Fill feature buffer
+  // Fill feature buffer (including timestamp if trained with it)
+  // NOTE: If you named axes in Data Forwarder as [timestamp, smoke, voc, co, flame, temp, humid]
+  // you must fill the features buffer in that exact order.
+  features[feature_ix++] = millis();
   features[feature_ix++] = smoke;
+  features[feature_ix++] = voc;
+  features[feature_ix++] = co;
   features[feature_ix++] = flame;
   features[feature_ix++] = temp;
   features[feature_ix++] = hum;
-  features[feature_ix++] = voc;
-  features[feature_ix++] = co;
 
   // When buffer is full, run inference
   if (feature_ix >= EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE) {

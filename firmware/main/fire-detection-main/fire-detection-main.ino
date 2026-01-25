@@ -145,24 +145,24 @@ private:
     /**
      * @brief Logs sensor data in CSV format to Serial.
      * CSV Columns: timestamp, smoke, voc, co, flame, temperature, humidity
+     * Order is derived from SENSOR_MAP.
      */
     void logData() {
         Serial.print(millis());
-        Serial.print(",");
-        Serial.print(analogRead(A0));  // Smoke
-        Serial.print(",");
-        Serial.print(analogRead(A1));  // VOC
-        Serial.print(",");
-        Serial.print(analogRead(A2));  // CO
-        Serial.print(",");
-        Serial.print(analogRead(A3));  // Flame
-        Serial.print(",");
-        if (_ahtInitialized && _aht.startMeasurementReady(/*crcEn=*/true)) {
-            Serial.print(_aht.getTemperature_C(), 2);
+        
+        for (const auto& s : SENSOR_MAP) {
             Serial.print(",");
-            Serial.print(_aht.getHumidity_RH(), 2);
-        } else {
-            Serial.print("ERR,ERR");
+            if (s.type == SensorType::ANALOG) {
+                Serial.print(analogRead(s.pinSDA));
+            } else if (s.type == SensorType::I2C) {
+                if (_ahtInitialized && _aht.startMeasurementReady(/*crcEn=*/true)) {
+                    Serial.print(_aht.getTemperature_C(), 2);
+                    Serial.print(",");
+                    Serial.print(_aht.getHumidity_RH(), 2);
+                } else {
+                    Serial.print("ERR,ERR");
+                }
+            }
         }
         Serial.println();
     }
