@@ -4,3 +4,4 @@
 - [ ] Setup opencode and gemini cli.
 - [ ] Use the Agent to create custom configurations in `config.typ` and `metadata.typ` for the thesis. So that it feels unique and modern.
 - [ ] Move the `THESIS_OUTLINE.md` & `WRITING_TIPS.md` to the new repo.
+- [ ] (High Priority) Use Python Data Analysis tools (like Pandas, NumPy) to analyze any datasets related to the thesis topic [data](data/raw)
