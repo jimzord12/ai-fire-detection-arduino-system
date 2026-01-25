@@ -19,7 +19,7 @@ bin/
 
 # Data
 # Ignore CSV files in data/raw but keep the directory structure
-data/raw/**/*.csv
+# data/raw/**/*.csv
 !data/raw/**/.gitkeep
 
 # IDEs
