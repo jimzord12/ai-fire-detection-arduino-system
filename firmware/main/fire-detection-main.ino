@@ -3,9 +3,10 @@
 #include "DFRobot_AHT20.h"
 
 /**
- * @brief Sensor Configuration & Logic
+ * @brief Fire Detection System with Integrated Diagnostics
  * Optimized for Renesas RA4M1 (Arduino UNO R4)
  */
+
 enum class SensorType {
     ANALOG,
     I2C
@@ -32,8 +33,6 @@ static const SensorConfig SENSOR_MAP[] = {
 const int BAUD_RATE = 115200;
 const int I2C_Stability_Wait = 500;
 
-// --- Main Class ---
-
 class FireDetectionSystem {
 private:
     DFRobot_AHT20 _aht;
@@ -45,71 +44,96 @@ private:
     uint32_t _lastAhtReinitAttempt = 0;
     const uint32_t _ahtReinitInterval = 5000; // ms
 
+    // Diagnostics state
+    bool _systemFault = false;
+    String _failedSensors = "";
 
-    void processAnalog(const SensorConfig& cfg) {
-        Serial.print(analogRead(cfg.pinSDA));
-        Serial.print(",");
+    void printCell(String text, int width, bool last = false) {
+        Serial.print(text);
+        for (int i = text.length(); i < width; i++) Serial.print(" ");
+        if (!last) Serial.print(" | ");
     }
 
-    void processI2C() {
-        // Trigger measurement and wait for completion (enable CRC check)
-        if (_ahtInitialized && _aht.startMeasurementReady(/* crcEn = */ true)) {
-            Serial.print(_aht.getTemperature_C(), 2);
-            Serial.print(",");
-            Serial.print(_aht.getHumidity_RH(), 2);
-        } else {
-            // Measurement failed or sensor not initialized; print diagnostic markers
-            Serial.print("ERR,ERR");
-        }
+    void printDivider() {
+        Serial.println("+------------+----------+------------+----------+");
     }
 
-public:
-    void begin() {
-        Serial.begin(BAUD_RATE);
-        Wire.begin();
-        Wire.setClock(100000); // standard 100kHz I2C
+    /**
+     * @brief Performs a hardware self-test on all configured sensors.
+     * @return true if all sensors passed, false otherwise.
+     */
+    bool performSelfTest() {
+        Serial.println("\n[SYSTEM] Initializing Hardware Self-Test...");
+        Serial.println();
 
-        Serial.println("[AHT20] Initializing...");
-        uint8_t status = 255;
-        uint8_t attempts = 0;
-        const uint8_t maxAttempts = 5;
-        while ((status = _aht.begin()) != 0 && attempts < maxAttempts) {
-            Serial.print("[AHT20] init failed status=");
-            Serial.println(status);
-            attempts++;
-            delay(I2C_Stability_Wait);
-        }
-        if (status == 0) {
-            _ahtInitialized = true;
-            Serial.println("[AHT20] init succeeded");
-        } else {
-            _ahtInitialized = false;
-            Serial.println("[AHT20] init failed - will retry in loop");
-        }
-    }
+        printDivider();
+        printCell(" TYPE", 10); printCell("NAME", 8); printCell("PIN", 10); printCell("STATUS", 8, true);
+        Serial.println();
+        printDivider();
 
-    void update() {
-        uint32_t currentMillis = millis();
-        if (currentMillis - _lastTick >= _sampleInterval) {
-            _lastTick = currentMillis;
-            runDiagnostics();
+        bool allOk = true;
+        _failedSensors = "";
 
-            // Attempt to reinitialize AHT20 periodically if not initialized
-            if (!_ahtInitialized &&
-                (currentMillis - _lastAhtReinitAttempt >= _ahtReinitInterval)) {
-                _lastAhtReinitAttempt = currentMillis;
-                Serial.println("[AHT20] Attempting re-init...");
-                if (_aht.begin() == 0) {
+        for (const auto& s : SENSOR_MAP) {
+            bool currentPassed = false;
+            String typeStr = (s.type == SensorType::ANALOG) ? " ANALOG" : " I2C";
+            String pinStr;
+
+            if (s.type == SensorType::ANALOG) {
+                // Map analog pin constants to readable strings
+                if (s.pinSDA == A0) pinStr = "A0";
+                else if (s.pinSDA == A1) pinStr = "A1";
+                else if (s.pinSDA == A2) pinStr = "A2";
+                else if (s.pinSDA == A3) pinStr = "A3";
+                else pinStr = String(s.pinSDA);
+
+                int val = analogRead(s.pinSDA);
+                // Basic heuristic: check if sensor is within expected electronic bounds
+                if (val > 5 && val < 1018) currentPassed = true;
+            } 
+            else if (s.type == SensorType::I2C) {
+                pinStr = "A4/A5";
+                Wire.beginTransmission(0x38); // AHT20 Default Address
+                if (Wire.endTransmission() == 0 && _aht.begin() == 0) {
+                    currentPassed = true;
                     _ahtInitialized = true;
-                    Serial.println("[AHT20] re-init succeeded");
-                } else {
-                    Serial.println("[AHT20] re-init failed");
                 }
             }
+
+            String statusStr = currentPassed ? "[ OK ]" : "[FAIL]";
+            printCell(typeStr, 10);
+            printCell(s.name, 8);
+            printCell(pinStr, 10);
+            printCell(statusStr, 8, true);
+            Serial.println();
+
+            if (!currentPassed) {
+                allOk = false;
+                if (_failedSensors.length() > 0) _failedSensors += ", ";
+                _failedSensors += s.name;
+            }
         }
+        printDivider();
+
+        if (allOk) {
+            Serial.println("\n>>> LOG: SYSTEM STATUS [PASS]");
+            Serial.println(">>> All sensors are operational and within expected parameters.");
+        } else {
+            Serial.println("\n>>> LOG: SYSTEM STATUS [FAULT]");
+            Serial.print(">>> CRITICAL: The following sensors are NOT working: ");
+            Serial.println(_failedSensors);
+            Serial.println(">>> ACTION: Check physical connections and power.");
+        }
+        Serial.println();
+        return allOk;
     }
 
-    void runDiagnostics() {
+    void alarmPattern(uint32_t currentMillis) {
+        // Fast alarming blink: 100ms ON, 100ms OFF
+        digitalWrite(LED_BUILTIN, (currentMillis / 100) % 2);
+    }
+
+    void logData() {
         Serial.print(millis());
         Serial.print(",");
         Serial.print(analogRead(A0));  // Smoke
@@ -128,6 +152,49 @@ public:
             Serial.print("ERR,ERR");
         }
         Serial.println();
+    }
+
+public:
+    void begin() {
+        Serial.begin(BAUD_RATE);
+        Wire.begin();
+        Wire.setClock(100000); // Standard 100kHz I2C
+        pinMode(LED_BUILTIN, OUTPUT);
+
+        // Allow some time for Serial to connect and sensors to stabilize
+        delay(1000);
+
+        if (!performSelfTest()) {
+            _systemFault = true;
+        }
+    }
+
+    void update() {
+        uint32_t currentMillis = millis();
+
+        // If system is in fault state, block operation and alarm
+        if (_systemFault) {
+            alarmPattern(currentMillis);
+            return;
+        }
+
+        // Normal sensor logging at sample interval
+        if (currentMillis - _lastTick >= _sampleInterval) {
+            _lastTick = currentMillis;
+            logData();
+
+            // Periodic re-initialization attempt for AHT20 if it was lost
+            if (!_ahtInitialized &&
+                (currentMillis - _lastAhtReinitAttempt >= _ahtReinitInterval)) {
+                _lastAhtReinitAttempt = currentMillis;
+                if (_aht.begin() == 0) {
+                    _ahtInitialized = true;
+                }
+            }
+        }
+
+        // Operational heartbeat (slow blink)
+        digitalWrite(LED_BUILTIN, (currentMillis / 1000) % 2);
     }
 };
 
