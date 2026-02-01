@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Parse arguments
 LABEL=$1
 SCENARIO=$2
-CATEGORY="${3:-training}"  # Default to 'training' if not specified
+CATEGORY="${3:-split}"  # Default to 'split' if not specified
 
 # Validate inputs
 if [ -z "$LABEL" ]; then
