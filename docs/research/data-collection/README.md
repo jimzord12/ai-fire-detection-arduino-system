@@ -14,7 +14,7 @@ This strategy defines a three-class classification approach (`fire`, `no_fire`, 
 
 - `sampling-and-format.md` — Sampling parameters, temporal considerations, and CSV format
 - `fire.md` — Scenario descriptions for the `fire` class (A1–A3)
-- `no_fire.md` — Scenario descriptions for the `no_fire` class (B1–B3)
+- `no_fire.md` — Scenario descriptions for the `no_fire` class (B1–B4)
 - `false_alarm.md` — Scenario descriptions for the `false_alarm` class (C1–C3)
 - `procedure.md` — Equipment setup, collection workflow, QA, and automated script usage
 - `scripts.md` — Details about `tools/collection/automated_data_collection.sh` and `tools/integration/upload_to_edge_impulse.sh`

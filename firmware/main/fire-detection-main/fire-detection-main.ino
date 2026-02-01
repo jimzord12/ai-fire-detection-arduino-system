@@ -72,36 +72,19 @@ private:
      * @return true if all sensors passed, false otherwise.
      */
     bool performSelfTest() {
-        Serial.println("\n[SYSTEM] Initializing Hardware Self-Test...");
-        Serial.println();
-
-        printDivider();
-        printCell(" TYPE", 10); printCell("NAME", 8); printCell("PIN", 10); printCell("STATUS", 8, true);
-        Serial.println();
-        printDivider();
-
         bool allOk = true;
         _failedSensors = "";
 
+        // First pass: check all sensors without printing
         for (const auto& s : SENSOR_MAP) {
             bool currentPassed = false;
-            String typeStr = (s.type == SensorType::ANALOG) ? " ANALOG" : " I2C";
-            String pinStr;
 
             if (s.type == SensorType::ANALOG) {
-                // Map analog pin constants to readable strings
-                if (s.pinSDA == A0) pinStr = "A0";
-                else if (s.pinSDA == A1) pinStr = "A1";
-                else if (s.pinSDA == A2) pinStr = "A2";
-                else if (s.pinSDA == A3) pinStr = "A3";
-                else pinStr = String(s.pinSDA);
-
                 int val = analogRead(s.pinSDA);
                 // Basic heuristic: check if sensor is within expected electronic bounds
                 if (val > 0 && val < 1025) currentPassed = true;
             }
             else if (s.type == SensorType::I2C) {
-                pinStr = "A4/A5";
                 Wire.beginTransmission(0x38); // AHT20 Default Address
                 if (Wire.endTransmission() == 0 && _aht.begin() == 0) {
                     currentPassed = true;
@@ -109,31 +92,66 @@ private:
                 }
             }
 
-            String statusStr = currentPassed ? "[ OK ]" : "[FAIL]";
-            printCell(typeStr, 10);
-            printCell(s.name, 8);
-            printCell(pinStr, 10);
-            printCell(statusStr, 8, true);
-            Serial.println();
-
             if (!currentPassed) {
                 allOk = false;
                 if (_failedSensors.length() > 0) _failedSensors += ", ";
                 _failedSensors += s.name;
             }
         }
-        printDivider();
 
-        if (allOk) {
-            Serial.println("\n>>> LOG: SYSTEM STATUS [PASS]");
-            Serial.println(">>> All sensors are operational and within expected parameters.");
-        } else {
+        // Only print diagnostic output if there are failures
+        if (!allOk) {
+            Serial.println("\n[SYSTEM] Initializing Hardware Self-Test...");
+            Serial.println();
+
+            printDivider();
+            printCell(" TYPE", 10); printCell("NAME", 8); printCell("PIN", 10); printCell("STATUS", 8, true);
+            Serial.println();
+            printDivider();
+
+            // Second pass: print sensor statuses
+            for (const auto& s : SENSOR_MAP) {
+                bool currentPassed = false;
+                String typeStr = (s.type == SensorType::ANALOG) ? " ANALOG" : " I2C";
+                String pinStr;
+
+                if (s.type == SensorType::ANALOG) {
+                    // Map analog pin constants to readable strings
+                    if (s.pinSDA == A0) pinStr = "A0";
+                    else if (s.pinSDA == A1) pinStr = "A1";
+                    else if (s.pinSDA == A2) pinStr = "A2";
+                    else if (s.pinSDA == A3) pinStr = "A3";
+                    else pinStr = String(s.pinSDA);
+
+                    int val = analogRead(s.pinSDA);
+                    // Basic heuristic: check if sensor is within expected electronic bounds
+                    if (val > 0 && val < 1025) currentPassed = true;
+                }
+                else if (s.type == SensorType::I2C) {
+                    pinStr = "A4/A5";
+                    Wire.beginTransmission(0x38); // AHT20 Default Address
+                    if (Wire.endTransmission() == 0 && _aht.begin() == 0) {
+                        currentPassed = true;
+                        _ahtInitialized = true;
+                    }
+                }
+
+                String statusStr = currentPassed ? "[ OK ]" : "[FAIL]";
+                printCell(typeStr, 10);
+                printCell(s.name, 8);
+                printCell(pinStr, 10);
+                printCell(statusStr, 8, true);
+                Serial.println();
+            }
+            printDivider();
+
             Serial.println("\n>>> LOG: SYSTEM STATUS [FAULT]");
             Serial.print(">>> CRITICAL: The following sensors are NOT working: ");
             Serial.println(_failedSensors);
             Serial.println(">>> ACTION: Check physical connections and power.");
+            Serial.println();
         }
-        Serial.println();
+
         return allOk;
     }
 
@@ -145,24 +163,29 @@ private:
     /**
      * @brief Logs sensor data in CSV format to Serial.
      * CSV Columns: timestamp, smoke, voc, co, flame, temperature, humidity
-     * Order is derived from SENSOR_MAP.
      */
     void logData() {
+        // Ensure we always emit a complete CSV row so log parsers don't get corrupted.
+        bool ahtReady = _ahtInitialized && _aht.startMeasurementReady(/*crcEn=*/true);
+
         Serial.print(millis());
-        
-        for (const auto& s : SENSOR_MAP) {
+        Serial.print(",");
+        Serial.print(analogRead(A0));  // Smoke
+        Serial.print(",");
+        Serial.print(analogRead(A1));  // VOC
+        Serial.print(",");
+        Serial.print(analogRead(A2));  // CO
+        Serial.print(",");
+        Serial.print(analogRead(A3));  // Flame
+        Serial.print(",");
+
+        if (ahtReady) {
+            Serial.print(_aht.getTemperature_C(), 2);
             Serial.print(",");
-            if (s.type == SensorType::ANALOG) {
-                Serial.print(analogRead(s.pinSDA));
-            } else if (s.type == SensorType::I2C) {
-                if (_ahtInitialized && _aht.startMeasurementReady(/*crcEn=*/true)) {
-                    Serial.print(_aht.getTemperature_C(), 2);
-                    Serial.print(",");
-                    Serial.print(_aht.getHumidity_RH(), 2);
-                } else {
-                    Serial.print("ERR,ERR");
-                }
-            }
+            Serial.print(_aht.getHumidity_RH(), 2);
+        } else {
+            // AHT not ready: mark temp/humidity as ERR (keeps column count consistent)
+            Serial.print("ERR,ERR");
         }
         Serial.println();
     }

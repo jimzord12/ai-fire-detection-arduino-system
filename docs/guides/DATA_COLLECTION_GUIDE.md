@@ -76,12 +76,29 @@ Replace `<scenario>` with: `close_low_vent`, `medium_normal_vent`, or `smolderin
 
 **Goal:** Capture baseline conditions to prevent false positives from normal environment changes.
 
-### Scenario B1: Baseline Room Air (Closed Room)
+**Four scenarios are required** to represent diverse environmental baseline conditions.
+
+### Scenario B1: Baseline Room Air (Generic)
 
 - **Environment Preparation:**
   - Ensure NO fire sources, smoke, or strong odors are present.
+  - Normal room conditions (typical office or living room).
+  - **Timing:** Capture once to establish general baseline.
+- **Execution:**
+  Run this command:
+  ```bash
+  tools/collection/automated_data_collection.sh no_fire 30 10 base_room_air
+  ```
+- **Verification:**
+  - Check folder: `data/no_fire/base_room_air/`
+  - Verify sensor readings are stable and low.
+
+### Scenario B2: Baseline Room Air (Closed Room)
+
+- **Environment Preparation:**
   - Close all windows and doors.
-  - **Timing:** Perform this once in the Morning, Afternoon, and Evening.
+  - Ensure NO fire sources, smoke, or strong odors are present.
+  - **Timing:** Capture sealed room conditions (reduced airflow).
 - **Execution:**
   Run this command:
   ```bash
@@ -91,13 +108,12 @@ Replace `<scenario>` with: `close_low_vent`, `medium_normal_vent`, or `smolderin
   - Check folder: `data/no_fire/closed_room/`
   - Verify sensor readings are stable and low.
 
-### Scenario B2: Baseline Room Air (Open Space)
+### Scenario B3: Baseline Room Air (Open Space)
 
 - **Environment Preparation:**
   - Open all windows and doors to create an open space environment.
   - Ensure NO fire sources, smoke, or strong odors are present.
   - **Placement:** Place sensors in a well-ventilated area with good airflow.
-  - **Timing:** Perform this once in the Morning, Afternoon, and Evening.
 - **Execution:**
   Run this command:
   ```bash
@@ -107,7 +123,7 @@ Replace `<scenario>` with: `close_low_vent`, `medium_normal_vent`, or `smolderin
   - Check folder: `data/no_fire/open_space/`
   - Verify sensor readings are stable and low.
 
-### Scenario B3: HVAC/Temp Transients
+### Scenario B4: HVAC/Temp Transients
 
 - **Environment Preparation:**
   - Turn on AC, Heater, or open a window to cause a rapid temp change.
@@ -129,7 +145,7 @@ To upload the collected data, run the following command:
 tools/integration/upload_to_edge_impulse.sh no_fire <scenario>
 ```
 
-Replace `<scenario>` with: `closed_room`, `open_space`, or `hvac_transient`.
+Replace `<scenario>` with: `base_room_air`, `closed_room`, `open_space`, or `hvac_transient`.
 
 ---
 
