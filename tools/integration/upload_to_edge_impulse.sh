@@ -17,18 +17,19 @@ if [ -z "$LABEL" ]; then
     echo "Arguments:"
     echo "  label     - Label/class name (e.g., fire, no_fire, false_alarm)"
     echo "  scenario  - Optional scenario subdirectory (e.g., base_room_air)"
-    echo "  category  - Data category: 'training' or 'testing' (default: training)"
+    echo "  category  - Data category: 'training', 'testing', or 'split' (default: split)"
     echo ""
     echo "Examples:"
     echo "  $0 fire                              # Upload all files from data/fire/"
     echo "  $0 no_fire base_room_air            # Upload data/no_fire/base_room_air/"
     echo "  $0 fire close_low_vent testing      # Upload to testing set"
+    echo "  $0 fire close_low_vent split        # Auto-split 80/20"
     exit 1
 fi
 
 # Validate category
-if [ "$CATEGORY" != "training" ] && [ "$CATEGORY" != "testing" ]; then
-    echo "Error: Category must be 'training' or 'testing'"
+if [ "$CATEGORY" != "training" ] && [ "$CATEGORY" != "testing" ] && [ "$CATEGORY" != "split" ]; then
+    echo "Error: Category must be 'training', 'testing', or 'split'"
     exit 1
 fi
 

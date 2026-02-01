@@ -1,7 +1,16 @@
+# Project TODOs
+
+## High Priority
+
+- [ ] Use Python Data Analysis tools (like Pandas, NumPy) to analyze any datasets related to the thesis topic [data](data/raw)
+- [ ] Setup opencode and gemini cli.
+
+## Medium Priority
+
 - [ ] Create a dedicated repo for the Thesis. Use the `ls1intum/thesis-template-typst` as the base template. [Link to guide](https://github.com/ls1intum/thesis-template-typst)
 - [ ] Set up Typst environment (install Typst, necessary fonts, etc.) following the [TUM Template Guide](thesis/typst/templates/typst/templates/TUM-TEMPLATE-GUIDE.md).
 - [ ] Migrate the `contexts/tpyst` files there.
-- [ ] Setup opencode and gemini cli.
 - [ ] Use the Agent to create custom configurations in `config.typ` and `metadata.typ` for the thesis. So that it feels unique and modern.
 - [ ] Move the `THESIS_OUTLINE.md` & `WRITING_TIPS.md` to the new repo.
-- [ ] (High Priority) Use Python Data Analysis tools (like Pandas, NumPy) to analyze any datasets related to the thesis topic [data](data/raw)
+
+## Low Priority
