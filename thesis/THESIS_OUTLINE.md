@@ -42,9 +42,9 @@
 - Characteristics of MEMS Smoke, VOC, CO, IR Flame, and Temperature/Humidity Sensors
 - Principles of Sensor Fusion for Discrimination
 - **Feature Engineering for Fire Detection:**
-  - Time-domain features (Rate-of-Rise)
-  - Frequency-domain features (FFT for flame flicker at 10–15Hz)
-  - Cross-sensor correlations
+  - Statistical Analysis (Mean, RMS, Kurtosis) for Gas/Thermal Trends
+  - Frequency-domain features (FFT/Spectral Power) for flame flicker at 10–15Hz
+  - Cross-sensor correlations and dimensionality reduction
 - Neural Network Fundamentals for Classification
 - Model Quantization and Optimization for Resource-Constrained Devices
 - Overview of the Edge Impulse Platform Pipeline
@@ -64,7 +64,7 @@
 *(Critical Chapter for "Robotic Platform" Grade)*
 - **The Autonomous Edge-Node Architecture:**
   - Justification for Arduino UNO R4 WiFi (Renesas RA4M1 + ESP32-S3 Bridge)
-  - Dual-Core Asymmetric Multiprocessing benefits (Sensing vs. Comms)
+  - Asymmetric Multi-Processing (AMP): RA4M1 as the "Inference Brain" vs. ESP32-S3 as the "Connectivity Backbone"
 - Power Management and Thermal Considerations (Active Heating elements)
 - **Physical Design and Enclosure:**
   - Airflow considerations for Gas Sensors
@@ -97,6 +97,9 @@
 - Arduino Firmware Development:
   - Data Forwarder Sketch (Data Collection)
   - Real-Time Inference Sketch (Deployment)
+- **Heuristic Post-Processing and Hybrid Triggering Logic:**
+  - Combining ML Probabilities with Hard Thresholds (Visual/Heuristic Confirmation)
+  - Temporal Debouncing (Consecutive Detection Requirements)
 - Logic for Alarm Triggering (Smoothing, Confidence Thresholds)
 - Quantization Strategy (Float32 vs. Int8)
 
@@ -106,6 +109,8 @@
 - Training and Validation Metrics (Accuracy, Loss)
 - **Ablation Study:**
   - Performance comparison: Single Sensor vs. Fusion Model
+  - The "Heat Paradox": Why Single-Sensor Thermal Detection Fails in False Alarm Scenarios
+  - Identifying the "CO Truth Sensor" for Combustion Verification
   - Proof of "Fusion" benefit
 - **Environment-Specific Performance:**
   - Confusion Matrices for Urban, Indoor, and Outdoor sets
@@ -116,7 +121,7 @@
 - Comparison with Baseline Approaches
 
 ### Chapter 9: Discussion (7–9 pages)
-- Interpretation of Class Separability
+- Interpretation of Class Separability (The "Truth Sensor" and "Thermal Anomaly" Analysis)
 - Strengths of the "Autonomous Node" Approach
 - Analysis of Error Cases (Why did False Alarms happen?)
 - **Deployment Scenarios and Scalability:**
