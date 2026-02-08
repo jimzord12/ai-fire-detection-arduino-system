@@ -50,6 +50,17 @@ An autonomous multi-sensor fire detection node leveraging sensor fusion and Tiny
 
 ---
 
+## Data Analysis Insights
+
+Key findings from the multi-sensor fusion analysis (v1.0):
+
+- **100% Separability**: Fire, no-fire, and false alarm (steam, cooking, sprays) classes are mathematically distinct in the current feature space.
+- **The CO "Truth Sensor"**: CO levels are the most reliable differentiator for active combustion. Spray/steam scenarios exhibit high VOC/Smoke but negligible CO spikes.
+- **The Heat Paradox**: False alarms (steam/cooking) often show higher temperature spikes than early-stage fires, making simple heat-based detection unreliable compared to sensor fusion.
+- **Feature Importance**: Smoke (~33%) and VOC (~18%) are primary indicators, while Humidity (~3%) provides the least unique information.
+
+---
+
 ## Build & Deployment Commands
 
 ### Arduino Firmware
@@ -117,6 +128,8 @@ cd tools/legacy/logger-py && python logger.py
 | **Super Guide**             | [docs/guides/super-guide.md](docs/guides/super-guide.md)                                                               | Comprehensive end-to-end setup & operation                             |
 | **Day-to-Day Setup**        | [docs/guides/DAY-TO-DAY-SETUP.md](docs/guides/DAY-TO-DAY-SETUP.md)                                                     | Quick startup procedures & troubleshooting                             |
 | **Data Collection Guide**   | [data/DATA_COLLECTION_GUIDE.md](data/DATA_COLLECTION_GUIDE.md)                                                         | Practical data capture procedures                                      |
+| **Data Analysis Report**   | [data/analysis/DATA_ANALYSIS_REPORT.md](data/analysis/DATA_ANALYSIS_REPORT.md)                                         | Statistical analysis, sensor correlations, and ML separability         |
+| **Analysis Results**       | [data/analysis/analysis_results.json](data/analysis/analysis_results.json)                                             | Raw metrics, feature importance, and classification stats              |
 | **Data Strategy**           | [docs/research/data-collection/README.md](docs/research/data-collection/README.md)                                     | Rationale for three-class design, sampling parameters                  |
 | **Fire Scenarios**          | [docs/research/data-collection/fire.md](docs/research/data-collection/fire.md)                                         | Fire detection protocol & sensor signatures                            |
 | **False Alarm Scenarios**   | [docs/research/data-collection/false_alarm.md](docs/research/data-collection/false_alarm.md)                           | Cooking, steam, cleaning scenarios                                     |
@@ -128,6 +141,7 @@ cd tools/legacy/logger-py && python logger.py
 | **Sensor Verification**     | [firmware/diagnostics/verify_all_sensors_operational.ino](firmware/diagnostics/verify_all_sensors_operational.ino)     | Hardware diagnostics & health checks                                   |
 | **Sensor Examples**         | [firmware/examples/](firmware/examples/)                                                                               | Individual sensor test sketches (flame, smoke, VOC, CO, temp/humidity) |
 | **Logger Tool**             | [tools/legacy/logger-py/](tools/legacy/logger-py/)                                                                     | Serial data capture & CSV export                                       |
+| **Data Generation**        | [tools/generation/generate-spray-data.ts](tools/generation/generate-spray-data.ts)                                     | TypeScript tool for synthetic scenario generation (e.g., sprays)      |
 | **Data Collection Script**  | [tools/collection/automated_data_collection.sh](tools/collection/automated_data_collection.sh)                         | Automated sampling with timestamps & labels                            |
 | **Edge Impulse Upload**     | [tools/integration/upload_to_edge_impulse.sh](tools/integration/upload_to_edge_impulse.sh)                             | API integration for model training platform                            |
 | **Arduino Setup**           | [tools/setup/check-edge-impulse-env.sh](tools/setup/check-edge-impulse-env.sh)                                         | Environment validation & USB configuration                             |
@@ -145,7 +159,9 @@ firmware/main/           → Production code (fire-detection-main.ino)
 firmware/diagnostics/    → Hardware verification tools
 firmware/examples/       → Individual sensor test sketches
 data/raw/               → Organized by class: fire/, no_fire/, false_alarm/
+data/analysis/          → Data processing scripts, reports, and visualizations
 tools/collection/       → Data logging automation
+tools/generation/       → Synthetic data generation (TypeScript)
 tools/integration/      → Edge Impulse API integration
 tools/setup/           → Environment configuration
 docs/guides/           → User-facing procedures
