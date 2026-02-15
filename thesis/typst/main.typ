@@ -1,4 +1,5 @@
 #import "common/template.typ": project
+#import "common/glossary.typ": section_glossary
 
 #show: project.with(
   title: "Autonomous Multi-Sensor Fire Detection Node Using Sensor Fusion and TinyML",

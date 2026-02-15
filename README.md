@@ -2,6 +2,8 @@
 
 This project utilizes the Arduino UNO R4 WiFi microcontroller in conjunction with various DFRobot sensors to create an AI-powered fire detection system. The system leverages the HuskyLens AI Machine Vision Sensor for real-time object recognition and tracking, alongside multiple environmental sensors to monitor smoke, flame, VOCs, CO levels, temperature, and humidity.
 
+Quick orientation for contributors/agents: see [REPO_AGENT.md](REPO_AGENT.md).
+
 ## Project Structure
 
 ```text
@@ -62,3 +64,4 @@ Based on the provided image, the following electronic components and sensors are
 | **PRD-001298** | Devebox Resistor Kit (Lite) | Assorted resistors including 220R, 470R, 1K, 4.7K, and 10K values [image:1].          |
 | **Generic**    | Jumper Wires                | Multiple bundles of multicolored jumper wires for breadboard connections [image:1].   |
 | **Generic**    | Trimpot Potentiometers      | Set of blue variable resistors (trimmer potentiometers) for circuit tuning [image:1]. |
+

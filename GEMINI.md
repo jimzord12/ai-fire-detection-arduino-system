@@ -120,53 +120,55 @@ cd tools/legacy/logger-py && python logger.py
 
 ## Document Index
 
-| Document                    | Path                                                                                                                   | Purpose                                                                |
-| --------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| **Project README**          | [README.md](README.md)                                                                                                 | Project overview, component inventory, setup                           |
-| **Task List**               | [TODO.md](TODO.md)                                                                                                     | Active tasks, thesis migration, data analysis                          |
-| **Agent Guidelines**        | [docs/research/AGENTS.md](docs/research/AGENTS.md)                                                                     | Build commands, code style (reference)                                 |
-| **Super Guide**             | [docs/guides/super-guide.md](docs/guides/super-guide.md)                                                               | Comprehensive end-to-end setup & operation                             |
-| **Day-to-Day Setup**        | [docs/guides/DAY-TO-DAY-SETUP.md](docs/guides/DAY-TO-DAY-SETUP.md)                                                     | Quick startup procedures & troubleshooting                             |
-| **Data Collection Guide**   | [data/DATA_COLLECTION_GUIDE.md](data/DATA_COLLECTION_GUIDE.md)                                                         | Practical data capture procedures                                      |
-| **Data Analysis Report**    | [data/analysis/DATA_ANALYSIS_REPORT.md](data/analysis/DATA_ANALYSIS_REPORT.md)                                         | Statistical analysis, sensor correlations, and ML separability         |
-| **Analysis Results**        | [data/analysis/analysis_results.json](data/analysis/analysis_results.json)                                             | Raw metrics, feature importance, and classification stats              |
-| **Data Strategy**           | [docs/research/data-collection/README.md](docs/research/data-collection/README.md)                                     | Rationale for three-class design, sampling parameters                  |
-| **Fire Scenarios**          | [docs/research/data-collection/fire.md](docs/research/data-collection/fire.md)                                         | Fire detection protocol & sensor signatures                            |
-| **False Alarm Scenarios**   | [docs/research/data-collection/false_alarm.md](docs/research/data-collection/false_alarm.md)                           | Cooking, steam, cleaning scenarios                                     |
-| **No Fire Baseline**        | [docs/research/data-collection/no_fire.md](docs/research/data-collection/no_fire.md)                                   | Normal operation, environmental variance                               |
-| **Collection Checklist**    | [docs/research/data-collection/checklist.md](docs/research/data-collection/checklist.md)                               | Pre-collection safety & equipment verification                         |
-| **Sampling & Format**       | [docs/research/data-collection/sampling-and-format.md](docs/research/data-collection/sampling-and-format.md)           | CSV structure, sensor calibration details                              |
-| **Storage & Validation**    | [docs/research/data-collection/storage-and-validation.md](docs/research/data-collection/storage-and-validation.md)     | Data integrity, backup, version control                                |
-| **Firmware Main**           | [firmware/main/fire-detection-main/fire-detection-main.ino](firmware/main/fire-detection-main/fire-detection-main.ino) | Production sensor integration & logging code                           |
-| **Sensor Verification**     | [firmware/diagnostics/verify_all_sensors_operational.ino](firmware/diagnostics/verify_all_sensors_operational.ino)     | Hardware diagnostics & health checks                                   |
-| **Sensor Examples**         | [firmware/examples/](firmware/examples)                                                                                | Individual sensor test sketches (flame, smoke, VOC, CO, temp/humidity) |
-| **Logger Tool**             | [tools/legacy/logger-py/](tools/legacy/logger-py)                                                                      | Serial data capture & CSV export                                       |
-| **Data Generation**         | [tools/generation/generate-spray-data.ts](tools/generation/generate-spray-data.ts)                                     | TypeScript tool for synthetic scenario generation (e.g., sprays)       |
-| **Data Collection Script**  | [tools/collection/automated_data_collection.sh](tools/collection/automated_data_collection.sh)                         | Automated sampling with timestamps & labels                            |
-| **Edge Impulse Upload**     | [tools/integration/upload_to_edge_impulse.sh](tools/integration/upload_to_edge_impulse.sh)                             | API integration for model training platform                            |
-| **Arduino Setup**           | [tools/setup/check-edge-impulse-env.sh](tools/setup/check-edge-impulse-env.sh)                                         | Environment validation & USB configuration                             |
-| **Thesis Outline**          | [thesis/THESIS_OUTLINE.md](thesis/THESIS_OUTLINE.md)                                                                   | Academic thesis structure (multi-sensor fusion, TinyML)                |
-| **Scenario Notes**          | [docs/notes/](docs/notes)                                                                                              | Specific test scenario analysis (A3, C2)                               |
-| **Ubuntu Troubleshooting**  | [docs/troubleshoot/ubuntu-24.04-troubleshoot.md](docs/troubleshoot/ubuntu-24.04-troubleshoot.md)                       | Linux environment issues                                               |
-| **Windows Troubleshooting** | [docs/troubleshoot/windows-env-setup-troubleshooting.md](docs/troubleshoot/windows-env-setup-troubleshooting.md)       | Windows setup problems & solutions                                     |
+| Document | Path | Purpose |
+| --- | --- | --- |
+| **Project README** | [README.md](README.md) | Project overview, component inventory, setup |
+| **Task List** | [TODO.md](TODO.md) | Active tasks, thesis migration, data analysis |
+| **Agent Guidelines** | [GEMINI.md](GEMINI.md) | **This file.** Build commands, code style, and project structure reference for the AI agent. |
+| **Thesis Agent Guide** | [thesis/GEMINI.md](thesis/GEMINI.md) | Agent guidelines specifically for interacting with the `thesis` directory and Typst workflow. |
+| **Typst Agent Guide** | [thesis/typst/GEMINI.md](thesis/typst/GEMINI.md) | Agent guidelines for the Typst-based thesis writing environment. |
+| **Super Guide** | [docs/guides/super-guide.md](docs/guides/super-guide.md) | Comprehensive end-to-end setup & operation |
+| **Day-to-Day Setup** | [docs/guides/DAY-TO-DAY-SETUP.md](docs/guides/DAY-TO-DAY-SETUP.md) | Quick startup procedures & troubleshooting |
+| **Data Collection Guide** | [data/DATA_COLLECTION_GUIDE.md](data/DATA_COLLECTION_GUIDE.md) | Practical data capture procedures |
+| **Data Analysis Report** | [data/analysis/DATA_ANALYSIS_REPORT.md](data/analysis/DATA_ANALYSIS_REPORT.md) | Statistical analysis, sensor correlations, and ML separability |
+| **Analysis Results** | [data/analysis/analysis_results.json](data/analysis/analysis_results.json) | Raw metrics, feature importance, and classification stats |
+| **Data Strategy** | [docs/research/data-collection/README.md](docs/research/data-collection/README.md) | Rationale for three-class design, sampling parameters |
+| **Firmware Main** | [firmware/main/fire-detection-main/fire-detection-main.ino](firmware/main/fire-detection-main/fire-detection-main.ino) | Production sensor integration & logging code |
+| **Sensor Verification** | [firmware/diagnostics/verify_all_sensors_operational.ino](firmware/diagnostics/verify_all_sensors_operational.ino) | Hardware diagnostics & health checks |
+| **Logger Tool** | [tools/legacy/logger-py/](tools/legacy/logger-py) | Serial data capture & CSV export |
+| **Data Collection Script** | [tools/collection/automated_data_collection.sh](tools/collection/automated_data_collection.sh) | Automated sampling with timestamps & labels |
+| **Thesis Outline** | [thesis/THESIS_OUTLINE.md](thesis/THESIS_OUTLINE.md) | Academic thesis structure (multi-sensor fusion, TinyML) |
+| **Thesis Progress** | [thesis/THESIS_PROGRESS.md](thesis/THESIS_PROGRESS.md) | Tracking the completion status of thesis sections. |
+| **Typst Master File** | [thesis/typst/main.typ](thesis/typst/main.typ) | The main Typst file that assembles the entire thesis. |
 
 ---
 
 ## Key Directories
 
 ```
-firmware/main/           → Production code (fire-detection-main.ino)
-firmware/diagnostics/    → Hardware verification tools
-firmware/examples/       → Individual sensor test sketches
-data/raw/               → Organized by class: fire/, no_fire/, false_alarm/
-data/analysis/          → Data processing scripts, reports, and visualizations
-tools/collection/       → Data logging automation
-tools/generation/       → Synthetic data generation (TypeScript)
-tools/integration/      → Edge Impulse API integration
-tools/setup/           → Environment configuration
-docs/guides/           → User-facing procedures
-docs/research/         → Technical & academic content
-docs/research/data-collection/  → Detailed collection protocols
+.
+├── data/
+│   ├── analysis/     # Scripts and reports for data analysis
+│   ├── notebooks/    # Jupyter notebooks for exploratory data analysis
+│   └── raw/          # Raw, unprocessed sensor data logs
+├── docs/
+│   ├── guides/       # User-facing procedures and setup guides
+│   └── research/     # Technical & academic content
+├── firmware/
+│   ├── diagnostics/  # Hardware verification tools
+│   ├── examples/     # Individual sensor test sketches
+│   └── main/         # Production firmware
+├── thesis/
+│   ├── assets/       # Figures and images for the thesis
+│   ├── literature/   # Literature review materials
+│   └── typst/        # Typst source files for the thesis
+│       ├── chapters/ # Modular chapter files
+│       └── common/   # Common templates and glossary
+└── tools/
+    ├── collection/   # Data logging automation
+    ├── generation/   # Synthetic data generation
+    ├── integration/  # Edge Impulse API integration
+    └── setup/        # Environment configuration scripts
 ```
 
 ---
