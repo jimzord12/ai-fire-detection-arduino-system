@@ -7,7 +7,7 @@
 ) = {
   // Set document metadata
   set document(title: title, author: author)
-  
+
   // Set page properties
   set page(
     paper: "a4",
@@ -15,14 +15,14 @@
     numbering: "1",
     number-align: center,
   )
-  
+
   // Set text properties
   set text(
     font: "New Computer Modern",
     size: 11pt,
     lang: "en",
   )
-  
+
   // Title Page
   align(center)[
     #block(text(weight: 700, 1.75em, title))
@@ -31,20 +31,20 @@
     #v(1em)
     #date
   ]
-  
+
   pagebreak()
-  
+
   // Abstract
-  heading(level: 1, outline: false)[Abstract]
+  heading(level: 1, outlined: false)[Abstract]
   abstract
-  
+
   pagebreak()
-  
+
   // Table of Contents
-  outline(depth: 3, indent: true)
-  
+  outline(depth: 3, indent: auto)
+
   pagebreak()
-  
+
   // Main Body
   set heading(numbering: "1.1")
   body

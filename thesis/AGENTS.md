@@ -16,7 +16,11 @@ To allow for iterative development, the thesis is broken down into three tiers:
 
 ### Tier 1: Atomic Sections (`sections/`)
 
-Every sub-heading in your outline is a standalone `.typ` file.
+Every sub-heading in your outline is a standalone **section folder**.
+
+- Each section folder contains:
+  - a `.typ` file (the section content)
+  - a `.bib` file (section-local references)
 
 - **Location:** `thesis/typst/chapters/[chapter_name]/sections/`
 - **Benefit:** You can focus on writing 500–1000 words at a time without getting lost in a 70-page document.
@@ -40,9 +44,15 @@ The root file that pulls everything together.
 
 ### Adding Content
 
-1. Create or open a section file: `thesis/typst/chapters/01_introduction/sections/1_2_problem_statement.typ`.
+1. Create or open the section content file:
+   `thesis/typst/chapters/01_introduction/sections/1_2_problem_statement/1_2_problem_statement.typ`.
 2. Write your content using Typst syntax.
 3. Ensure the section is included in the chapter's `chapter.typ`.
+
+Optional but recommended:
+
+- Add references for that section in:
+  `thesis/typst/chapters/01_introduction/sections/1_2_problem_statement/1_2_problem_statement.bib`.
 
 ### Real-time Preview
 
@@ -56,7 +66,12 @@ This will open/update a PDF every time you save a `.typ` file.
 
 ### Citations
 
-Add your sources to `thesis/typst/bibliography.bib` and cite them in your text using `@key`.
+For drafting, keep citations **close to the text**:
+
+- Put new entries in the section-local `.bib` file next to your section `.typ`.
+- Periodically merge curated entries into the thesis-wide bibliography: `thesis/typst/bibliography.bib`.
+
+In the `.typ` text, cite sources using `@key`.
 Example: `As discussed by @perez2023tinyml...`
 
 ---
