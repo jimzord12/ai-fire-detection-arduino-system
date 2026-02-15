@@ -1,4 +1,4 @@
-## Bibliography (IEEE style recommended)
+## Bibliography (APA 7th Edition recommended)
 
 A **Hayagriva file is a top-level YAML** mapping: each entry starts with a unique citation key (your choice, like smith2023), followed by indented fields.
 
@@ -58,7 +58,7 @@ edgeimpulse2024:
 In your `.typ` file:
 
 ```typst
-#bibliography("references.yml", style: "ieee")  // or "apa", "chicago-author-date", etc.
+#bibliography("references.yml", style: "apa")  // or "ieee", "chicago-author-date", etc.
 ```
 
 Cite in text with @smith2023 → renders as [1] or (Smith et al., 2023) depending on style.

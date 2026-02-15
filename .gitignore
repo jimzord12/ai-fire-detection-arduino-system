@@ -4,6 +4,11 @@
 env/
 venv/
 
+
+# NodeJS
+
+node_modules
+
 # Python
 __pycache__/
 *.py[cod]
@@ -31,3 +36,6 @@ bin/
 # OS
 .DS_Store
 Thumbs.db
+
+# Gemini Tools
+/.gemini/*

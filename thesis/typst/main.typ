@@ -23,4 +23,4 @@
 #include "chapters/10_conclusion/chapter.typ"
 
 // Bibliography
-#bibliography("bibliography.bib", style: "ieee")
+#bibliography("bibliography.bib", style: "apa")

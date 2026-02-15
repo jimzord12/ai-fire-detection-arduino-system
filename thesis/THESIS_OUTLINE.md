@@ -141,7 +141,7 @@
   - Cooperative Sensing (Multi-robot consensus)
 
 ### Back Matter
-- References (IEEE Format)
+- References (APA 7th Edition)
 - Appendices
   - Appendix A: Full Arduino Source Code
   - Appendix B: Wiring Diagrams & PCB Layouts

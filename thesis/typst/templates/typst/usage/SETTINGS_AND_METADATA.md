@@ -205,7 +205,7 @@ Save as `config.typ`:
     pagebreak()
   }
 
-  bibliography(references.yml, style: "ieee", title: "References")
+  bibliography(references.yml, style: "apa", title: "References")
 }
 ```
 

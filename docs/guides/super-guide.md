@@ -45,11 +45,12 @@ Before starting, you must install the following software on your computer:
 ### 1.3 Operation System Requirements
 
 The following operating systems are supported:
+
 - Windows 10 or later ONLY via Windows Subsystem for Linux 2 (WSL2)
 - macOS 10.15 (Catalina) or later
 - Linux distributions (Ubuntu 20.04 or later recommended)
 
-### 1.3 Knowledge Prerequisites
+### 1.4 Knowledge Prerequisites
 
 This guide assumes you:
 
@@ -895,7 +896,7 @@ void loop() {
 - **F1-Score**: Harmonic mean of precision and recall
 - **For fire detection**: Prioritize high recall (don't miss fires) while maintaining acceptable precision (minimize false alarms)
 
-**Source**: "Performance Evaluation of Machine Learning Models for Fire Detection" (various IEEE papers)
+**Source**: "Performance Evaluation of Machine Learning Models for Fire Detection" (various APA-style academic papers)
 
 #### Chapter 6: Real-World Deployment Considerations
 
@@ -949,60 +950,51 @@ Use these search terms on **Google Scholar**, **IEEE Xplore**, **ACM Digital Lib
 **Suggested 50-70 Page Thesis Outline**:
 
 1. **Introduction** (5-7 pages)
-
    - Problem statement: Fire safety statistics, false alarm costs
    - Research objectives
    - Thesis organization
 
 2. **Literature Review** (10-12 pages)
-
    - Traditional fire detection methods
    - Machine learning in fire detection
    - Edge computing and TinyML
    - Gap analysis: Why sensor fusion + TinyML is novel
 
 3. **Theoretical Background** (8-10 pages)
-
    - Sensor physics (MOx, IR, capacitive humidity)
    - Neural network fundamentals
    - DSP and feature extraction
    - Quantization techniques
 
 4. **System Design** (10-12 pages)
-
    - Hardware architecture (Arduino R4, sensors)
    - Software architecture (Edge Impulse pipeline)
    - Data collection methodology
    - Model training procedure
 
 5. **Implementation** (8-10 pages)
-
    - Code walkthrough (Arduino sketches)
    - Edge Impulse configuration details
    - Deployment process
 
 6. **Results and Evaluation** (8-10 pages)
-
    - Training accuracy, test accuracy, confusion matrix
    - Real-world testing scenarios
    - False alarm analysis
    - Performance benchmarks (inference time, memory usage)
 
 7. **Discussion** (5-7 pages)
-
    - Interpretation of results
    - Comparison with existing systems
    - Limitations and challenges
    - Future improvements (more sensors, larger dataset, online learning)
 
 8. **Conclusion** (2-3 pages)
-
    - Summary of contributions
    - Practical implications
    - Future research directions
 
 9. **References** (2-3 pages)
-
    - Cite all papers, datasheets, and Edge Impulse documentation
 
 10. **Appendices** (Optional, 5-10 pages)
@@ -1020,18 +1012,18 @@ Use these search terms on **Google Scholar**, **IEEE Xplore**, **ACM Digital Lib
 - **Compare alternatives**: Why neural networks vs. random forests? Why Edge Impulse vs. TensorFlow Lite?
 - **Reproducibility**: Provide enough detail that another engineer could replicate your work
 
-### 9.6 Citation Examples (IEEE Format)
+### 9.6 Citation Examples (APA 7th Edition)
 
 ```
-[1] E. Galea et al., "Fire Detection and Management through a Multi-Sensor Network for the Protection of Cultural Heritage Areas," European Commission CORDIS, Project ID 244088, 2010.
+Galea, E., et al. (2010). Fire detection and management through a multi-sensor network for the protection of cultural heritage areas. European Commission CORDIS, Project ID 244088.
 
-[2] Edge Impulse Inc., "Data Acquisition for Time-Series Data," Edge Impulse Documentation, 2025. [Online]. Available: https://docs.edgeimpulse.com/studio/projects/data-acquisition
+Edge Impulse Inc. (2025). Data acquisition for time-series data. Edge Impulse Documentation. https://docs.edgeimpulse.com/studio/projects/data-acquisition
 
-[3] Renesas Electronics Corp., "RA4M1 Group User's Manual: Hardware," Rev. 4.00, 2023.
+Renesas Electronics Corp. (2023). RA4M1 group user's manual: Hardware (Rev. 4.00).
 
-[4] DFRobot, "Fermion: MEMS Smoke Detection Sensor Datasheet," 2024. [Online]. Available: https://wiki.dfrobot.com
+DFRobot. (2024). Fermion: MEMS smoke detection sensor datasheet. https://wiki.dfrobot.com
 
-[5] Y. Chen et al., "An Indoor Fire Detection Method Based on Multi-Sensor Fusion," Sensors, vol. 23, no. 24, Dec. 2023.
+Chen, Y., et al. (2023). An indoor fire detection method based on multi-sensor fusion. Sensors, 23(24).
 ```
 
 ---
@@ -1139,3 +1131,4 @@ Good luck with your project! 🔥🚒
 [36](https://www.edgeimpulse.com/blog/even-better-audio-classification-with-our-new-dsp-blocks/)
 [37](https://www.youtube.com/watch?v=7vr4D_zlQTE)
 [38](https://docs.edgeimpulse.com/tutorials/topics/machine-learning/classify-multiple-2d-features)
+

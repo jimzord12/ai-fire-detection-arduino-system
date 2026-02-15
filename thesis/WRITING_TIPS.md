@@ -17,7 +17,7 @@ Your work assignment mentions a "Robotic Platform" (25% grade). Since you are bu
 
 - **Setup:**
   - Structure: `main.typ`, `chapters/`, `figures/`.
-  - Use the **IEEE Thesis Template** for Typst.
+  - Use the **APA 7th Edition Thesis Template** for Typst (as configured in `main.typ`).
 - **Figures & Charts:**
   - Do NOT screenshot tables. Use Typst `table()` function.
   - Export Edge Impulse charts as `.svg` or high-res `.png` for crisp zooming.
