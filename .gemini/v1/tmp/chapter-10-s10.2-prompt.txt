@@ -1,0 +1,24 @@
+Create a professional technical illustration for an academic thesis on Maritime IoT.
+
+**Type:** Technical Schematic / Flowchart
+**Style:** Schematic, Clean, Vector-style, Cyber-security themed.
+
+**Components to Include:**
+- **Alice (Stationary):** Coastal Control Center icon with a photon emitter.
+- **Bob (Mobile):** Autonomous Cargo Ship icon with a photon detector.
+- **Quantum Channel:** A line labeled "Quantum Channel (Single Photons)" connecting Alice and Bob.
+- **Classical Channel:** A dashed line labeled "Public Classical Channel" for basis reconciliation.
+- **Process Steps:** Show icons for "Random Number Generation", "Photon Polarization", and "Sifted Key".
+- **Security:** A padlock icon being locked by the generated key.
+
+**Visual Flow:** Left to right flow from the coastal station to the ship.
+
+**Color Scheme:** Silver, dark blue, and glowing green/cyan for quantum paths.
+
+**Additional Notes:** Focus on the dual-channel nature of QKD.
+
+Requirements:
+- Clean, professional academic style
+- Clear labels and annotations where appropriate
+- High contrast for print readability
+- No text overlays unless specifically requested

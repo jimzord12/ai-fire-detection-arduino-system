@@ -1,0 +1,43 @@
+description = "Format & Organize this Greek Chapter"
+
+prompt="""
+# Chapter Formatting & Organization Task
+
+## Objective
+
+**Target Chapter**: {{args}}
+
+The current Chapter went through a process called "Humanization".
+The issue is that this process alters/destroys the original formatting and structure of the Document.
+
+Your task is to carefully re-organize and format the chapter back to its original state, while ensuring that the content remains in Greek.
+
+This is INCREDIBLY IMPORTANT for the academic integrity of the document, you MUST NOT alter any of the content, only the formatting and structure.
+
+There is **ONLY ONE exception** to this rule: The Titles and Section Headings must be translated to Greek as per the following guidelines:
+
+```markdown
+### Section Subheadings Greek Equivalents
+- **Why This Matters**: Σπουδαιότητα και Σκοπιμότητα της Έρευνας
+- **Literature Review & Background**: Θεωρητικό Υπόβαθρο
+- **Technical Challenges & Issues**: Τεχνικές Προκλήσεις και Προβληματισμοί
+- **Current Technologies & Approaches**: Υφιστάμενες Τεχνολογίες και Μεθοδολογικές Προσεγγίσεις
+- **Applications & Use Cases**: Εφαρμογές και Σενάρια Χρήσης
+- **Future Directions & Research Gaps**: Μελλοντικές Κατευθύνσεις και Ερευνητικά Κενά
+
+### Conclusion Subheadings Greek Equivalents
+- **Key Takeaways**: Κύρια Συμπεράσματα
+- **Limitations & Knowledge Gaps**: Περιορισμοί και Ερευνητικά Κενά
+- **Research Contributions**: Ερευνητικές Συνεισφορές
+
+## References -> Βιβλιογραφία
+```
+
+@{docs/File-System-Convention.md}
+
+
+## Deliverable
+The original version of the chapter (in Greek) is located at the same path (root/chapters/Chapter-{{args}}/gr) but it does NOT have the `-Combined` suffix.
+Your output should be a new file in the same directory that is a fully re-organized chapter in Greek, with proper formatting and structure restored.
+It should have the same filename as the original chapter but with the suffix `-Finalized` instead of `-Combined`.
+"""

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://raw.githubusercontent.com/google-gemini/gemini-cli/main/schemas/settings.schema.json",
+  "general": {
+    "enablePromptCompletion": true,
+    "enableAutoUpdateNotification": true,
+    "defaultApprovalMode": "yolo",
+    "enableAutoUpdate": false,
+    "checkpointing": {
+      "enabled": true
+    }
+  },
+  "tools": {
+    "allowed": [
+      "run_shell_command(check_arg_type.sh)",
+      "run_shell_command(parse_visual_aids_args.sh)",
+      "run_shell_command(.gemini/cli-tools/image-gen-ts/image-gen.sh)"
+    ]
+  },
+  "security": {
+    "folderTrust": {
+      "enabled": true
+    }
+  },
+  "ui": {
+    "showModelInfoInChat": true,
+    "footer": {
+      "hideModelInfo": true
+    }
+  },
+  "model": {
+    "name": "gemini-3-flash-preview"
+  }
+}
+

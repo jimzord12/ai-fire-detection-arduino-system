@@ -1,0 +1,38 @@
+description = "Generate a Greek version of the requested chapter"
+
+prompt="""
+# Chapter Translation Workflow
+
+@{docs/File-System-Convention.md}
+
+1. First ULTRA carefully analyze Chapter: {{args}}
+2. Identify the language of the chapter content.
+3. If the chapter is already in Greek, notify the user that no translation is needed.
+4. If the chapter is not in Greek, proceed with the translation.
+5. This is an IMPORTANT document destined for a Greek University. Thus I respectuflly request that you translate the chapter into Greek with utmost accuracy and attention to detail.
+6. Ensure that the translation maintains the original meaning and context of the chapter.
+7. After translation, create a new markdown file at the same path as the original chapter, inside a new directory named "gr". The title of the new file should be the same as the original chapter.
+
+## Common Errors to Avoid
+- Translate the Section Titles & their subheadings accurately. Some Examples:
+   - "Κεφάλαιο 2: Maritime Communication Networks" should become "Kεφάλαιο 2: Δίκτυα Ναυτιλιακών Επικοινωνιών"
+   - "2.1: Software-Defined Networks (SDN) σε Ναυτιλιακά Περιβάλλοντα" should become "2.1 Δίκτυα Οριζόμενα από Λογισμικό (SDN) σε Ναυτιλιακά Περιβάλλοντα
+- Use formal Greek language suitable for academic contexts.
+- Ensure that all technical terms are translated correctly and consistently.
+- Maintain the structure and formatting of the original chapter.
+
+### Section Subheadings Greek Equivalents
+- **Why This Matters**: Σπουδαιότητα και Σκοπιμότητα της Έρευνας
+- **Literature Review & Background**: Θεωρητικό Υπόβαθρο
+- **Technical Challenges & Issues**: Τεχνικές Προκλήσεις και Προβληματισμοί
+- **Current Technologies & Approaches**: Υφιστάμενες Τεχνολογίες και Μεθοδολογικές Προσεγγίσεις
+- **Applications & Use Cases**: Εφαρμογές και Σενάρια Χρήσης
+- **Future Directions & Research Gaps**: Μελλοντικές Κατευθύνσεις και Ερευνητικά Κενά
+
+### Conclusion Subheadings Greek Equivalents
+- **Key Takeaways**: Κύρια Συμπεράσματα
+- **Limitations & Knowledge Gaps**: Περιορισμοί και Ερευνητικά Κενά
+- **Research Contributions**: Ερευνητικές Συνεισφορές
+
+## References -> Βιβλιογραφία
+"""

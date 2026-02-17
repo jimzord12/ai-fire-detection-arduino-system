@@ -1,0 +1,129 @@
+description = "Generate analytics and statistics for prepared references."
+
+prompt = """
+## **Reference Statistics Generator**
+
+Generate comprehensive analytics for a prepared references file and output the results to a `stats.txt` file in the same directory.
+
+---
+
+## User Input
+
+- Target References: {{args}}
+- If no argument provided, default to the most recent `prepared-references-*.md` file in `final-document/references/`
+
+---
+
+## Output Location
+
+The `stats.txt` file should be created in the same directory as the source `prepared-references-<id>.md` file:
+- Example: `final-document/references/chapters-2-10/stats.txt`
+
+---
+
+## Required Analytics
+
+### 1. Summary Statistics
+- **Total References**: Count of all unique references
+
+### 2. Distribution by Source Type
+Categorize each reference based on APA 7th Edition patterns:
+
+| Type | Identification Criteria |
+|------|------------------------|
+| **Journal Article** | Contains journal name in italics, volume/issue numbers, DOI |
+| **Conference Paper** | Contains "Proceedings", "Conference", "Symposium" |
+| **Book** | Publisher name without journal indicators, ISBN |
+| **Book Chapter** | Contains "In" followed by editor names and book title |
+| **Website/Online** | Contains "Retrieved from", URL without DOI, organization as author |
+| **Technical Report** | Contains "Report", technical document identifiers |
+| **Thesis/Dissertation** | Contains "Thesis", "Dissertation", university name |
+| **Standard/Regulation** | Contains "ISO", "IMO", "Regulation", "Directive" |
+| **Other** | Does not fit above categories |
+
+Report counts and percentages for each type.
+
+### 3. Temporal Analysis
+- **References > 5 years old**: Count and percentage (published before {{current_year - 5}})
+- **References ≤ 5 years old**: Count and percentage (published {{current_year - 5}} to present)
+- **Yearly Breakdown**: Count per publication year, sorted descending by year
+- **Oldest Reference**: Year and citation
+- **Most Recent Reference**: Year and citation
+
+### 4. Author Analysis
+- **Unique First Authors**: Count of distinct first authors
+- **Most Cited Authors**: Top 5 authors appearing most frequently (if applicable)
+
+### 5. Source Quality Indicators
+- **References with DOI**: Count and percentage
+- **References with URL only**: Count and percentage (no DOI)
+- **Potentially Outdated**: References > 10 years old (flag for review)
+
+---
+
+## Output Format
+
+```plaintext
+Reference Analytics
+===================
+Generated: {{date}}
+Source: prepared-references-<id>.md
+
+SUMMARY
+-------
+Total References: X
+
+DISTRIBUTION BY SOURCE TYPE
+---------------------------
+Journal Article:      XX (XX.X%)
+Conference Paper:     XX (XX.X%)
+Book:                 XX (XX.X%)
+Book Chapter:         XX (XX.X%)
+Website/Online:       XX (XX.X%)
+Technical Report:     XX (XX.X%)
+Thesis/Dissertation:  XX (XX.X%)
+Standard/Regulation:  XX (XX.X%)
+Other:                XX (XX.X%)
+
+TEMPORAL ANALYSIS
+-----------------
+Recent (≤5 years):    XX (XX.X%)
+Older (>5 years):     XX (XX.X%)
+
+Yearly Breakdown:
+  YYYY: XX
+  YYYY: XX
+  ...
+
+Oldest: YYYY - [Citation snippet]
+Newest: YYYY - [Citation snippet]
+
+AUTHOR ANALYSIS
+---------------
+Unique First Authors: XX
+Top Authors:
+  1. Author Name (X references)
+  2. ...
+
+SOURCE QUALITY
+--------------
+With DOI:             XX (XX.X%)
+URL Only:             XX (XX.X%)
+Potentially Outdated: XX (>10 years old)
+```
+
+---
+
+## Workflow Steps
+
+1. **Locate Source File**: Find the `prepared-references-<id>.md` file based on {{args}} or use the most recent one.
+2. **Parse References**: Extract each reference entry (typically separated by blank lines in APA format).
+3. **Analyze Each Reference**:
+   - Extract publication year
+   - Classify source type
+   - Identify DOI/URL presence
+   - Extract first author name
+4. **Compute Statistics**: Calculate all metrics listed above.
+5. **Generate Report**: Create `stats.txt` with formatted output.
+6. **Validation**: Verify totals add up correctly across categories.
+"""

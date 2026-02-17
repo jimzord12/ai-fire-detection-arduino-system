@@ -1,0 +1,206 @@
+description = "Insert generated images and tables from assets into a chapter's Greek markdown file."
+
+prompt = """
+# Chapter Assets Insertion Workflow
+
+@{docs/AI-related/partials/environment.md}
+@{docs/AI-related/partials/file-system-conventions.md}
+@{docs/AI-related/partials/asset-insertion.md}
+
+## 0. Argument Validation
+
+**Rule:** You must receive exactly 1 argument: [Chapter Number].
+If `{{args}}` does not contain a valid chapter number (1-11), **HALT** and ask the user for the correct format: `/chapters:insert-assets [Chapter]`.
+
+**Example:** `/chapters:insert-assets 2` will insert all assets into Chapter 2's Greek markdown file.
+
+## 1. Environment Validation
+
+Before proceeding, verify you are in the correct project root:
+1. Check for existence of `chapter-progress-tracker.md` in the current directory.
+2. Verify the chapter directory exists: `chapters/Chapter-{{args}}/gr/Chapter-{{args}}-Final.md`.
+3. If validation fails, **HALT** and notify the user.
+
+## 2. Asset Discovery
+
+### 2.1 Locate the Target Chapter File
+
+Find the Greek chapter markdown file to edit:
+- **Path Pattern:** `chapters/Chapter-{{args}}/gr/Chapter-{{args}}-Final.md`
+
+### 2.2 Scan Image Assets
+
+Search for all image assets in:
+**Path:** `chapters/Chapter-{{args}}/gr/assets/images/`
+
+You will need to list the existing directories. For each section folder (`S[N].[M]/`) found:
+1. List all numbered subfolders (`001/`, `002/`, etc.)
+2. Check if `image.png` exists (skip if not generated yet)
+3. Read the `data.md` file to extract:
+   - **Location:** Section reference
+   - **Placement:** Where to insert the figure
+   - **Greek Caption:** The `(Greek Version)` or `Εικόνα` caption
+   - **Note:** In case you cannot find the Greek version, create it on the spot by translating the English caption to Greek.
+
+### 2.3 Scan Table Assets
+
+Search for all table assets in:
+**Path:** `chapters/Chapter-{{args}}/gr/assets/tables/`
+
+For each section folder (`S[N].[M]/`) found:
+1. List all numbered subfolders (`001/`, `002/`, etc.)
+2. Read the `table.md` file to extract:
+   - **Location:** Section reference
+   - **Placement:** Where to insert the table
+   - **Greek Version:** The full table content in Greek
+   - **Note:** Again, in case you cannot find the Greek version, create it on the spot by translating the English caption to Greek.
+
+## 3. User Confirmation
+
+Before inserting assets, present a summary to the user:
+
+```
+**Chapter {{args}} Asset Insertion Summary**
+
+**Target File:** chapters/Chapter-{{args}}/gr/[filename].md
+
+**Images Found:**
+- S[N.1]/001: Figure [N.1] - [Brief title] - [Status: Ready/Missing image.png]
+- S[N.2]/001: Figure [N.2] - [Brief title] - [Status: Ready/Missing image.png]
+...
+
+**Tables Found:**
+- S[N.3]/001: Table [N.3] - [Brief title]
+- S[N.7]/001: Table [N.7] - [Brief title]
+...
+
+**Assets to Insert:** [X] images, [Y] tables
+**Skipped (image.png missing):** [Z]
+
+Shall I proceed with inserting [X+Y] assets into the chapter?
+```
+
+**Wait** for user approval before continuing.
+
+## 4. Asset Insertion Process
+
+For each asset (process in section order, images before tables within each section):
+
+### 4.1 Locate Insertion Point
+
+1. Read the target chapter markdown file.
+2. Find the section mentioned in the `Location` field.
+3. Locate the paragraph or heading mentioned in the `Placement` field.
+4. Identify the exact line number after which to insert.
+
+### 4.2 Insert Image
+
+For each image asset with an existing `image.png`:
+
+```markdown
+
+![Figure [N.X] [Short Description]](assets/images/S[N.X]/[XXX]/image.png)
+
+**Εικόνα [N.X]**: _[Greek caption extracted from data.md]_
+
+```
+
+**Insertion Rules:**
+- Add one blank line before the image markdown.
+- Add one blank line after the caption.
+- Use the relative path from the chapter file: `assets/images/S[N.X]/[XXX]/image.png`
+- Extract the figure number from the data.md caption (e.g., "Figure 7.1" → "7.1")
+
+### 4.3 Insert Table
+
+For each table asset:
+
+Extract the **Greek Version** section from `table.md` and insert it:
+
+```markdown
+
+**Πίνακας [N.X]:** [Greek Title]
+
+| Στήλη 1 | Στήλη 2 | Στήλη 3 |
+|:--------|:--------|:--------|
+| Δεδομένα | Δεδομένα | Δεδομένα |
+
+```
+
+**Insertion Rules:**
+- Add one blank line before the table title.
+- Add one blank line after the table.
+- Preserve exact table formatting from `table.md`.
+
+### 4.4 Track Insertions
+
+Keep track of:
+- Line offsets (each insertion shifts subsequent line numbers)
+- Successfully inserted assets
+- Failed insertions (could not find placement point)
+
+## 5. Conflict Detection
+
+Before inserting, check if the asset is **already inserted**:
+1. Search the chapter file for the image path or table title.
+2. If found, **skip** the asset and mark as "Already inserted".
+3. Report this in the summary.
+
+## 6. Progress Reporting
+
+After processing each asset, provide a status update:
+
+```
+✓ Inserted: Figure [N.X] after "paragraph ending with..."
+✓ Inserted: Table [N.X] after "section heading..."
+⏭ Skipped: Figure [N.Y] - Already exists in document
+✗ Failed: Table [N.Z] - Could not locate insertion point
+```
+
+## 7. Completion Summary
+
+After all assets are processed, provide a final summary:
+
+```
+**Chapter {{args}} Asset Insertion Complete**
+
+✓ Successfully Inserted: [X] images, [Y] tables
+⏭ Skipped (already exist): [A] assets
+✗ Failed (placement not found): [B] assets
+⚠ Pending (image.png missing): [C] images
+
+**Inserted Assets:**
+- Figure [N.1]: Line [XXX]
+- Table [N.3]: Line [YYY]
+- ...
+
+**Failed Assets (manual review needed):**
+- [Asset]: [Reason for failure]
+```
+
+## 8. Error Handling
+
+### 8.1 Placement Not Found
+If the exact placement text cannot be found:
+1. Log the asset as "Failed - Placement not found"
+2. Suggest alternative: "Consider inserting manually at Section [N.X]"
+3. Continue to the next asset
+
+### 8.2 Multiple Matches
+If the placement text matches multiple locations:
+1. Use the first occurrence in the specified section
+2. Log a warning: "Multiple matches found, used first occurrence in Section [N.X]"
+
+### 8.3 File Write Error
+If the file cannot be modified:
+1. Halt the process
+2. Report the error with details
+3. Suggest checking file permissions
+
+## 9. Best Practices
+
+1. **Always backup** the chapter file before mass insertions (copy to `archive/` folder if available).
+2. **Process in order** - Insert assets from top to bottom of the document to minimize line offset tracking issues.
+3. **Verify after completion** - Suggest the user review the chapter to ensure proper formatting.
+4. **Use relative paths** - All asset paths should be relative to the chapter file location.
+"""

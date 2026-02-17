@@ -1,0 +1,25 @@
+Create a professional technical illustration for an academic thesis on Maritime IoT.
+
+**Type:** System Architecture Diagram
+
+**Style:** Technical illustration / Schematic
+
+**Components to Include:**
+- **Left Panel (Physical Entity):** The physical Dolphin 1 vessel at sea. Labels: Mass ($m$), Inertia ($I$), Thruster Forces ($T$), Environmental Loads (Waves/Wind).
+- **Right Panel (Digital Entity):** The "Virtual Dolphin 1" wireframe model. Labels: 3D Geometric Model, Hydrodynamic Coefficients.
+- **Center/Connection:** A bi-directional data flow arrow labeled "Real-time Synchronization".
+- **Coordinate Systems:**
+    - **Geodetic System ($O_g-X_gY_gZ_g$):** Fixed to the earth (Latitude, Longitude).
+    - **Body-fixed System ($O_b-X_bY_bZ_b$):** Attached to the ship (Surge, Sway, Heave, Roll, Pitch, Yaw).
+
+**Visual Flow:** Left (Physical) <-> Center (Sync) <-> Right (Digital). Coordinate axes should be clearly superimposed on the ship illustrations.
+
+**Color Scheme:** Blue tones for the physical/sea environment, Green/Wireframe style for the digital twin. High contrast for labels.
+
+**Additional Notes:** Ensure the notation ($O_g, O_b$) matches standard kinematic diagrams.
+
+Requirements:
+- Clean, professional academic style
+- Clear labels and annotations where appropriate
+- High contrast for print readability
+- No text overlays unless specifically requested

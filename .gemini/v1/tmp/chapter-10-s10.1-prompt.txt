@@ -1,0 +1,23 @@
+Create a professional technical illustration for an academic thesis on Maritime IoT.
+
+**Type:** System Architecture Diagram
+**Style:** Technical illustration, Minimalist, Professional, Blue and White color palette.
+
+**Components to Include:**
+- **Space Layer:** LEO (Low Earth Orbit) and MEO satellite constellations.
+- **Aerial Layer:** UAVs (Drones) and HAPS (High-Altitude Platform Stations).
+- **Surface Layer:** Autonomous Surface Vessels (ASVs), smart buoys, and coastal 6G base stations with THz antennas.
+- **Underwater Layer:** AUVs (Autonomous Underwater Vehicles) and sensors.
+- **Cloud Layer:** A central "Global Maritime Cloud" for data fusion.
+
+**Visual Flow:** Show dotted lines representing THz links between coastal stations and ships, and solid lines for satellite-to-ship/buoy links. Use blue-green light beams for underwater-to-surface optical communication.
+
+**Color Scheme:** Deep ocean blue, sky blue, white, and subtle neon highlights for data links.
+
+**Additional Notes:** Ensure the hierarchy from Space to Undersea is clear and organized.
+
+Requirements:
+- Clean, professional academic style
+- Clear labels and annotations where appropriate
+- High contrast for print readability
+- No text overlays unless specifically requested

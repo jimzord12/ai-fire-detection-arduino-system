@@ -1,0 +1,43 @@
+description = "Read (Load into your context) the Chapters requested by parsing slash command args, supporting single chapters, ranges, 'all', or comma-separated lists."
+
+prompt = """
+# Chapter Loading Protocol
+
+@{docs/File-System-Convention.md}
+
+## 1. Input Analysis
+
+First, determine the type of the argument provided (`{{args}}`) by running the project's validation script:
+
+`run_shell_command(command="/home/jimzord-dev/Documents/Lilian_Thesis/.gemini/scripts/check_arg_type.sh '{{args}}'")`
+
+## 2. Execution Logic
+
+Perform the following actions based strictly on the script's output:
+
+### Case: "number"
+*   **Action**: Load the **completed** markdown file for Chapter `{{args}}`.
+*   **Constraint**: Do NOT load individual Section files.
+*   **Error Handling**: If the chapter file is missing, incomplete, or empty, **PAUSE** and notify the User immediately.
+
+### Case: "range"
+*   **Action**: Based on the range (e.g., "2-4"), load the **completed** markdown files for all chapters in that inclusive range.
+*   **Example**: If "2-4", load Chapter 2, Chapter 3, and Chapter 4.
+
+### Case: "list"
+*   **Action**: Parse the comma-separated string into individual items (numbers or ranges). For each item, load the corresponding **completed** markdown file(s).
+*   **Workflow**: Trim any whitespace, split by commas, and resolve any ranges within the list.
+*   **Example**: If "1-3, 5", load Chapters 1, 2, 3, and 5.
+
+### Case: "all"
+*   **Action**: Load the **completed** markdown files for **ALL** chapters defined in the project.
+*   **Error Handling**: If ANY chapter in the sequence has issues (missing/incomplete/empty), **STOP** and notify the User.
+
+### Case: "invalid"
+*   **Action**: **STOP**. Notify the user that `{{args}}` is not a valid format.
+*   **Supported Formats**:
+    1.  Single Number (e.g., "1")
+    2.  Range (e.g., "1-3")
+    3.  Comma-separated list (e.g., "1-3, 5, 7-9")
+    4.  "all"
+"""

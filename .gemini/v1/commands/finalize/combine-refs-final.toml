@@ -1,0 +1,144 @@
+description = "Combine all prepared reference files into a single, deduplicated, APA 7th Edition sorted master list."
+
+prompt = """
+# **Combine References for Final Document**
+
+## **Purpose**
+
+Merge all prepared reference files from `final-document/references/chapters-*/prepared-references-*.md` into a single comprehensive reference list, ensuring:
+1. **No duplicates** among all references
+2. **APA 7th Edition sorting** (alphabetical by first author's surname, then by publication year)
+
+---
+
+## **Step 1: Locate All Prepared Reference Files**
+
+Search for files matching this glob pattern:
+```
+final-document/references/chapters-*/prepared-references-*.md
+```
+
+Expected locations:
+- `final-document/references/chapters-1/prepared-references-1.md`
+- `final-document/references/chapters-2-10/prepared-references-2-10.md`
+- (and any other `chapters-*` directories that contain `prepared-references-*.md` files)
+
+---
+
+## **Step 2: Extract and Parse References**
+
+For each file found:
+1. Read the entire file content
+2. Extract individual reference entries (each reference is a bullet point starting with `-`)
+3. Ignore header lines, metadata, and section separators (`---`)
+
+---
+
+## **Step 3: Deduplicate References**
+
+### **Duplicate Detection Strategy**
+
+A reference is considered a **duplicate** if ANY of these conditions match:
+1. **Exact match**: Identical strings after trimming whitespace
+2. **DOI match**: Same DOI (case-insensitive comparison)
+3. **Semantic match**: Same author(s) + year + title (accounting for minor variations in formatting)
+
+### **Deduplication Rules**
+- When duplicates are found, keep only ONE instance
+- Prefer the entry with more complete information (e.g., one with DOI over one without)
+- Log all detected duplicates for transparency
+
+---
+
+## **Step 4: Sort References (APA 7th Edition)**
+
+### **Primary Sort Key**: First author's surname (alphabetical, case-insensitive)
+
+### **Secondary Sort Key**: Publication year (oldest first for same author)
+
+### **Tertiary Sort Key**:
+- For same author + same year: Sort alphabetically by title
+- Apply lowercase letter suffixes (a, b, c) ONLY if there are multiple works by the same author in the same year
+
+### **Special Cases**
+- **Organizational authors**: Sort by first significant word (ignore "The", "A", "An")
+- **No author**: Sort by title's first significant word
+- **Multiple authors**: Use first author's surname for sorting
+
+---
+
+## **Step 5: Generate Final Output**
+
+Create the file: `final-document/references/References_Final.md`
+
+### **Output Format**:
+```markdown
+# Βιβλιογραφία
+
+> **Total References**: [COUNT]
+> **Source Files**: [LIST OF SOURCE FILES]
+> **Generated**: [DATE]
+> **Duplicates Removed**: [COUNT]
+
+---
+
+- [Reference 1]
+- [Reference 2]
+- [Reference 3]
+...
+```
+
+---
+
+## **Step 6: Generate Summary Report**
+
+After creating the file, provide a summary:
+
+### **Report Contents**:
+1. **Total unique references** in final list
+2. **Number of duplicates removed** (with examples if any)
+3. **Source files processed**
+4. **Any references with potential issues** (missing DOIs, incomplete information, etc.)
+
+---
+
+## **Quality Controls**
+
+- [ ] All source files were successfully read
+- [ ] References maintain proper APA formatting
+- [ ] No empty entries or malformed references
+- [ ] Greek letters and special characters preserved correctly
+- [ ] URLs and DOIs remain intact and functional
+- [ ] Italics formatting preserved (using asterisks or underscores)
+
+---
+
+## **Error Handling**
+
+If any issues are encountered:
+1. Log the specific problem
+2. Continue processing remaining references
+3. Include problematic entries in a "Needs Review" section at the end
+4. Report all issues in the final summary
+
+---
+
+## **Example APA 7th Edition Sorting**
+
+**Input (unsorted)**:
+```
+- Xu, G., ... (2019). Internet of Things...
+- Ashraf, I., ... (2023). A Survey on Cyber Security...
+- Durlik, I., ... (2023). Navigating the Sea of Data...
+- Abu Dhabi Ports. (2018). Abu Dhabi ports launches...
+```
+
+**Output (sorted)**:
+```
+- Abu Dhabi Ports. (2018). Abu Dhabi ports launches...
+- Ashraf, I., ... (2023). A Survey on Cyber Security...
+- Durlik, I., ... (2023). Navigating the Sea of Data...
+- Xu, G., ... (2019). Internet of Things...
+```
+
+"""

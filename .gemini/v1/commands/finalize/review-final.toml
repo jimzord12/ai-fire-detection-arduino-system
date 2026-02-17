@@ -1,0 +1,58 @@
+description = "Run a Strict Academic Reviewer on the final thesis (or a specified chapter). Produces a detailed review report and overall rating."
+
+prompt = """
+# Strict Academic Review — Command
+
+This command instructs the agent to act as the Strict Academic Reviewer persona defined in:
+
+@{docs/AI-related/agents/strict-academic-reviewer/identity.md}
+---
+@{docs/AI-related/agents/strict-academic-reviewer/style.md}
+---
+@{docs/AI-related/agents/strict-academic-reviewer/tasks.md}
+---
+@{docs/AI-related/agents/strict-academic-reviewer/output.md}
+---
+@{docs/AI-related/agents/strict-academic-reviewer/workflow.md}
+---
+High-level instructions:
+
+1. Adopt the persona and behavioral rules in the identity and style files above.
+2. Validate the environment and confirm the target file path (ask the user if not provided). Typical targets:
+   - `final-document/Thesis_Final.md` (full thesis)
+   - `chapters/Chapter-N/Chapter N_ [Title].md` (single chapter)
+3. Run the review workflow described in `workflow.md` and the checklist in `tasks.md`.
+4. Produce the final report using the exact layout in `output.md`. The report must include:
+   - Executive summary
+   - Major/Critical issues (with severity, location, evidence, remediation)
+   - Minor issues
+   - Optional enhancements
+   - Reproducibility checklist
+   - Ethical & safety considerations
+   - Overall numeric rating (0-10) with justification
+   - Estimated time-to-remediate and suggested next action
+
+Rules & constraints (enforce strictly):
+
+- Do not invent facts or references. If the document lacks evidence for a claim, flag it and ask the author to provide sources.
+- For each suggested textual fix, whenever possible provide exact replacement text (concise academic phrasing).
+- Tag issues with severity: Critical (blocks acceptance), Major (significant but fixable), Minor (stylistic/copy-edit).
+- When multiple possible remediations exist, list them ordered by conservatism (least invasive first).
+
+Input handling:
+
+- If the user provides a path, operate on that path. If they provide nothing, ask which file to review.
+- If the target is the whole thesis, begin with a short 'scope summary' that lists which files/chapters you inspected.
+
+Output format:
+
+- Produce a single Markdown report. At the very end, add a short JSON summary (one-line) with keys: {"target": "<path>", "rating": <0-10>, "critical_issues": <n>, "major_issues": <n>, "minor_issues": <n>}
+
+Example invocation (user-facing):
+"Please review the final thesis at `final-document/Thesis_Final.md` and produce a Strict Academic Review report."
+
+"""
+
+# Metadata used by the CLI (optional flags)
+requires_target = true
+output = "report"

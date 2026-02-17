@@ -1,0 +1,37 @@
+{
+  "name": "ref-tools",
+  "version": "2.0.0",
+  "description": "CLI tools for academic reference management: validation, verification, and format conversion",
+  "main": "index.js",
+  "bin": {
+    "ref-tools": "./verify-references.ts",
+    "convert-to-hayagriva": "./convert-to-hayagriva.ts"
+  },
+  "scripts": {
+    "validate": "tsx verify-references.ts",
+    "filter": "tsx filter-report.ts",
+    "convert": "tsx convert-to-hayagriva.ts",
+    "test": "node --import tsx --test verify-references.test.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "commander": "^14.0.2",
+    "mdast-util-from-markdown": "^2.0.2",
+    "mdast-util-to-string": "^4.0.0",
+    "node-fetch": "^3.3.2",
+    "p-limit": "^6.2.0",
+    "playwright": "^1.57.0",
+    "playwright-chromium": "^1.57.0",
+    "string-similarity": "^4.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "@types/string-similarity": "^4.0.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
+

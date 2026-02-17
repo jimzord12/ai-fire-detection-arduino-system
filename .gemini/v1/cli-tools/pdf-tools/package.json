@@ -1,0 +1,33 @@
+{
+  "name": "pdf-tools",
+  "version": "1.0.0",
+  "description": "CLI tools for PDF manipulation: splitting, extracting, and rotating pages",
+  "main": "index.js",
+  "bin": {
+    "pdf-split": "./pdf-split.ts"
+  },
+  "scripts": {
+    "split": "tsx pdf-split.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "pdf",
+    "split",
+    "extract",
+    "pages",
+    "cli"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@cantoo/pdf-lib": "^2.5.3",
+    "@sylphide/pdf-actions": "^1.1.3",
+    "commander": "^14.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

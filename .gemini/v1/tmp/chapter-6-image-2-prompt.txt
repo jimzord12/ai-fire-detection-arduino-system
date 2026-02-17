@@ -1,0 +1,24 @@
+Create a professional technical illustration for an academic thesis on Maritime IoT.
+
+**Type:** Block Diagram
+
+**Style:** Engineering Schematic
+
+**Components to Include:**
+- **Microcontroller Block:** Labeled "SAMD20-J Autopilot (DUT)".
+- **Simulator Block:** Labeled "Simulink Environment (Host PC)". Internal sub-blocks: "Ship Dynamics", "Wind Model", "Wave Model".
+- **Connections:**
+    - Arrow from Simulator to Microcontroller: "Simulated GPS/Compass Data".
+    - Arrow from Microcontroller to Simulator: "Rudder/Sail Commands (PWM)".
+
+**Visual Flow:** Circular loop flow (Feedback loop).
+
+**Color Scheme:** Professional engineering diagram colors (Greys, Blues, White background). Distinguish Hardware (Physical) from Software (Simulator) using slight color coding (e.g., Grey for Hardware, Blue for Software).
+
+**Additional Notes:** Clean lines, legible font for all labels.
+
+Requirements:
+- Clean, professional academic style
+- Clear labels and annotations where appropriate
+- High contrast for print readability
+- No text overlays unless specifically requested

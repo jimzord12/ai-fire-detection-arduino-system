@@ -1,0 +1,38 @@
+description = "Prepare references for the Final Document workflow."
+
+prompt = """
+## **References Preparions**
+
+### Definition of Preparing References
+
+By preparing the references, I mean to read the requested Chapters' Reference sections and compile a comprehensive list of all unique references cited in those chapters.
+
+A new file named `final-document/references/chapters-<id>/prepared-references-<id>.md` should be created to store the compiled references.
+Depending on the User's request args type, the <id> in the filename should reflect the chapters included (e.g., `2-5` for Chapters 2 to 5, or `all` for all chapters).
+In case of:
+- A single chapter, use the chapter number as the <id> (e.g., `3` for Chapter 3). Example: `final-document/references/chapters/3/prepared-references-3.md`
+- A range of chapters, use the range format (e.g., `2-6` for Chapters 2 to 6). Example: `final-document/references/chapters/2-6/prepared-references-2-6.md`
+- A list of chapters, use the list format separated by underscores (e.g., `2_4_7` for Chapters 1-3, 4, and 7). Example: `final-document/references/chapters/1-3_4_7/prepared-references-1-3_4_7.md`
+
+You may utilize this shell script to parse the args type: `.gemini/scripts/check_arg_type.sh`
+
+---
+
+## User Input
+
+- User's Request: {{args}}
+- References/Citations Style: APA 7th Edition
+
+---
+
+### **Workflow Steps**
+
+0. Verify that the Chapters that the User requested are not already included in previously prepared references files to avoid duplication.
+1. Figure out User's request: {{args}}, (by checking its type using the script above).
+2. Read the Reference sections from the specified Chapters in `chapters/Chapter-N/gr/Chapter-N-Final.md`.
+3. Compile a comprehensive list of all unique references cited in those chapters.
+4. Create a new file named `final-document/references/prepared-references-<id>.md` and write the compiled references into this file.
+5. Perform a self-check to ensure that all references have been accurately compiled and that there are no duplicates.
+6. Confirm that all references are formatted consistently according to the specified citation style.
+"""
+

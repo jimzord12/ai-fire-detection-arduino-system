@@ -1,0 +1,6 @@
+description = "Get a report on the current status of all chapters."
+
+prompt = """
+Please recursively search all the chapter directory and also the take into account the `chapter-progress-tracker.md` file and then log a quick concise report on which Chapters are completed, which are not completed and if any chapter have issues
+
+"""

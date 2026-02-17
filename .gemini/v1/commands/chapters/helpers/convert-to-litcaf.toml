@@ -1,0 +1,167 @@
+description = "Convert an existing chapter to LITCAF structure (Literature-Issues-Tech-Current-Applications-Future)"
+
+prompt="""
+# Chapter LITCAF Conversion Workflow
+
+You are tasked with converting an existing chapter to the LITCAF structure. This is a CRITICAL task that requires careful attention to detail and systematic execution.
+
+## IMPORTANT: Process One Section at a Time
+
+Due to response length limits, you MUST convert the chapter **one section at a time**. After completing each section, STOP and wait for the user to say "continue" before proceeding to the next section.
+
+## Step 1: Analyze the Source Chapter
+
+First, carefully read and analyze Chapter: {{args}}
+
+1. Identify all existing sections (e.g., 5.1, 5.2, 5.3, etc.)
+2. Note the current structure of each section
+3. Extract the key content, references, and technical details from each section
+4. Identify any tables, figures, or special formatting that must be preserved
+
+## Step 2: Create the New LITCAF File
+
+Create a new file with the suffix "-LITCAF.md" in the same directory as the original chapter.
+For example: `Chapter-5-LITCAF.md`
+
+## Step 3: Conversion Order
+
+Convert the chapter in this EXACT order, waiting for "continue" after each step:
+
+1. **Επισκόπηση (Overview)** - Create the chapter overview with 4 paragraphs:
+   - Paragraph 1: Definition (~50-100 words) - Define the chapter's domain with 2-3 citations
+   - Paragraph 2: The Pillars (~50-100 words) - List all sections that will follow
+   - Paragraph 3: Synthesis (~50-100 words) - Explain how pillars work together
+   - Paragraph 4: Roadmap (~50-100 words) - Connect to previous and next chapters
+
+2. **Section X.1** - First main section with full LITCAF structure
+3. **Section X.2** - Second main section with full LITCAF structure
+4. **... (continue for all sections)**
+5. **Συμπεράσματα (Conclusion)** - Final conclusion section
+6. **Βιβλιογραφία (References)** - Complete bibliography
+
+## LITCAF Section Structure (Greek)
+
+Each section (X.1, X.2, etc.) MUST have these 6 subsections:
+
+### **Σπουδαιότητα και Σκοπιμότητα της Έρευνας**
+(Why This Matters - The "Elevator Pitch")
+- Why is this technology/concept critical RIGHT NOW?
+- What happens if we fail to implement it?
+- Length: 100-150 words
+
+### **Θεωρητικό Υπόβαθρο**
+(Literature Review & Background - The Academic Foundation)
+- How has this technology evolved? From [Old Method] to [New Method]
+- Cite key historical and recent studies
+- Length: 200-250 words
+
+### **Τεχνικές Προκλήσεις και Προβληματισμοί**
+(Technical Challenges & Issues - The Constraints)
+- What makes this hard in a MARITIME environment?
+- Bandwidth, corrosion, intermittent power, regulations, etc.
+- Length: 200-250 words
+
+### **Υφιστάμενες Τεχνολογίες και Μεθοδολογικές Προσεγγίσεις**
+(Current Technologies & Approaches - State-of-the-Art)
+- Specific algorithms, protocols, or hardware used TODAY
+- Be technical and specific (standards, model names)
+- Length: 250-300 words
+
+### **Εφαρμογές και Σενάρια Χρήσης**
+(Applications & Use Cases - Real-World Proof)
+- Who is using this? (Maersk, Navy, Smart Ports, etc.)
+- Tangible benefits observed
+- Length: 150-200 words
+
+### **Μελλοντικές Κατευθύνσεις και Ερευνητικά Κενά**
+(Future Directions & Research Gaps - The Horizon)
+- What is missing? What will next generation (6G, AI) bring?
+- Sets up "Research Gaps" for conclusion
+- Length: 150-200 words
+
+## Conclusion Structure (Greek)
+
+### **Συμπεράσματα**
+
+[Summary Paragraph: 100-150 words - High-level recap of the chapter's analysis]
+
+#### **Κύρια Συμπεράσματα**
+- [Core Insight 1]: [Description]
+- [Core Insight 2]: [Description]
+- [Core Insight 3]: [Description]
+- [Core Insight 4]: [Description]
+
+#### **Περιορισμοί και Ερευνητικά Κενά**
+
+**Τρέχοντες Τεχνικοί Περιορισμοί:**
+- [Limitation 1]
+- [Limitation 2]
+
+**Αναγνωρισμένα Ερευνητικά Κενά:**
+- [Gap 1]
+- [Gap 2]
+
+**Εμπόδια Υλοποίησης:**
+- [Barrier 1]
+- [Barrier 2]
+
+#### **Ερευνητικές Συνεισφορές**
+[Formal Statement: ~100 words - How this chapter advances the thesis]
+
+## Critical Guidelines
+
+1. **PRESERVE ALL CONTENT**: Do not lose any information from the original chapter. Reorganize, don't delete.
+
+2. **PRESERVE REFERENCES**: All citations from the original must appear in the new version. Collect them for the final Βιβλιογραφία section.
+
+3. **PRESERVE TABLES & FIGURES**: Keep all tables and figures, placing them in the most appropriate LITCAF subsection.
+
+4. **USE FORMAL GREEK**: This is for a Greek University thesis. Use formal academic Greek.
+
+5. **MAINTAIN TECHNICAL ACCURACY**: Ensure technical terms and concepts are correctly represented.
+
+6. **ONE SECTION AT A TIME**: After completing each section, add a placeholder like:
+   ```
+   ---
+   _[Συνέχεια: Ενότητα X.Y - Section Title]_
+   ```
+   Then move to the next section. User confirmation is **NOT required** to proceed.
+
+## Weight Distribution (LITCAF Percentages)
+
+- **L** (Literature Review & Background): 15-20%
+- **I** (Technical Challenges & Issues): 20-25%
+- **T** (Current Technologies & Approaches): 25-30%
+- **C** (Applications & Use Cases): 15-20%
+- **A/F** (Future Directions & Research Gaps): 15-20%
+
+## Example Progress Report
+
+After each section, report progress like this:
+
+```
+✅ **Section X.Y: [Title]** added!
+
+**Progress:**
+- ✅ Επισκόπηση (Overview)
+- ✅ X.1: [Title]
+- ✅ X.2: [Title]
+- ⏳ X.3: [Title]
+- ⏳ Συμπεράσματα + Βιβλιογραφία
+
+**Moving to Section X.3?**...
+```
+
+## Begin Conversion
+
+Now, start by:
+1. Reading the source chapter: {{args}}
+2. Creating the new LITCAF file
+3. Writing the **Επισκόπηση (Overview)** section
+4. Writing **Section X.1** with full LITCAF structure
+5. Display the progress report
+6. Move to the next section. User confirmation is **NOT required** to proceed.
+7. Repeat for all sections until completion.
+
+Remember: Quality over speed. Each section should be comprehensive and maintain all original content in the new LITCAF structure.
+"""

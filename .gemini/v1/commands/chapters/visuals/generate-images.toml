@@ -1,0 +1,149 @@
+description = "Generate all images for a specified chapter using the image-gen tool."
+
+prompt = """
+# Chapter Image Generation Workflow
+
+@{docs/AI-related/partials/environment.md}
+@{docs/AI-related/partials/file-system-conventions.md}
+@{docs/AI-related/partials/image-generation.md}
+
+## 0. Argument Validation
+
+**Rule:** You must receive exactly 1 argument: [Chapter Number].
+If `{{args}}` does not contain a valid chapter number (1-11), **HALT** and ask the user for the correct format: `/chapters:generate-images [Chapter]`.
+
+**Example:** `/chapters:generate-images 2` will generate all images for Chapter 2.
+
+## 1. Environment Validation
+
+Before proceeding, verify you are in the correct project root:
+1. Check for existence of `chapter-progress-tracker.md` in the current directory.
+2. Verify the chapter directory exists: `chapters/Chapter-{{args}}/gr/assets/images/`.
+3. If validation fails, **HALT** and notify the user.
+
+## 2. Asset Discovery
+
+Scan the chapter's image assets directory to find all `data.md` files that need image generation.
+
+**Search Path:** `chapters/Chapter-{{args}}/gr/assets/images/`
+
+For each section folder (`S[N].[M]/`) found:
+1. List all numbered subfolders (`001/`, `002/`, etc.)
+2. Check if `image.png` already exists (skip if present unless user requests regeneration)
+3. Read the `data.md` file to extract the generation prompt
+
+## 3. User Confirmation
+
+Before generating images, present a summary to the user:
+
+```
+**Chapter {{args}} Image Generation Summary**
+
+**Assets Found:**
+- S[N.1]/001: [Brief description from data.md] - [Status: Pending/Exists]
+- S[N.2]/001: [Brief description from data.md] - [Status: Pending/Exists]
+...
+
+**Images to Generate:** [X]
+**Images Skipped (already exist):** [Y]
+
+Shall I proceed with generating [X] images?
+```
+
+**Wait** for user approval before continuing.
+
+## 4. Image Generation Process
+
+For each pending image asset:
+
+### 4.1 Prompt Extraction
+
+Read the `data.md` file and extract the generation prompt. The prompt should be composed from:
+- The "Generation Prompt" section if present
+- Otherwise, use the figure caption and visual description
+
+### 4.2 Create Temporary Prompt File
+
+Create a temporary prompt file for the image-gen tool:
+
+```bash
+# Example path
+/tmp/chapter-{{args}}-image-prompt.txt
+```
+
+**Prompt Template:**
+```
+Create a professional technical illustration for an academic thesis on Maritime IoT.
+
+[Extracted content from data.md - Type, Style, Components, Visual Flow, etc.]
+
+Requirements:
+- Clean, professional academic style
+- Clear labels and annotations where appropriate
+- High contrast for print readability
+- No text overlays unless specifically requested
+```
+
+### 4.3 Execute Image Generation
+
+Run the image generation tool using `run_shell_command`:
+
+```bash
+.gemini/cli-tools/image-gen-ts/image-gen.sh /tmp/chapter-{{args}}-image-prompt.txt "chapters/Chapter-{{args}}/gr/assets/images/S[N.M]/[XXX]/image.png" --aspect-ratio 16:9
+```
+
+**Recommended Options:**
+- `--aspect-ratio 16:9` for diagrams and flowcharts
+- `--aspect-ratio 4:3` for architecture diagrams
+- `--aspect-ratio 1:1` for icons or simple illustrations
+
+### 4.4 Verify Output
+
+After each generation:
+1. Verify the image file was created
+2. Report success or failure to the user
+3. Continue to the next image
+
+## 5. Progress Reporting
+
+After processing each image, provide a status update:
+
+```
+✓ Generated: S[N.M]/001/image.png
+✗ Failed: S[N.M]/002/image.png - [Error message]
+⏭ Skipped: S[N.M]/003/image.png - Already exists
+```
+
+## 6. Completion Summary
+
+After all images are processed, provide a final summary:
+
+```
+**Chapter {{args}} Image Generation Complete**
+
+✓ Successfully Generated: [X] images
+✗ Failed: [Y] images
+⏭ Skipped: [Z] images (already existed)
+
+**Generated Files:**
+- chapters/Chapter-{{args}}/gr/assets/images/S[N.M]/001/image.png
+- ...
+
+**Failed Files (if any):**
+- [Path]: [Error reason]
+```
+
+## 7. Error Handling
+
+If the image generation tool fails:
+1. Log the error message
+2. Continue to the next image (do not stop the entire process)
+3. Collect all failures for the final summary
+4. Suggest potential fixes (API key issues, network problems, etc.)
+
+## 8. Regeneration Mode
+
+If the user explicitly requests regeneration of existing images, add the `--force` flag mentally and overwrite existing `image.png` files.
+
+**Usage:** `/chapters:generate-images {{args}} --force` (Note: implement this as a check in the args)
+"""

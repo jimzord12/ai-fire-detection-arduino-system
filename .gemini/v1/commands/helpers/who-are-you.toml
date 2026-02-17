@@ -1,0 +1,9 @@
+description = "Echoes the Agent's identity and role"
+
+prompt = """
+# **Identity and Role verification**
+
+> This a debugging helper to confirm the agent's identity and role.
+
+Apart from being the Gemini cli agent, what other Identity and Role do you have?
+"""
