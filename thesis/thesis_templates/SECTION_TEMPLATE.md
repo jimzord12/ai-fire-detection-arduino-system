@@ -4,6 +4,8 @@ Use this template to write a single thesis section with numbered subsections. Ea
 
 # <SECTION_INDEX> <SECTION_TITLE>
 
+<Write an Introduction about the Section here. Use impersonal academic voice.>
+
 ## <SUBSECTION_INDEX> <SUBSECTION_TITLE>
 
 <Write the subsection content here. Use impersonal academic voice.>

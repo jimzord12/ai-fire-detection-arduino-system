@@ -111,3 +111,56 @@ Use `thesis/THESIS_PROGRESS.md` to mark sections as:
 
 This helps you see the "big picture" while working on tiny, modular pieces.
 
+---
+
+## 7. Reference Verification
+
+All references in the bibliography must be verified for validity and accessibility before final submission.
+
+### How to Run the Tool
+
+```bash
+cd .gemini/v1/cli-tools
+npx tsx ref-tools/verify-references.ts ../../thesis/typst/bibliography.bib
+```
+
+### Understanding the Report
+
+- **Location:** Generated in the same directory as the input file
+- **Format:** `{input_basename}-validation-report-{timestamp}.md`
+- **Contents:** Summary stats, confidence levels, detailed findings per reference
+
+**Status Icons:**
+
+| Icon | Status      | Description                             |
+| ---- | ----------- | --------------------------------------- |
+| ✅   | Verified    | High confidence match found in database |
+| ⚠️   | Suspicious  | Partial match or title discrepancy      |
+| ❌   | Broken Link | URL/DOI unreachable or returns 404      |
+
+### Workflow for Fixing References
+
+1. Review all `broken_link` and `suspicious` entries in the report
+2. Find appropriate replacements for invalid DOIs (check Crossref, Semantic Scholar)
+3. Ensure all references have either a `doi` or `url` field
+4. Delete the previous report before re-running: `rm thesis/typst/bibliography-validation-report-*.md`
+5. Re-run the verification tool
+6. Repeat until no `broken_link` or `suspicious` entries remain
+
+### Common Issues
+
+- **DOI Not Found** - DOI may be incorrect or not yet registered; verify at https://doi.org
+- **Access Denied** - Paywalled or restricted access; try alternative sources
+- **HTTP 429** - Rate limited; wait a few minutes and retry
+
+### ⚠️ Author Requirements
+
+> **IMPORTANT:** "Anonymous" author values are **NOT permitted** in the bibliography.
+>
+> All references must have **identifiable authors**:
+>
+> - Individual researchers (e.g., "Smith, John")
+> - Organizations (e.g., "IEEE Standards Association")
+> - Institutions (e.g., "National Fire Protection Association")
+>
+> If a source has no identifiable author, **replace it with a better source** that has proper attribution. Anonymous sources lack academic credibility and should not be used in the thesis.
