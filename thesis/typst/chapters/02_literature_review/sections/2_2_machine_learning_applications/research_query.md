@@ -1,4 +1,4 @@
-# Research Query: 2.3 Machine Learning Applications in Fire Detection
+# Research Query: 2.2 Machine Learning Applications in Fire Detection
 
 Conduct a deep dive into the specific algorithms and architectures used for fire detection in the last decade.
 

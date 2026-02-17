@@ -1,4 +1,4 @@
-# Research Query: 9.5 Ethical and Safety Aspects of AI in Life-Critical Systems
+# Research Query: 9.1 Ethical and Safety Aspects of AI in Life-Critical Systems
 
 Research the ethical, legal, and safety implications of deploying AI-driven fire detection systems.
 
