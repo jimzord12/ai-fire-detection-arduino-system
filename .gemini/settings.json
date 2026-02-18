@@ -3,7 +3,7 @@
   "general": {
     "enablePromptCompletion": true,
     "enableAutoUpdateNotification": true,
-    "defaultApprovalMode": "yolo",
+
     "enableAutoUpdate": false,
     "checkpointing": {
       "enabled": true
@@ -24,11 +24,10 @@
   "ui": {
     "showModelInfoInChat": true,
     "footer": {
-      "hideModelInfo": true
+      "hideModelInfo": false
     }
   },
   "model": {
-    "name": "gemini-3-flash-preview"
+    "name": "gemini-2.5-flash"
   }
 }
-

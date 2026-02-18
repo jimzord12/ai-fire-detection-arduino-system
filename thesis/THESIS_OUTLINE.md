@@ -43,35 +43,35 @@
 
 ### Chapter 2: Literature Review (12–15 pages, ~5,600 words)
 
-#### 2.0 Literature Search Method (PRISMA-inspired rapid SLR) (~400 words)
+#### 2.1 Literature Search Method (PRISMA-inspired rapid SLR) (~400 words)
 
 - Databases and search strings (2015–present)
 - Inclusion/exclusion criteria and screening steps
 - PRISMA flow reporting + extraction table
 
-#### 2.1 Evolution of Fire Detection Technologies (~750 words)
+#### 2.2 Evolution of Fire Detection Technologies (~750 words)
 
-#### 2.2 Traditional Single-Sensor and Multi-Sensor Systems (~800 words)
+#### 2.3 Traditional Single-Sensor and Multi-Sensor Systems (~800 words)
 
-#### 2.3 Machine Learning Applications in Fire Detection (~750 words)
+#### 2.4 Machine Learning Applications in Fire Detection (~750 words)
 
-#### 2.4 Sensor Fusion Techniques (~1,100 words)
+#### 2.5 Sensor Fusion Techniques (~1,100 words)
 
 - Kalman Filters (~350 words)
 - Bayesian Networks (~350 words)
 - Neural Networks (~400 words)
 
-#### 2.5 TinyML and Edge AI Deployments on Microcontrollers (~750 words)
+#### 2.6 TinyML and Edge AI Deployments on Microcontrollers (~750 words)
 
-#### 2.6 MEMS-Based Gas Sensors and IR Flame Detection in Recent Works (~550 words)
+#### 2.7 MEMS-Based Gas Sensors and IR Flame Detection in Recent Works (~550 words)
 
-#### 2.7 Strategies for False Alarm Reduction (~500 words)
+#### 2.8 Strategies for False Alarm Reduction (~500 words)
 
 - Context-Awareness (~500 words)
 
-#### 2.8 Research Gaps and Motivation for Three-Class Classification (~400 words)
+#### 2.9 Research Gaps and Motivation for Three-Class Classification (~400 words)
 
-#### 2.9 Summary of Related Works (~1,000 words)
+#### 2.10 Summary of Related Works (~1,000 words)
 
 - Comparison Table (~400 words)
 
@@ -280,4 +280,3 @@ _(Critical Chapter for "Robotic Platform" Grade)_
   - Appendix F: Edge Impulse Configuration
   - **Appendix G: Risk Assessment & Safety Protocols**
   - **Appendix H: Raw Data Samples (CSV Snippets)**
-
