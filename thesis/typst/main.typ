@@ -15,13 +15,13 @@
 #include "chapters/01_introduction/chapter.typ"
 #include "chapters/02_literature_review/chapter.typ"
 #include "chapters/03_theoretical_background/chapter.typ"
-#include "chapters/04_sensor_characterization/chapter.typ"
-#include "chapters/05_hardware_integration/chapter.typ"
-#include "chapters/06_data_collection/chapter.typ"
+#include "chapters/04_sensor_selection_characterization/chapter.typ"
+#include "chapters/05_hardware_platform_system_integration/chapter.typ"
+#include "chapters/06_data_collection_methodology/chapter.typ"
 #include "chapters/07_implementation/chapter.typ"
-#include "chapters/08_results_evaluation/chapter.typ"
+#include "chapters/08_experimental_results_evaluation/chapter.typ"
 #include "chapters/09_discussion/chapter.typ"
-#include "chapters/10_conclusion/chapter.typ"
+#include "chapters/10_conclusion_future_work/chapter.typ"
 
 // Bibliography
 #bibliography("bibliography.bib", style: "apa")

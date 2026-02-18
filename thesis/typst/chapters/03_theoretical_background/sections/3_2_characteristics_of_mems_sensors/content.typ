@@ -1,0 +1,1 @@
+# Characteristics of MEMS Smoke, VOC, CO, IR Flame, and Temperature/Humidity Sensors
