@@ -1,0 +1,48 @@
+
+> ref-tools@2.0.0 test
+> node --import tsx --test verify-references.test.ts
+
+TAP version 13
+# node:internal/modules/run_main:123
+#     triggerUncaughtException(
+#     ^
+# Error [TransformError]: Transform failed with 1 error:
+# C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.ts:771:0: ERROR: Unexpected end of file
+#     at failureErrorWithLog (C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\node_modules\\esbuild\\lib\\main.js:1467:15)
+#     at C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\node_modules\\esbuild\\lib\\main.js:736:50
+#     at responseCallbacks.<computed> (C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\node_modules\\esbuild\\lib\\main.js:603:9)
+#     at handleIncomingPacket (C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\node_modules\\esbuild\\lib\\main.js:658:12)
+#     at Socket.readFromStdout (C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\node_modules\\esbuild\\lib\\main.js:581:7)
+#     at Socket.emit (node:events:524:28)
+#     at addChunk (node:internal/streams/readable:561:12)
+#     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+#     at Readable.push (node:internal/streams/readable:392:5)
+#     at Pipe.onStreamRead (node:internal/stream_base_commons:191:23)
+# Node.js v20.19.4
+# Subtest: C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts
+not ok 1 - C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts
+  ---
+  duration_ms: 160.7171
+  location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 163.6153
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools
+npm error workspace ref-tools@2.0.0
+npm error location C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --import tsx --test verify-references.test.ts

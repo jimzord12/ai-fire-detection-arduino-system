@@ -5,7 +5,7 @@ prompt = """
 
 Apply IEEE-style numeric indexing to citations in this markdown file: {{args}}
 
-After completing the conversion, create a new markdown file named "markdown_ieee.md" and save it in the same directory. Then delete the original markdown file.
+After completing the conversion, create a new markdown file named "content_ieee.md" and save it in the same directory. Then delete the original markdown file.
 
 ## IEEE Indexing Agent Rules (Markdown → IEEE [n])
 
@@ -13,7 +13,7 @@ Purpose: take a section Markdown file and produce an updated version where:
 - inline citations are IEEE numeric indices like `[1]`, `[2]–[4]`
 - the `### References` section is numbered as `[1] ...`, `[2] ...`
 
-It is OK to be uncertain; prefer placing citations conservatively at the end of the sentence containing the claim.
+It is OK to be uncertain about the exact placement of citations (NOT the citation details like authors, dates. etc. These MUST be correct); prefer placing citations conservatively at the end of the sentence containing the claim.
 
 ### Input assumptions
 - The file is a single thesis section with headings and paragraphs.

@@ -1,15 +1,21 @@
 import assert from 'node:assert';
-import { describe, test } from 'node:test';
+import { beforeEach, describe, test } from 'node:test';
 import {
   clearCache,
   getCacheKey,
   getCachedResult,
   parseReference,
   setCachedResult,
+  verifyWithCrossref,
   verifyWithPlaywright,
+  verifyWithSemanticScholar,
   type RefMetadata,
   type ValidationResult,
 } from './verify-references.js';
+
+beforeEach(() => {
+  clearCache();
+});
 
 describe('Reference Parser', () => {
   test('should parse a standard APA-style reference', () => {
@@ -57,6 +63,51 @@ describe('Reference Parser', () => {
     const parsed = parseReference(text);
 
     assert.strictEqual(parsed.year, '2019');
+  });
+
+  test('should parse authors with initials and "and" conjunction', () => {
+    const text = 'Doe, J. F., & Smith, A. B. (2022). Title.';
+    const parsed = parseReference(text);
+    assert.deepStrictEqual(parsed.authors, ['Doe', 'J. F.', '& Smith', 'A. B.']);
+  });
+
+  test('should parse authors with full first names', () => {
+    const text = 'Johnson, Alice, & Brown, Robert. (2021). Title.';
+    const parsed = parseReference(text);
+    assert.deepStrictEqual(parsed.authors, ['Johnson', 'Alice', '& Brown', 'Robert.']);
+  });
+
+  test('should parse a title with a colon', () => {
+    const text = 'Author, A. (2020). Main Title: Subtitle Here. Journal.';
+    const parsed = parseReference(text);
+    assert.strictEqual(parsed.title, 'Main Title: Subtitle Here');
+  });
+
+  test('should parse a title with special characters', () => {
+    const text = 'Author, B. (2019). "Quoted Title" with !@#$. Journal.';
+    const parsed = parseReference(text);
+    assert.strictEqual(parsed.title, '"Quoted Title" with !@#$');
+  });
+
+  test('should parse a title that contains a dot within (e.g., an abbreviation)', () => {
+    const text = 'Author, C. (2018). An U.S. Perspective on Research. Journal.';
+    const parsed = parseReference(text);
+    assert.strictEqual(parsed.title, 'An U.S. Perspective on Research. Journal.');
+  });
+
+  test('should handle titles that might resemble DOIs or URLs but are not', () => {
+    const text = 'Author, D. (2017). A Study of https://example.com in Practice. Journal.';
+    const parsed = parseReference(text);
+    assert.strictEqual(parsed.title, 'A Study of https://example.com in Practice. Journal.');
+    assert.strictEqual(parsed.url, undefined); // Ensure it doesn't mistakenly extract this as a URL
+  });
+
+  test('should correctly extract DOI when URL is also present', () => {
+    const text =
+      'Author, E. (2016). Article. Journal. https://example.com/article https://doi.org/10.1000/123';
+    const parsed = parseReference(text);
+    assert.strictEqual(parsed.doi, 'https://doi.org/10.1000/123');
+    assert.strictEqual(parsed.url, 'https://example.com/article');
   });
 });
 
@@ -151,6 +202,281 @@ describe('Cache Functions', () => {
 
     clearCache();
     assert.strictEqual(getCachedResult(ref), null, 'Cache should be cleared');
+  });
+});
+
+describe('Crossref Verification (Mocked)', () => {
+  test('should verify a reference with a valid DOI', async t => {
+    const mockResponse = {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        message: {
+          title: ['A Valid Title from Crossref'],
+          author: [{ family: 'Author', given: 'A.' }],
+          issued: { 'date-parts': [[2023]] },
+        },
+      }),
+    };
+
+    t.mock.method(global, 'fetch', async () => mockResponse);
+
+    const ref: RefMetadata = {
+      originalText: '...',
+      authors: ['Author, A.'],
+      year: '2023',
+      title: 'A Valid Title from Crossref',
+      doi: '10.1234/test.doi',
+    };
+
+    const result = await verifyWithCrossref(ref);
+
+    assert.notStrictEqual(result, null);
+    assert.strictEqual(result?.status, 'verified');
+    assert.strictEqual(result?.source, 'crossref');
+    assert.ok(result?.matchScore > 0.9);
+    assert.strictEqual(result?.confidence, 'high');
+    assert.ok(result?.signals.includes('DOI verified in Crossref'));
+    assert.ok(result?.signals.includes('Strong title match (>80%)'));
+    assert.ok(result?.signals.includes('Year confirmed'));
+  });
+
+  test('should return suspicious for a DOI lookup with low title match', async t => {
+    const mockResponse = {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        message: {
+          title: ['Completely Different Title'],
+          author: [{ family: 'Author', given: 'A.' }],
+          issued: { 'date-parts': [[2023]] },
+        },
+      }),
+    };
+
+    t.mock.method(global, 'fetch', async () => mockResponse);
+
+    const ref: RefMetadata = {
+      originalText: '...',
+      authors: ['Author, A.'],
+      year: '2023',
+      title: 'A Valid Title from Crossref',
+      doi: '10.1234/test.doi',
+    };
+
+    const result = await verifyWithCrossref(ref);
+
+    assert.notStrictEqual(result, null);
+    assert.strictEqual(result?.status, 'suspicious');
+    assert.strictEqual(result?.source, 'crossref');
+    assert.ok(result?.matchScore < 0.7);
+    assert.strictEqual(result?.confidence, 'low');
+    assert.ok(result?.signals.includes('DOI verified in Crossref')); // DOI is still found
+  });
+
+  test('should verify a reference with title search', async t => {
+    const mockResponse = {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        message: {
+          items: [
+            {
+              title: ['Another Valid Title from Crossref'],
+              author: [{ family: 'Author', given: 'B.' }],
+              issued: { 'date-parts': [[2024]] },
+            },
+            {
+              title: ['A Valid Title from Crossref'], // Best match
+              author: [{ family: 'Author', given: 'A.' }],
+              issued: { 'date-parts': [[2023]] },
+            },
+          ],
+        },
+      }),
+    };
+
+    t.mock.method(global, 'fetch', async () => mockResponse);
+
+    const ref: RefMetadata = {
+      originalText: '...',
+      authors: ['Author, A.'],
+      year: '2023',
+      title: 'A Valid Title from Crossref',
+    };
+
+    const result = await verifyWithCrossref(ref);
+
+    assert.notStrictEqual(result, null);
+    assert.strictEqual(result?.status, 'verified');
+    assert.strictEqual(result?.source, 'crossref');
+    assert.ok(result?.matchScore > 0.9);
+    assert.strictEqual(result?.confidence, 'high');
+    assert.ok(result?.signals.includes('Strong title match (>80%)'));
+    assert.ok(result?.signals.includes('Year confirmed'));
+  });
+
+  test('should return null for API error', async t => {
+    const mockResponse = {
+      ok: false,
+      status: 500,
+      json: async () => ({}),
+    };
+
+    t.mock.method(global, 'fetch', async () => mockResponse);
+
+    const ref: RefMetadata = {
+      originalText: '...',
+      authors: ['Author, A.'],
+      year: '2023',
+      title: 'Any Title',
+    };
+
+    const result = await verifyWithCrossref(ref);
+
+    assert.strictEqual(result, null);
+  });
+
+  test('should return null if no match found in items', async t => {
+    const mockResponse = {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        message: {
+          items: [], // No items
+        },
+      }),
+    };
+
+    t.mock.method(global, 'fetch', async () => mockResponse);
+
+    const ref: RefMetadata = {
+      originalText: '...',
+      authors: ['Author, A.'],
+      year: '2023',
+      title: 'Non Existent Title',
+    };
+
+    const result = await verifyWithCrossref(ref);
+
+    assert.strictEqual(result, null);
+  });
+});
+
+describe('Semantic Scholar Verification (Mocked)', () => {
+  test('should verify a reference with a valid title', async t => {
+    const mockResponse = {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        data: [
+          {
+            title: 'A Valid Title from Semantic Scholar',
+            authors: [{ name: 'Author A' }],
+            year: 2023,
+            externalIds: { DOI: '10.5678/ss.test' },
+          },
+        ],
+      }),
+    };
+
+    t.mock.method(global, 'fetch', async () => mockResponse);
+
+    const ref: RefMetadata = {
+      originalText: '...',
+      authors: ['Author, A.'],
+      year: '2023',
+      title: 'A Valid Title from Semantic Scholar',
+    };
+
+    const result = await verifyWithSemanticScholar(ref);
+
+    assert.notStrictEqual(result, null);
+    assert.strictEqual(result?.status, 'verified');
+    assert.strictEqual(result?.source, 'semantic_scholar');
+    assert.ok(result?.matchScore > 0.9);
+    assert.strictEqual(result?.confidence, 'high');
+    assert.ok(result?.signals.includes('Found in Semantic Scholar'));
+    assert.ok(result?.signals.includes('Strong title match (>80%)'));
+    assert.ok(result?.signals.includes('Year confirmed'));
+    assert.ok(result?.signals.includes('DOI available'));
+  });
+
+  test('should return suspicious for a title search with low title match', async t => {
+    const mockResponse = {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        data: [
+          {
+            title: 'Slightly Different Title',
+            authors: [{ name: 'Author A' }],
+            year: 2023,
+          },
+        ],
+      }),
+    };
+
+    t.mock.method(global, 'fetch', async () => mockResponse);
+
+    const ref: RefMetadata = {
+      originalText: '...',
+      authors: ['Author, A.'],
+      year: '2023',
+      title: 'A Valid Title from Semantic Scholar',
+    };
+
+    const result = await verifyWithSemanticScholar(ref);
+
+    assert.notStrictEqual(result, null);
+    assert.strictEqual(result?.status, 'suspicious');
+    assert.strictEqual(result?.source, 'semantic_scholar');
+    assert.ok(result?.matchScore < 0.7 && result?.matchScore >= 0.5); // Between 50-70%
+    assert.strictEqual(result?.confidence, 'medium');
+  });
+
+  test('should return null for Semantic Scholar API error', async t => {
+    const mockResponse = {
+      ok: false,
+      status: 500,
+      json: async () => ({}),
+    };
+
+    t.mock.method(global, 'fetch', async () => mockResponse);
+
+    const ref: RefMetadata = {
+      originalText: '...',
+      authors: ['Author, A.'],
+      year: '2023',
+      title: 'Any Title',
+    };
+
+    const result = await verifyWithSemanticScholar(ref);
+
+    assert.strictEqual(result, null);
+  });
+
+  test('should return null if no match found in data', async t => {
+    const mockResponse = {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        data: [], // No data
+      }),
+    };
+
+    t.mock.method(global, 'fetch', async () => mockResponse);
+
+    const ref: RefMetadata = {
+      originalText: '...',
+      authors: ['Author, A.'],
+      year: '2023',
+      title: 'Non Existent Title',
+    };
+
+    const result = await verifyWithSemanticScholar(ref);
+
+    assert.strictEqual(result, null);
   });
 });
 
@@ -339,6 +665,88 @@ describe('Playwright Verification (Mocked)', () => {
     assert.strictEqual(result.source, 'none');
     assert.match(result.details, /No URL or DOI available/);
   });
+
+  test('should verify PDF URL via HEAD request successfully', async t => {
+    const mockHeadResponse = {
+      ok: true,
+      status: 200,
+      headers: new Headers({ 'content-type': 'application/pdf', 'content-length': '1048576' }),
+    };
+
+    t.mock.method(global, 'fetch', async () => mockHeadResponse);
+
+    const mockBrowser = { newContext: async () => ({}) }; // Playwright won't be used for PDF HEAD request
+
+    const ref: RefMetadata = {
+      originalText: '...',
+      authors: [],
+      year: '2023',
+      title: 'A PDF Document',
+      url: 'http://example.com/document.pdf',
+    };
+
+    const result = await verifyWithPlaywright(ref, mockBrowser as any);
+
+    assert.strictEqual(result.status, 'verified');
+    assert.strictEqual(result.source, 'playwright');
+    assert.strictEqual(result.confidence, 'high');
+    assert.ok(result.signals.includes('PDF URL accessible via HEAD request'));
+    assert.ok(result.signals.includes('Content-Type confirmed as PDF'));
+    assert.ok(result.signals.some(s => s.startsWith('File size:')));
+  });
+
+  test('should return broken_link for inaccessible PDF URL via HEAD request', async t => {
+    const mockHeadResponse = {
+      ok: false,
+      status: 404,
+      statusText: 'Not Found',
+      headers: new Headers({}),
+    };
+
+    t.mock.method(global, 'fetch', async () => mockHeadResponse);
+
+    const mockBrowser = { newContext: async () => ({}) };
+
+    const ref: RefMetadata = {
+      originalText: '...',
+      authors: [],
+      year: '2023',
+      title: 'Missing PDF',
+      url: 'http://example.com/missing.pdf',
+    };
+
+    const result = await verifyWithPlaywright(ref, mockBrowser as any);
+
+    assert.strictEqual(result.status, 'broken_link');
+    assert.strictEqual(result.source, 'playwright');
+    assert.strictEqual(result.confidence, 'high');
+    assert.ok(result.signals.includes('PDF URL returned error status'));
+    assert.match(result.details, /PDF URL returned HTTP 404/);
+  });
+
+  test('should handle network error during PDF HEAD request', async t => {
+    t.mock.method(global, 'fetch', async () => {
+      throw new Error('Network error during HEAD request');
+    });
+
+    const mockBrowser = { newContext: async () => ({}) };
+
+    const ref: RefMetadata = {
+      originalText: '...',
+      authors: [],
+      year: '2023',
+      title: 'Network Error PDF',
+      url: 'http://example.com/network_error.pdf',
+    };
+
+    const result = await verifyWithPlaywright(ref, mockBrowser as any);
+
+    assert.strictEqual(result.status, 'broken_link');
+    assert.strictEqual(result.source, 'playwright');
+    assert.strictEqual(result.confidence, 'high');
+    assert.ok(result.signals.includes('Failed to reach PDF URL'));
+    assert.match(result.details, /Failed to verify PDF URL: Network error/);
+  });
 });
 
 describe('ValidationResult Structure', () => {
@@ -381,4 +789,3 @@ describe('ValidationResult Structure', () => {
     );
   });
 });
-

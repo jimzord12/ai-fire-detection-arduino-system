@@ -1,0 +1,397 @@
+
+> ref-tools@2.0.0 test
+> node --import tsx --test verify-references.test.ts
+
+TAP version 13
+# Subtest: Reference Parser
+    # Subtest: should parse a standard APA-style reference
+    ok 1 - should parse a standard APA-style reference
+      ---
+      duration_ms: 1.1447
+      ...
+    # Subtest: should parse reference with URL
+    ok 2 - should parse reference with URL
+      ---
+      duration_ms: 0.2239
+      ...
+    # Subtest: should handle reference without DOI or URL
+    ok 3 - should handle reference without DOI or URL
+      ---
+      duration_ms: 0.1241
+      ...
+    # Subtest: should handle reference with multiple dates in parentheses
+    ok 4 - should handle reference with multiple dates in parentheses
+      ---
+      duration_ms: 0.1035
+      ...
+    # Subtest: should parse authors with initials and "and" conjunction
+    ok 5 - should parse authors with initials and "and" conjunction
+      ---
+      duration_ms: 0.4961
+      ...
+    # Subtest: should parse authors with full first names
+    ok 6 - should parse authors with full first names
+      ---
+      duration_ms: 0.1314
+      ...
+    # Subtest: should parse a title with a colon
+    ok 7 - should parse a title with a colon
+      ---
+      duration_ms: 0.1273
+      ...
+    # Subtest: should parse a title with special characters
+    ok 8 - should parse a title with special characters
+      ---
+      duration_ms: 0.1171
+      ...
+    # Subtest: should parse a title that contains a dot within (e.g., an abbreviation)
+    not ok 9 - should parse a title that contains a dot within (e.g., an abbreviation)
+      ---
+      duration_ms: 2.7644
+      location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:3022'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        + actual - expected
+        
+        + 'An U.S. Perspective on Research'
+        - 'An U.S. Perspective on Research. Journal.'
+                                          ^
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 'An U.S. Perspective on Research. Journal.'
+      actual: 'An U.S. Perspective on Research'
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.test.ts:95:12)
+        Test.runInAsyncScope (node:async_hooks:206:9)
+        Test.run (node:internal/test_runner/test:796:25)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:526:7)
+      ...
+    # Subtest: should handle titles that might resemble DOIs or URLs but are not
+    not ok 10 - should handle titles that might resemble DOIs or URLs but are not
+      ---
+      duration_ms: 0.3683
+      location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:3293'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        + actual - expected
+        
+        + 'A Study of https://example.com in Practice'
+        - 'A Study of https://example.com in Practice. Journal.'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 'A Study of https://example.com in Practice. Journal.'
+      actual: 'A Study of https://example.com in Practice'
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.test.ts:101:12)
+        Test.runInAsyncScope (node:async_hooks:206:9)
+        Test.run (node:internal/test_runner/test:796:25)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:526:7)
+      ...
+    # Subtest: should correctly extract DOI when URL is also present
+    ok 11 - should correctly extract DOI when URL is also present
+      ---
+      duration_ms: 0.1261
+      ...
+    1..11
+not ok 1 - Reference Parser
+  ---
+  duration_ms: 6.5811
+  type: 'suite'
+  location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:398'
+  failureType: 'subtestsFailed'
+  error: '2 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: Cache Functions
+    # Subtest: should generate consistent cache keys for same reference
+    ok 1 - should generate consistent cache keys for same reference
+      ---
+      duration_ms: 0.3678
+      ...
+    # Subtest: should use DOI for cache key when available
+    ok 2 - should use DOI for cache key when available
+      ---
+      duration_ms: 0.0982
+      ...
+    # Subtest: should use title for cache key when DOI not available
+    ok 3 - should use title for cache key when DOI not available
+      ---
+      duration_ms: 0.0857
+      ...
+    # Subtest: should store and retrieve cached results
+    ok 4 - should store and retrieve cached results
+      ---
+      duration_ms: 0.1304
+      ...
+    1..4
+ok 2 - Cache Functions
+  ---
+  duration_ms: 0.7719
+  type: 'suite'
+  ...
+# Subtest: Crossref Verification (Mocked)
+    # Subtest: should verify a reference with a valid DOI
+    ok 1 - should verify a reference with a valid DOI
+      ---
+      duration_ms: 1003.4662
+      ...
+    # Subtest: should return suspicious for a DOI lookup with low title match
+    not ok 2 - should return suspicious for a DOI lookup with low title match
+      ---
+      duration_ms: 78828.6611
+      location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:6712'
+      failureType: 'testCodeFailure'
+      error: 'false == true'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.test.ts:274:12)
+        async Test.run (node:internal/test_runner/test:797:9)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:526:7)
+      ...
+    # Subtest: should verify a reference with title search
+    not ok 3 - should verify a reference with title search
+      ---
+      duration_ms: 1012.5232
+      location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:7474'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        + actual - expected
+        
+        + 'medium'
+        - 'high'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 'high'
+      actual: 'medium'
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.test.ts:314:12)
+        async Test.run (node:internal/test_runner/test:797:9)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:526:7)
+      ...
+# Crossref API error: 500 for https://api.crossref.org/works?query.title=Any%20Title&rows=5
+    # Subtest: should return null for API error
+    ok 4 - should return null for API error
+      ---
+      duration_ms: 1002.2769
+      ...
+    # Subtest: should return null if no match found in items
+    ok 5 - should return null if no match found in items
+      ---
+      duration_ms: 1015.7348
+      ...
+    1..5
+not ok 3 - Crossref Verification (Mocked)
+  ---
+  duration_ms: 82863.095
+  type: 'suite'
+  location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:5804'
+  failureType: 'subtestsFailed'
+  error: '2 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: Semantic Scholar Verification (Mocked)
+    # Subtest: should verify a reference with a valid title
+    ok 1 - should verify a reference with a valid title
+      ---
+      duration_ms: 1006.9212
+      ...
+    # Subtest: should return suspicious for a title search with low title match
+    not ok 2 - should return suspicious for a title search with low title match
+      ---
+      duration_ms: 1001.6697
+      location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:10073'
+      failureType: 'testCodeFailure'
+      error: 'Expected "actual" to be strictly unequal to: null'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: ~
+      actual: ~
+      operator: 'notStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.test.ts:431:12)
+        async Test.run (node:internal/test_runner/test:797:9)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:526:7)
+      ...
+# Semantic Scholar API error: 500
+    # Subtest: should return null for Semantic Scholar API error
+    ok 3 - should return null for Semantic Scholar API error
+      ---
+      duration_ms: 1007.4285
+      ...
+    # Subtest: should return null if no match found in data
+    ok 4 - should return null if no match found in data
+      ---
+      duration_ms: 1003.277
+      ...
+    1..4
+not ok 4 - Semantic Scholar Verification (Mocked)
+  ---
+  duration_ms: 4019.579
+  type: 'suite'
+  location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:9091'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: Playwright Verification (Mocked)
+    # Subtest: should detect "not found" keywords in content
+    not ok 1 - should detect "not found" keywords in content
+      ---
+      duration_ms: 0.6328
+      location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:11549'
+      failureType: 'testCodeFailure'
+      error: 'page.on is not a function'
+      code: 'ERR_TEST_FAILURE'
+      name: 'TypeError'
+      stack: |-
+        verifyWithPlaywright (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.ts:374:8)
+        async TestContext.<anonymous> (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.test.ts:511:20)
+        async Test.run (node:internal/test_runner/test:797:9)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1135:7)
+        async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+      ...
+    # Subtest: should detect "not found" keywords in title
+    not ok 2 - should detect "not found" keywords in title
+      ---
+      duration_ms: 0.2295
+      location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:12436'
+      failureType: 'testCodeFailure'
+      error: 'page.on is not a function'
+      code: 'ERR_TEST_FAILURE'
+      name: 'TypeError'
+      stack: |-
+        verifyWithPlaywright (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.ts:374:8)
+        async TestContext.<anonymous> (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.test.ts:545:20)
+        async Test.run (node:internal/test_runner/test:797:9)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:526:7)
+      ...
+    # Subtest: should detect "Access Denied" as broken link
+    not ok 3 - should detect "Access Denied" as broken link
+      ---
+      duration_ms: 0.2095
+      location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:13264'
+      failureType: 'testCodeFailure'
+      error: 'page.on is not a function'
+      code: 'ERR_TEST_FAILURE'
+      name: 'TypeError'
+      stack: |-
+        verifyWithPlaywright (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.ts:374:8)
+        async TestContext.<anonymous> (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.test.ts:578:20)
+        async Test.run (node:internal/test_runner/test:797:9)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:526:7)
+      ...
+    # Subtest: should verify page with matching citation_title meta tag
+    not ok 4 - should verify page with matching citation_title meta tag
+      ---
+      duration_ms: 0.4818
+      location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:14113'
+      failureType: 'testCodeFailure'
+      error: 'page.on is not a function'
+      code: 'ERR_TEST_FAILURE'
+      name: 'TypeError'
+      stack: |-
+        verifyWithPlaywright (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.ts:374:8)
+        async TestContext.<anonymous> (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.test.ts:615:20)
+        async Test.run (node:internal/test_runner/test:797:9)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:526:7)
+      ...
+    # Subtest: should handle connection errors gracefully
+    not ok 5 - should handle connection errors gracefully
+      ---
+      duration_ms: 0.2436
+      location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:15091'
+      failureType: 'testCodeFailure'
+      error: 'page.on is not a function'
+      code: 'ERR_TEST_FAILURE'
+      name: 'TypeError'
+      stack: |-
+        verifyWithPlaywright (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.ts:374:8)
+        async TestContext.<anonymous> (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.test.ts:643:20)
+        async Test.run (node:internal/test_runner/test:797:9)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:526:7)
+      ...
+    # Subtest: should return suspicious for reference without URL or DOI
+    ok 6 - should return suspicious for reference without URL or DOI
+      ---
+      duration_ms: 0.1337
+      ...
+    # Subtest: should verify PDF URL via HEAD request successfully
+    ok 7 - should verify PDF URL via HEAD request successfully
+      ---
+      duration_ms: 0.5591
+      ...
+    # Subtest: should return broken_link for inaccessible PDF URL via HEAD request
+    ok 8 - should return broken_link for inaccessible PDF URL via HEAD request
+      ---
+      duration_ms: 0.1707
+      ...
+    # Subtest: should handle network error during PDF HEAD request
+    ok 9 - should handle network error during PDF HEAD request
+      ---
+      duration_ms: 0.1559
+      ...
+    1..9
+not ok 5 - Playwright Verification (Mocked)
+  ---
+  duration_ms: 3.0279
+  type: 'suite'
+  location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:11500'
+  failureType: 'subtestsFailed'
+  error: '5 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: ValidationResult Structure
+    # Subtest: should include confidence and signals in result
+    not ok 1 - should include confidence and signals in result
+      ---
+      duration_ms: 0.3199
+      location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:18424'
+      failureType: 'testCodeFailure'
+      error: 'page.on is not a function'
+      code: 'ERR_TEST_FAILURE'
+      name: 'TypeError'
+      stack: |-
+        verifyWithPlaywright (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.ts:374:8)
+        async TestContext.<anonymous> (C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools\verify-references.test.ts:780:20)
+        async Test.run (node:internal/test_runner/test:797:9)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1135:7)
+        async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+      ...
+    1..1
+not ok 6 - ValidationResult Structure
+  ---
+  duration_ms: 0.3585
+  type: 'suite'
+  location: 'C:\\Github\\ai-fire-detection-arduino-system\\.gemini\\v1\\cli-tools\\ref-tools\\verify-references.test.ts:1:18381'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..6
+# tests 34
+# suites 6
+# pass 23
+# fail 11
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 87450.3502
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools
+npm error workspace ref-tools@2.0.0
+npm error location C:\Github\ai-fire-detection-arduino-system\.gemini\v1\cli-tools\ref-tools
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --import tsx --test verify-references.test.ts

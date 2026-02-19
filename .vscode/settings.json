@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["Microcontroller"]
+  "cSpell.words": ["Microcontroller"],
+  "terminal.integrated.sendKeybindingsToShell": true,
+  "typescript.tsdk": ".gemini\\skills\\thesis-section-crafting\\scripts\\node_modules\\typescript\\lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.tsserver.useSeparateProcessPerProjectRoot": false,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  }
 }

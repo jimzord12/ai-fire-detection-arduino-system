@@ -1,7 +1,6 @@
 import { program } from 'commander';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { toString } from 'mdast-util-to-string';
-import fetch from 'node-fetch';
 import { createHash } from 'node:crypto';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
@@ -589,9 +588,36 @@ export function parseReference(text: string): RefMetadata {
     const afterYear = cleanText
       .substring(yearMatch.index + yearMatch[0].length)
       .replace(/^\.?\s*/, '');
-    // Title is usually everything until the first dot that isn't part of an abbreviation, or until the DOI/URL
-    const titleCandidates = afterYear.split(/\. (?=[A-Z]|http|_|\[)/);
-    title = titleCandidates[0].replace(/^_|_$/g, '').trim();
+
+    // Extract title by finding sentence boundaries: period-space followed by capital OR http
+    // Special handling: if there's an embedded URL in the title (not at end), don't split before it
+    // Pattern: if title contains "https://" before the first ". [Capital]" boundary, take everything
+
+    // First check: does the text have an embedded URL (not at the very end)?
+    const hasEmbeddedUrl = /https?:\/\/[^\s.]+.*\.\s+[A-Z]/.test(afterYear);
+
+    if (hasEmbeddedUrl) {
+      // Has URL in the middle - don't split at sentence boundaries with URLs
+      // Just look for normal sentence breaks (high capital after period-space, not http)
+      const normalSplits = afterYear.split(/\.\s+(?=[A-Z](?!ttp))/);
+      title = normalSplits[0];
+    } else {
+      // Standard case: split on period-space followed by capital or http
+      const splitParts = afterYear.split(/\.\s+(?=[A-Z]|http)/);
+      title = splitParts[0];
+
+      // Check for abbreviation false breaks: if title ends with capital and next starts with capital
+      if (
+        splitParts.length > 1 &&
+        /[A-Z]\s*$/.test(splitParts[0]) &&
+        /^[A-Z]/.test(splitParts[1])
+      ) {
+        // Likely abbreviation - take one more part
+        title = splitParts[0] + '. ' + splitParts[1];
+      }
+    }
+
+    title = title.replace(/^_|_$/g, '').trim();
   }
 
   return {
@@ -751,4 +777,3 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 
   program.parse();
 }
-
