@@ -15,8 +15,8 @@
 
     Finally, I would like to acknowledge the developers and contributors of the open-source tools and platforms—specifically Arduino and Edge Impulse—whose technologies formed the foundation of the autonomous sensing node developed in this work.
 
-    #v(5em)
-    #align(right)[
+    #v(1fr)
+    #align(center)[
       #box(width: 40%)[
         #line(length: 100%, stroke: 0.5pt)
         #v(-0.5em)
