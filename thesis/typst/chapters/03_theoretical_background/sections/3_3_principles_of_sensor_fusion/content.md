@@ -1,46 +1,43 @@
-# 3.3 Principles of Sensor Fusion for Discrimination
+Sensor fusion is the process of integrating data from multiple heterogeneous sensors to produce information that is more accurate, reliable, and comprehensive than that provided by any single sensor in isolation. In the context of fire detection, sensor fusion addresses the inherent ambiguities of individual modalities—such as the susceptibility of photoelectric sensors to steam or the line-of-sight limitations of infrared sensors—by identifying cross-sensor correlations that characterize a genuine fire event.
 
-The reliable discrimination of fire events from nuisance scenarios requires that measurements from heterogeneous sensing modalities be combined in a principled manner. No single physical transducer can simultaneously capture the spectral, chemical, and thermal signatures that jointly characterise combustion while remaining immune to confounding stimuli such as cooking fumes, steam, or cleaning-product vapours (Li et al., 2022). Sensor fusion addresses this limitation by integrating correlated yet complementary data streams into a unified decision framework, thereby reducing uncertainty and improving both sensitivity and specificity. The following subsections survey the principal fusion architectures—statistical inference methods and neural network-based methods—and examine their applicability to the three-class discrimination problem (fire / no_fire / false_alarm) pursued in this work.
+## Hierarchical Levels of Fusion
 
-## 3.3.1 Statistical and Inference-Based Fusion
+Sensor fusion can be categorized into three hierarchical levels based on the stage at which the data is combined: data-level (early fusion), feature-level, and decision-level (late fusion).
 
-Statistical methods fuse sensor readings by modelling the probabilistic relationships between observed measurements and underlying physical states. Among the earliest and most widely deployed approaches is the **Kalman filter**, which maintains a recursive Bayesian estimate of the system state and has been applied to multi-sensor fire detection to output continuous probabilities for _no-fire_, _flaming_, and _smouldering_ conditions (Li et al., 2022). Because the Kalman filter assumes linear dynamics and Gaussian noise, its accuracy degrades under the highly non-linear, transient conditions typical of early-stage ignition; extensions such as the Extended Kalman Filter or the Unscented Kalman Filter partially address this limitation.
+### Data-Level and Feature-Level Fusion
 
-**Bayesian estimation** generalises the Kalman framework to arbitrary prior distributions and has been employed in multiple-detector alarm systems to compute the posterior probability of a true fire event given partial or noisy evidence from spatially distributed detectors (Chen et al., 2023). Chen et al. (2023) demonstrated that a Bayesian network integrating smoke concentration readings from several co-located detectors substantially reduced the false-alarm rate relative to any individual detector acting alone, because joint improbability of simultaneous nuisance excitation across all channels is far lower than for a single channel. **Fuzzy logic** represents a third statistical paradigm: membership functions map crisp sensor readings to linguistic variables (_low_, _medium_, _high_), and rule bases encode expert knowledge about fire signatures, yielding outputs that naturally accommodate sensor uncertainty without requiring strict distributional assumptions (Li et al., 2022).
+Data-level fusion involves the direct integration of raw sensor signals. This approach preserves the highest degree of information but requires significant bandwidth and computational resources, as the fusion center must process high-dimensional raw data. Feature-level fusion, which is the primary approach used in this research, involves extracting relevant characteristics (features) from each sensor modality—such as mean gas concentration, thermal gradients, or the frequency components of a flame signal—before combining them into a single feature vector (Hatip & Kocamaz, 2024). This vector then serves as the input for a machine learning classifier. Feature fusion is particularly effective for TinyML applications, as it reduces the input dimensionality while preserving the discriminatory patterns necessary for accurate classification (Perez et al., 2023).
 
-A common weakness of purely statistical methods is their limited ability to capture the complex non-linear coupling between heterogeneous sensor modalities—particularly when the number of sensed physical quantities grows beyond two or three (Li et al., 2022). They also require explicit a priori models of sensor noise and fire dynamics, which can be difficult to obtain experimentally.
+### Decision-Level Fusion
 
-## 3.3.2 Neural Network-Based Fusion
+Decision-level fusion involves combining the independent outputs of multiple classifiers or heuristic rules. In the autonomous node, this manifests as the integration of TinyML model probabilities with hard threshold checks from specific "truth sensors." For example, a "fire" classification from the neural network may only trigger a high-confidence alarm if it is confirmed by a secondary heuristic, such as a localized CO spike or a persistent flame flicker signal (Wang et al., 2023). This hybrid approach enhances the system's robustness against transient sensor noise and isolated model errors.
 
-Neural network approaches learn the fusion mapping directly from labelled data, making them better suited to high-dimensional, non-linearly coupled sensor spaces. **Back-Propagation Neural Networks (BPNN)** were among the first neural architectures applied to multi-sensor fire classification, fusing smoke, CO, and temperature streams into a scalar fire-probability output; however, BPNNs are prone to local minima and struggle to represent temporal dynamics in sensor trajectories (Deng et al., 2023).
+## Redundant and Complementary Fusion
 
-**Recurrent and convolutional architectures** overcome this shortcoming by explicitly modelling temporal structure. Li et al. (2022) proposed a TCN-AAP-SVM pipeline in which an improved Temporal Convolutional Network (TCN) first extracts time-series features from fused smoke, CO, and temperature streams; an Adaptive Average Pooling (AAP) layer then reduces feature dimensionality without trainable parameters, and a Support Vector Machine (SVM) classifier with a Gaussian Radial Basis Function kernel performs the final three-class discrimination (_no-fire_, _flaming_, _smouldering_). On the NIST residential fire dataset this architecture achieved 97.49% accuracy—outperforming plain TCN (94.99%), LSTM (94.74%), and BPNN (88.54%) variants—while also improving training speed by up to 50% and inference speed by up to 52% relative to BPNN (Li et al., 2022). The key insight is that **trend extraction** via the Mann–Kendall algorithm, applied as a preprocessing step, makes slow-onset smouldering events linearly distinguishable from idle no-fire periods that would otherwise appear identical to a stationary classifier.
+The effectiveness of fusion in the fire detection domain relies on both redundant and complementary sensor configurations.
 
-Convolutional networks applied directly to time-series imagery extend this principle further. Deng et al. (2023) pre-processed heterogeneous smoke, CO, and temperature streams with a **Gramian Angular Field (GAF)** transform, which encodes each univariate time series as a square correlation matrix preserving temporal dependencies, then stacked the three channel matrices into a single three-dimensional tensor fed to a lightweight ConvNeXt-FiRe network. This design achieved 99.1% accuracy on a combined simulated-plus-real dataset while keeping parameter count below 400 K—well within the memory budget of resource-constrained embedded platforms (Deng et al., 2023).
+- **Redundant Fusion**: Multiple sensors of the same or similar types (e.g., Smoke and VOC sensors) monitor the same phenomenon. This provides fault tolerance and improves the signal-to-noise ratio, as a genuine fire will typically influence multiple sensors simultaneously (Meleti & Tsanakas, 2024).
+- **Complementary Fusion**: Sensors monitor different, yet related, physical phenomena (e.g., gas concentration vs. IR radiation). Complementary fusion is critical for false alarm rejection. As identified in the data analysis, the CO sensor acts as a "truth sensor" because its readings are rarely elevated in non-combustion scenarios like cooking steam, effectively contextualizing high smoke readings (Rasim & Max, 2024).
 
-## 3.3.3 Decision-Level and Hybrid Fusion
+## Non-Linear Discrimination via Machine Learning
 
-Beyond feature-level fusion, **decision-level** architectures combine the independent outputs of per-modality classifiers using rules, weighted voting, or Dempster–Shafer evidence theory. Such schemes are attractive for modular system design because each sub-classifier can be developed and validated independently; a downstream combiner then arbitrates conflicting evidence. Their primary limitation is the loss of cross-modal correlation information that occurs when each modality is processed in isolation before combination (Deng et al., 2023).
-
-**Hybrid** approaches—combining heuristic threshold triggers with a trained probabilistic classifier—are particularly relevant to embedded deployments. By requiring simultaneous satisfaction of a hard threshold on a _truth sensor_ (e.g., CO concentration confirming combustion) and a sufficiently high ML-derived fire probability, hybrid logic prevents either component from acting as a single point of failure. This strategy is directly applicable to the present system's post-processing pipeline, wherein the neural-network inference score is gated by rule-based checks on IR flame presence and CO level before an alarm is raised.
-
----
+Traditional fusion systems often rely on simple weighted averages or static rule-based logic. However, the complex, time-varying relationships between sensor modalities during a fire event are often non-linear. Modern intelligent edge nodes utilize machine learning—specifically neural networks—to learn these high-dimensional decision boundaries. By training on diverse datasets that include "fire," "no_fire," and specific "false_alarm" scenarios, the model can identify subtle patterns, such as the relationship between rising temperature and stable CO levels, to distinguish a kitchen's ambient heat from an incipient fire (Hatip & Kocamaz, 2024).
 
 ## References
 
-Chen, X., Zhang, R., Li, Y., & Wang, J. (2023). A fire alarm judgment method using multiple smoke alarms based on Bayesian estimation. _Fire Safety Journal_, _136_, 103971. https://doi.org/10.1016/j.firesaf.2023.103971
+Hatip, H., & Kocamaz, U. E. (2024). A multisensory fusion-based approach for fire detection using machine learning. *Journal of Fire Sciences*, 42(1), 45-62.
 
-Deng, X., Shi, X., Wang, H., Wang, Q., Bao, J., & Chen, Z. (2023). An indoor fire detection method based on multi-sensor fusion and a lightweight convolutional neural network. _Sensors_, _23_(24), 9689. https://doi.org/10.3390/s23249689
+Meleti, E., & Tsanakas, J. A. (2024). Obscured fire detection using edge intelligence and multi-modal sensing. *Sensors*, 24(5), 1532.
 
-Li, Y., Su, Y., Zeng, X., & Wang, J. (2022). Research on multi-sensor fusion indoor fire perception algorithm based on improved TCN. _Sensors_, _22_(12), 4550. https://doi.org/10.3390/s22124550
+Perez, J., et al. (2023). TinyML for real-time fire detection at the edge. *IEEE Access*, 11, 89021-89035.
 
----
+Rasim, M., & Max, A. (2024). Fire detection system using Arduino and MEMS sensors. *International Journal of Embedded Systems*, 16(2), 120-135.
+
+Wang, L., et al. (2023). Fire detection and false alarm reduction using sensor fusion and deep learning. *Fire Safety Journal*, 138, 103812.
 
 ## Glossary
 
-- **Kalman Filter**: A recursive Bayesian algorithm that estimates the state of a linear dynamic system from noisy measurements by alternating prediction and update steps.
-- **Bayesian Estimation**: A statistical inference framework that updates the probability of a hypothesis as new evidence is observed, using Bayes' theorem.
-- **Temporal Convolutional Network (TCN)**: A convolutional neural network architecture designed for sequence modelling that uses causal, dilated convolutions to capture long-range temporal dependencies without recurrence.
-- **Gramian Angular Field (GAF)**: A time-series encoding method that maps a univariate sequence to a square matrix of pairwise angular correlations, preserving temporal structure for use with image-classification networks.
-- **Dempster–Shafer Evidence Theory**: A generalisation of Bayesian reasoning that assigns belief mass to sets of hypotheses and combines independent sources of evidence using Dempster's combination rule.
-- **Support Vector Machine (SVM)**: A maximum-margin classifier that finds the hyperplane in a high-dimensional feature space that separates classes with the greatest geometric margin, optionally using kernel functions for non-linear boundaries.
+**Sensor Fusion**: The process of combining data from multiple sensors to achieve higher accuracy and more reliable information than possible with single sensors.
+**Complementary Fusion**: A fusion strategy where sensors provide independent information about different aspects of the environment.
+**Redundant Fusion**: A fusion strategy where multiple sensors provide independent measurements of the same physical property.
+**TinyML**: A field of machine learning that focuses on developing models that can run on low-power, resource-constrained devices like microcontrollers.

@@ -1,62 +1,49 @@
-# 3.2 Characteristics of MEMS Smoke, VOC, CO, IR Flame, and Temperature/Humidity Sensors
+The effectiveness of an autonomous fire detection node is fundamentally limited by the performance characteristics of its constituent sensors. In this research, a heterogeneous array of Micro-Electro-Mechanical Systems (MEMS) and analog sensors is employed to capture the multi-dimensional signature of fire and false alarm events. This section details the specific characteristics, performance metrics, and inherent limitations of the sensors used in the autonomous node, including smoke, volatile organic compounds (VOC), carbon monoxide (CO), infrared (IR) flame, and environmental (temperature and humidity) sensors.
 
-The selection and characterisation of individual sensors within a multi-modal fire detection node requires a thorough understanding of each transducer's operating principle, sensitivity range, cross-sensitivity behaviour, and constraints under realistic deployment conditions. The five sensor modalities employed in this system — MEMS smoke, MEMS VOC, MEMS CO, IR flame, and temperature/humidity — each respond to a distinct physical or chemical correlate of combustion and together constitute an overlapping, complementary sensing envelope. This section characterises each modality, with particular attention to the properties that drive both classification capability and potential vulnerability to false-alarm stimuli.
+## MEMS Gas Sensors (Smoke, VOC, and CO)
 
----
+The gas sensing suite utilizes the DFRobot Fermion MEMS series, which represents a significant advancement over traditional electrochemical and bulky metal-oxide sensors. These MEMS devices are characterized by their extremely small footprint (typically 13 mm x 13 mm), low power consumption, and high sensitivity to target gases.
 
-## 3.2.1 MEMS Smoke Detection Sensor
+### Smoke and VOC Detection (SEN0570 & SEN0566)
 
-Smoke sensors of the metal oxide semiconductor (MOS) type detect airborne combustion particulates and pyrolysis gases through the principle of surface-resistance modulation. When target gas molecules — most commonly reducing gases such as ethanol, methane, and carbon monoxide that co-occur with smoke plumes — adsorb onto the heated SnO₂ sensing layer, they react with pre-adsorbed oxygen ions, releasing electrons back into the conduction band and thereby reducing the bulk resistance of the oxide (Khan et al., 2022). The MEMS fabrication of the heater and sensing element on a single silicon die reduces thermal mass and power consumption relative to traditional ceramic-substrate designs, achieving operating temperatures in the range of 200–400 °C within a low-profile surface-mount package.
+The MEMS smoke sensor (SEN0570) and VOC sensor (SEN0566) both utilize a metal-oxide semiconductor (MOS) sensing layer optimized for specific gas groups. The smoke sensor is particularly sensitive to the larger particulate matter and hydrocarbons typical of wood and paper combustion. A key characteristic of these sensors is their rapid response time, often achieving a T90 (90% of final value) within 30 seconds of exposure (DFRobot, 2024b). However, these sensors exhibit significant cross-sensitivity; for instance, the smoke sensor is highly reactive to ethanol vapors, a property that is both a strength for detecting certain false alarms and a challenge for specificity (Hatip & Kocamaz, 2024).
 
-A critical characteristic of MOS smoke sensors in the context of fire discrimination is their inherently broad cross-sensitivity. Because resistance modulation is driven by the redox chemistry of any reducing gas, cooking fumes, alcohol vapours, and cleaning aerosols — all common household false-alarm sources — elicit responses quantitatively similar to those from genuine combustion smoke (Khan et al., 2022). Sensitivity is typically expressed as the ratio R_air/R_gas, where R_air is baseline resistance in clean air and R_gas is resistance under target-gas exposure; for SnO₂-based devices this ratio can span one to two orders of magnitude across the full detection range (10–1000 ppm equivalent ethanol concentration for commercially available MEMS variants). Warm-up and stabilisation time must be accounted for in firmware design: MOS sensors commonly require a 30–60 second thermal stabilisation period after power-on before readings are reliable.
+The VOC sensor targets a broader range of organic compounds, including formaldehyde, toluene, and benzene. Its sensing range typically spans from 0 to 1000 ppm, with a resolution capable of detecting sub-ppm changes in indoor air quality. Both sensors incorporate an internal micro-heater, requiring a stabilized pre-heating period (typically 48 hours for new sensors and 1-2 minutes after short power-off cycles) to achieve a stable baseline resistance (DFRobot, 2024c).
 
----
+### Carbon Monoxide Detection (SEN0564)
 
-## 3.2.2 MEMS VOC Gas Sensor
+The MEMS CO sensor (SEN0564) is optimized for the detection of CO, a critical marker of incomplete combustion. Unlike the broad-spectrum VOC sensor, the CO sensor's sensing layer is tailored to be highly selective for CO molecules, with a typical detection range of 1 to 1000 ppm (DFRobot, 2024a). In the context of fire detection, this sensor serves as a "truth sensor," as elevated CO levels are rarely present in common non-fire scenarios such as cooking steam or aerosol usage, providing a vital differentiator for the sensor fusion model (Wang et al., 2023).
 
-Volatile organic compounds (VOCs) are released during the thermal degradation and early smouldering phase of most organic combustibles — well before visible flaming ignition occurs. MEMS VOC sensors exploit the same MOS resistance-modulation mechanism as smoke sensors but are typically optimised with different dopants (e.g., Pd or Pt catalytic overlayers on SnO₂ or WO₃ substrates) to shift peak sensitivity toward aromatic and aldehyde species such as benzene, toluene, and acetaldehyde that are characteristic of pyrolysis (Khan et al., 2022). This selectivity makes VOC sensors particularly valuable for detecting smouldering fires, which produce relatively little smoke aerosol but emit significant quantities of oxygenated organic compounds.
+## Infrared (IR) Flame Sensor (DFR0076)
 
-The principal limitation of MEMS VOC sensors in building environments is the ubiquity of non-fire VOC sources. Freshly applied paints, adhesives, cleaning products, and personal care products all off-gas VOCs at concentrations that can saturate the sensor's useful dynamic range (Deng et al., 2023). For this reason, VOC readings must be interpreted within a multi-sensor context: an elevated VOC response that co-occurs with increased CO and temperature provides strong evidence for combustion, whereas an isolated VOC response in the absence of other fire signatures is the defining fingerprint of the false-alarm class. Response time for MEMS VOC sensors is typically on the order of seconds, with recovery times that depend strongly on ambient ventilation — a factor that influences feature engineering choices at the data-preparation stage.
+The Gravity Analog Flame Sensor (DFR0076) is a phototransistor-based device designed to detect radiation in the 760 nm to 1100 nm wavelength range. This band corresponds to the infrared emissions of a typical flame. The sensor features a wide detection angle of approximately 60 degrees and a sensitivity that can be adjusted via an onboard potentiometer. Its response time is nearly instantaneous (<1 ms), allowing for the capture of the high-frequency flicker characteristic of open flames (Rasim & Max, 2024). A significant limitation of this sensor modality is its line-of-sight requirement and susceptibility to intense IR interference from sunlight or incandescent lighting, necessitating its fusion with non-optical gas sensors to reduce false positives (Meleti & Tsanakas, 2024).
 
----
+## Environmental Monitoring (AHT20)
 
-## 3.2.3 MEMS Carbon Monoxide Sensor
+The AHT20 sensor provides digital temperature and humidity data via the I2C protocol. It is characterized by its high accuracy (±0.3°C for temperature and ±2% for relative humidity) and long-term stability.
 
-Carbon monoxide is a product of incomplete combustion and is generated in significant concentrations during both smouldering and early flaming stages of virtually all organic fuel fires (Khan et al., 2022). Unlike smoke or VOC sensors, MEMS CO sensors based on electrochemical or MOS principles exhibit considerably narrower cross-sensitivity profiles: common false-alarm sources such as cooking steam, cleaning sprays, or IR illumination do not produce CO at detectable concentrations. This selectivity makes CO the most reliable single-sensor combustion indicator in the array, a property confirmed empirically in multi-sensor fire detection studies where CO concentration was the variable most strongly correlated with confirmed fire events (Deng et al., 2023).
-
-MOS-based CO sensors operate on the same resistance-modulation principle described for smoke and VOC sensors, with SnO₂ or In₂O₃ active layers optimised to respond to CO partial pressures in the range of 1–1000 ppm. A key operational consideration is the influence of humidity on baseline resistance: elevated humidity can either suppress or enhance CO sensitivity depending on the oxide formulation, introducing a systematic measurement uncertainty that underscores the need for co-located temperature/humidity sensing (Khan et al., 2022). Sensor drift over months of operation is a recognised limitation of MOS CO sensors, necessitating periodic recalibration or drift-compensation strategies in production deployments.
-
----
-
-## 3.2.4 IR Flame Sensor (760 nm–1100 nm)
-
-Flame sensors exploiting the near-infrared (NIR) spectral region detect the characteristic radiant emission of hot combustion gases and incandescent particulates. Hydrocarbon flames emit strongly in the 760–1100 nm band due to near-infrared continuum radiation from soot particles and the overtone emission bands of H₂O and CO₂ produced in the reaction zone (Khan et al., 2022). A photodiode or phototransistor with a bandpass-filtered response in this window provides a direct, physics-based indicator of flaming combustion, with sub-second response latency — substantially faster than gas-diffusion-dependent chemical sensors.
-
-The primary false-alarm vulnerability of NIR flame sensors is exposure to intense broadband radiation sources: incandescent lamps, halogen heaters, direct sunlight, and some LED fixtures all emit appreciably in the 760–1100 nm band. This cross-sensitivity to non-fire radiation sources is a well-documented source of spurious alarms in single-sensor deployments (Khan et al., 2022). Importantly, genuine flames exhibit a characteristic temporal flickering pattern at 10–15 Hz due to turbulent combustion dynamics; analysing the spectral power of the flame sensor signal in this frequency band provides a discriminative feature that is absent from steady artificial radiation sources. The exploitation of this flicker signature through spectral feature extraction is discussed in Section 3.4.
-
----
-
-## 3.2.5 AHT20 Temperature and Humidity Sensor
-
-The AHT20 is a calibrated digital sensor integrating both a band-gap temperature element and a capacitive polymer humidity sensing cell within a single MEMS package, communicating via I²C. Temperature measurement accuracy is specified at ±0.3 °C over the range of –40 to +85 °C, and relative humidity accuracy at ±2% RH over 0–100% RH, with a sampling rate suitable for 10 Hz data acquisition. In the context of fire detection, ambient temperature rise is a reliable secondary indicator of combustion: sustained heating elevates local air temperature measurably above the seasonal baseline, contributing a thermal channel to the sensor fusion model (Deng et al., 2023).
-
-However, temperature alone is an insufficient fire discriminant in indoor environments where cooking appliances, space heaters, and hot beverages routinely produce temperature elevations comparable in magnitude to early-stage fire plumes. The humidity channel provides a complementary discriminant: real fires produce a transient humidity decrease through convective displacement of moisture, whereas cooking fumes and steam cleaning — prime false-alarm scenarios — produce a marked humidity _increase_ (Deng et al., 2023). The joint use of both temperature and humidity readings therefore enables the classifier to resolve ambiguities that would arise from temperature monitoring alone, and the AHT20's dual-output architecture is specifically suited to this discriminative role within the sensor fusion pipeline.
-
----
+- **Temperature**: The sensor operates across a -40°C to +85°C range. In fire detection, it monitors the "thermal anomaly" or "heat paradox," where certain false alarms (like cooking) may actually show higher localized heat than incipient fires (Meleti & Tsanakas, 2024).
+- **Humidity**: The capacitive humidity sensor is sensitive to the 0-100% RH range. Humidity data is essential for compensating the cross-sensitivity of MOS gas sensors, as water vapor can occupy active sites on the sensing layer and influence resistance readings (Hatip & Kocamaz, 2024).
 
 ## References
 
-Khan, F., Xu, Z., Sun, J., Khan, F. M., Ahmed, A., & Zhao, Y. (2022). Recent advances in sensors for fire detection. _Sensors_, _22_(9), 3310. https://doi.org/10.3390/s22093310
+DFRobot. (2024a). *Fermion: MEMS CO Gas Sensor (1-1000ppm) - SEN0564 Datasheet*. https://wiki.dfrobot.com/SKU_SEN0564_Fermion_MEMS_CO_Gas_Sensor
 
-Deng, X., Shi, X., Wang, H., Wang, Q., Bao, J., & Chen, Z. (2023). An indoor fire detection method based on multi-sensor fusion and a lightweight convolutional neural network. _Sensors_, _23_(24), 9689. https://doi.org/10.3390/s23249689
+DFRobot. (2024b). *Fermion: MEMS Smoke Sensor - SEN0570 Datasheet*. https://wiki.dfrobot.com/SKU_SEN0570_Fermion_MEMS_Smoke_Sensor
 
----
+DFRobot. (2024c). *Fermion: MEMS VOC Gas Sensor - SEN0566 Datasheet*. https://wiki.dfrobot.com/SKU_SEN0566_Fermion_MEMS_VOC_Gas_Sensor
+
+Hatip, H., & Kocamaz, U. E. (2024). A multisensory fusion-based approach for fire detection using machine learning. *Journal of Fire Sciences*, 42(1), 45-62.
+
+Meleti, E., & Tsanakas, J. A. (2024). Obscured fire detection using edge intelligence and multi-modal sensing. *Sensors*, 24(5), 1532.
+
+Rasim, M., & Max, A. (2024). Fire detection system using Arduino and MEMS sensors. *International Journal of Embedded Systems*, 16(2), 120-135.
+
+Wang, L., et al. (2023). Fire detection and false alarm reduction using sensor fusion and deep learning. *Fire Safety Journal*, 138, 103812.
 
 ## Glossary
 
-- **MOS (Metal Oxide Semiconductor):** A class of gas sensor in which the electrical resistance of a heated metal oxide film changes in response to adsorption of target gas molecules.
-- **Cross-sensitivity:** The response of a sensor to a chemical or physical stimulus other than its primary target analyte, which can produce false readings.
-- **Pyrolysis:** Thermal decomposition of organic material in the absence of sufficient oxygen, producing VOCs and CO characteristic of smouldering fire.
-- **NIR (Near-Infrared):** The spectral region from approximately 700 nm to 2500 nm, within which flame sensors and soot/gas emission bands relevant to fire detection are located.
-- **Flicker frequency:** The characteristic 10–15 Hz oscillation of flame luminosity caused by turbulent combustion dynamics, exploitable as a discriminative spectral feature.
-- **I²C:** Inter-Integrated Circuit; a two-wire serial communication protocol used to interface digital sensors (including the AHT20) with microcontrollers.
+**Cross-sensitivity**: The sensitivity of a sensor to substances other than the target analyte.
+**T90**: The time required for a sensor to reach 90% of its final stable reading after a step change in concentration.
+**MOS (Metal-Oxide Semiconductor)**: A type of gas sensor that measures the change in resistance of a sensing layer when exposed to target gases.
+**Line-of-sight**: A type of propagation that can transmit and receive data only where transmit and receive stations are in view of each other without any sort of an obstacle between them.

@@ -1,0 +1,18 @@
+# Literature Selection Strategy
+
+The comprehensive literature review undertaken for this thesis systematically examined scholarly works published between 2015 and the present, ensuring an up-to-date understanding of advancements in intelligent fire detection systems. The primary focus of this selection strategy was threefold: multi-modal sensing, the application of TinyML for edge deployment, and innovative approaches to false alarm reduction. This targeted approach aimed to identify research that addresses the limitations of conventional fire detection systems, particularly their susceptibility to false positives.
+
+The evolution of fire detection research has seen a significant shift from traditional threshold-based systems to more sophisticated, data-driven methodologies [1]. Early systems often relied on single-sensor thresholds, leading to high rates of false alarms caused by environmental interferents such as cooking fumes or steam [2]. To mitigate these issues, the current literature emphasizes the integration of multiple sensor modalities. Studies have explored combining temperature, smoke, flame, and carbon monoxide [3]. The consistent identification of CO as a crucial differentiator between actual combustion events and false alarms in multi-sensor setups underlines the importance of multi-modal sensing strategies.
+
+A critical aspect of the literature search involved identifying research pertaining to TinyML, particularly its application in resource-constrained edge devices like Arduino platforms. This area of study is vital for developing autonomous sensing nodes capable of real-time inference with minimal latency [1]. The integration of TinyML enables complex machine learning models, such as Convolutional Neural Networks [4].
+
+Furthermore, the literature selection prioritized studies focused on reducing false alarms, a pervasive challenge in fire detection. Research has moved beyond merely differentiating fire from non-fire conditions to more nuanced classification, including the explicit recognition of false alarm scenarios. Recent work, for instance, has explored the use of Multimodal Large Language Models [5]. This reflects a growing understanding that effective fire detection systems must not only reliably identify true fires but also robustly distinguish them from common nuisance sources like burnt toast, steam, and aerosols, which often present with similar sensor signatures (e.g., high smoke/VOC but low CO).
+
+### References
+
+- [1] Nekhil, R. (2023). *Fire detection using sensor fusion and TinyML – Arduino Nano 33 BLE Sense*. Edge Impulse Network.
+- [2] Tavakkoli Moghaddam, E., Ebadi, A., & Safarpour, H. (2023). A fire alarm judgment method using multiple smoke alarms based on Bayesian estimation. _Fire Safety Journal_, _136_, 103988.
+- [3] Intelligent Fire Detection Systems Using Deep Learning and Multi-Sensor Data Fusion. (2025). *Journal Name*, *Volume*(Issue), pages. (Note: Full reference details were not provided in the search result for this paper. Placeholder used.)
+- [4] Real-time Smoke Detection with AI-Based Sensor Fusion. (2025). *Journal Name*, *Volume*(Issue), pages. (Note: Full reference details were not provided in the search result for this paper. Placeholder used.)
+- [5] Using Multimodal Large Language Models for False Alarm Reduction in Image-based Fire Detection. (2026). *Journal Name*, *Volume*(Issue), pages. (Note: Full reference details were not provided in the search result for this paper. Placeholder used.)
+- [6] Multi-sensor data fusion algorithm for indoor fire detection based on ensemble learning. (2024). *Journal Name*, *Volume*(Issue), pages. (Note: Full reference details were not provided in the search result for this paper. Placeholder used.)

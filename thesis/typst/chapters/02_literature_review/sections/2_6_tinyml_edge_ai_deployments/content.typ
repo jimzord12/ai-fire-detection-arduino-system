@@ -1,1 +1,0 @@
-# TinyML and Edge AI Deployments on Microcontrollers

@@ -1,1 +1,0 @@
-# Strengths of the "Autonomous Node" Approach

@@ -1,0 +1,37 @@
+I now have all the information needed. Let me compose the full section following the `SECTION_TEMPLATE.md` structure with APA 7th edition citations.
+
+---
+
+# 7.7 Quantization Strategy
+
+The deployment of trained neural networks on resource-constrained microcontrollers demands a reduction in model size and computational overhead without sacrificing classification accuracy. Model quantization addresses this challenge by converting the high-precision 32-bit floating-point (Float32) weight representations produced during training into lower-precision integer formats, most commonly 8-bit integers (Int8), before embedding the model into device firmware. This section examines the rationale for choosing Int8 post-training quantization (PTQ) in the present system, characterizes the trade-offs between Float32 and Int8 precision, and describes how quantization interacts with the Edge Impulse deployment pipeline targeting the Arduino UNO R4 WiFi's Renesas RA4M1 Cortex-M4 core.
+
+## 7.7.1 Float32 vs. Int8: Precision, Memory, and Latency Trade-offs
+
+Neural network weights trained under standard conditions are encoded in 32-bit single-precision floating-point format (IEEE 754 binary32), which provides a dynamic range of approximately \([-10^{38}, 10^{38}]\) and is more than sufficient to represent the gradients and activations encountered during gradient-descent optimization (Novac et al., 2021). At inference time on a general-purpose Cortex-M4 microcontroller, however, this precision is unnecessary and expensive. The Renesas RA4M1 core contains a single-precision hardware floating-point unit (FPU), meaning Float32 arithmetic is executable in hardware, but the resulting model consumes four bytes per weight parameter and stresses both the 32 KB SRAM and 256 KB Flash memory budgets of the device.
+
+Int8 quantization maps each Float32 weight and activation to a signed 8-bit integer using a linear scale factor and zero-point offset, reducing the per-parameter storage cost from 4 bytes to 1 byte — a **4× reduction in model footprint** (Novac et al., 2021). Beyond storage, replacing floating-point arithmetic with integer arithmetic carries significant latency benefits: on ARM Cortex-M4 cores that implement ARMv7E-M SIMD instructions, the CMSIS-NN library enables packing two 16-bit multiply-accumulate operations into a single 32-bit cycle, substantially accelerating layer-wise computation compared to sequential Float32 operations (Novac et al., 2021). Empirical benchmarks on TFLite-based ARM embedded deployments report throughput improvements of **3.3× to 4×** for Int8 models over Float32 equivalents under production inference conditions (Amara et al., 2023).
+
+The principal cost of Int8 quantization is a potential accuracy degradation arising from quantization error. Because the full floating-point dynamic range must be compressed into 256 discrete integer levels, subtle differences between closely spaced weight values may collapse to the same integer bucket, introducing rounding noise that propagates through each layer (Novac et al., 2021). In practice, however, this degradation is modest for well-trained compact models: published literature consistently reports that post-training quantization to Int8 incurs an accuracy loss of approximately **0.1%–2%** relative to the Float32 baseline, provided that the model has been trained with sufficient regularization and that per-layer scale factors are calibrated on a representative dataset (Lamaakal et al., 2025). For the three-class fire detection classifier developed in this project — a relatively shallow multi-layer perceptron operating on a low-dimensional spectral feature vector — the accuracy gap between Float32 and Int8 inference is expected to remain within this acceptable margin.
+
+## 7.7.2 Post-Training Quantization via Edge Impulse
+
+The quantization strategy adopted in this project is **post-training quantization (PTQ)**, in which the model is trained to full convergence using Float32 arithmetic and then quantized offline before deployment. PTQ is computationally inexpensive and requires no modification to the training procedure; calibration of the scale factors uses the existing training dataset to determine the activation ranges of each layer (Novac et al., 2021). This approach contrasts with quantization-aware training (QAT), in which fake quantization nodes are inserted into the forward pass during training to expose the optimizer to quantization noise. While QAT consistently recovers more accuracy under aggressive quantization (e.g., 4-bit or binary precision), the marginal benefit over PTQ at Int8 precision — typically less than 1% — does not justify the additional training complexity for the present application (Novac et al., 2021).
+
+Within the Edge Impulse platform, the trained Keras model is exported to TensorFlow Lite format and quantized using TFLite's Int8 PTQ pipeline, which applies per-tensor asymmetric quantization to activations and per-layer symmetric quantization to weights. The resulting `.tflite` model is further compiled by Edge Impulse's EON Compiler, which statically resolves the computation graph, eliminating the runtime interpreter overhead present in the standard TFLite Micro engine and further reducing RAM usage while preserving accuracy relative to the uncompiled Int8 baseline (Edge Impulse, 2025). The deployment artifact is a C++ static library that embeds the Int8 weights and a statically allocated inference arena, allowing the RA4M1 core to perform inference entirely within its on-chip SRAM without dynamic memory allocation.
+
+An Int8 TinyML fire detection model deployed under a comparable Edge Impulse workflow achieved a validation accuracy of 94.71% in Float32, which dropped to 93.35% after Int8 quantization — a reduction of only 1.36 percentage points, consistent with the expected PTQ accuracy range and confirming the viability of Int8 deployment for safety-relevant classification tasks on microcontrollers (Kapalamula et al., 2025). For the present system, the decision between Float32 and Int8 is therefore not a binary trade-off between accuracy and efficiency, but a calibrated engineering choice: Int8 is the default deployment format because it enables the model to reside comfortably within Flash and permits faster inference, while Float32 is retained as a reference baseline for performance validation and ablation analysis during the evaluation phase described in Chapter 8.
+
+---
+
+## References
+
+Amara, M., Bendoukha, S., Nemours, G., & Meziane, A. (2023). _Performance characterization of using quantization for DNN inference on edge devices: Extended version_. arXiv. https://doi.org/10.48550/arXiv.2303.05016
+
+Edge Impulse. (2025). _Deployment_. Edge Impulse Documentation. https://docs.edgeimpulse.com/studio/projects/deployment
+
+Kapalamula, H. E., Muyeba, M. K., Phiri, J., Banda, T., & Sakala, L. (2025). Edge intelligence for fire disaster mitigation using IoT and TinyML. _IEEE Access_. https://doi.org/10.1109/ACCESS.2025.11282020
+
+Lamaakal, I., El Makkaoui, K., Beni-Hssane, A., & Ezzati, A. (2025). A comprehensive survey on tiny machine learning for IoT applications. _IEEE Access_, _13_, 1–35. https://doi.org/10.1109/ACCESS.2025.10979983
+
+Novac, P.-E., Boukli Hacene, G., Pegatoquet, A., Miramond, B., & Gripon, V. (2021). Quantization and deployment of deep neural networks on microcontrollers. _Sensors_, _21_(9), 2984. https://doi.org/10.3390/s21092984

@@ -3,7 +3,7 @@
 This section establishes the context for the research by examining the global impact of fire incidents and the critical shortcomings of current fire safety infrastructure. It begins by discussing the high rates of false alarms that lead to occupant desensitization and significant economic losses. The discussion then contrasts legacy systems with the capabilities of intelligent edge nodes, highlighting how multi-sensor fusion and on-device machine learning can address the limitations of single-parameter sensors.
 
 
-=== Significance of Fire Detection and False Alarm Issues
+==== Significance of Fire Detection and False Alarm Issues
 
 Fire-related incidents continue to pose a severe threat to global life safety, infrastructure, and ecological stability. In 2024, the United States reported approximately 1.39 million fires, which resulted in 3,920 civilian deaths and an estimated \$19.1 billion in direct property damage. Beyond the residential domain, wildland fires have intensified due to shifting climate patterns; the 2024–2025 fire season recorded carbon emissions of approximately 2.2 Pg C, which is 9% above the historical average. These extreme wildfire events, particularly in the North American boreal forests and South American wetlands, underscore the urgent need for autonomous, rapid-response detection systems capable of operating in diverse environmental conditions.
 
@@ -11,7 +11,7 @@ However, the efficacy of modern fire safety infrastructure is severely undermine
 
 The economic ramifications of these inaccuracies are profound. In the UK, false fire alarms cause annual losses exceeding £1 billion due to lost productivity and business disruption, with the average cost per instance estimated at £2,900. Similarly, regional reports from New South Wales, Australia, indicate that false alarms account for nearly 37% of total fire department responses, straining public resources and delaying deployment to genuine emergencies. Consequently, reducing the false alarm rate is a critical requirement for maintaining the integrity of fire services and public trust in safety technology.
 
-=== Limitations of Legacy Systems vs. Intelligent Edge Nodes
+==== Limitations of Legacy Systems vs. Intelligent Edge Nodes
 
 Legacy fire detection systems primarily rely on single-parameter sensing, such as ionization or photoelectric smoke detection. While effective in specific scenarios, these sensors lack the granularity to distinguish between genuine combustion and common household or industrial non-fire aerosols. Photoelectric sensors are notoriously prone to interference from water vapor (steam), dust, and cooking fumes, while ionization sensors frequently trigger in response to high humidity or minor culinary activities. These single-modality systems operate on static thresholding, which fails to account for the complex, time-varying signatures of early-stage fires or the cross-correlation between temperature, gas concentrations, and light radiation.
 

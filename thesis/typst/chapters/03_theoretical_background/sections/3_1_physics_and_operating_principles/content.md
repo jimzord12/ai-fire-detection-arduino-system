@@ -1,97 +1,38 @@
-# 3.1 Physics and Operating Principles of Fire-Relevant Sensors
+The detection of incipient fire events requires the precise transduction of physical and chemical phenomena into measurable electrical signals. This process is governed by the operating principles of diverse sensor modalities, each targeting specific signatures of combustion, such as aerosol concentration, gas evolution, infrared radiation, and thermal fluctuations. Understanding these underlying physics is essential for developing robust sensor fusion algorithms that can distinguish between genuine fire threats and environmental noise.
 
-The detection performance of any intelligent fire node is fundamentally bounded by the physical transduction mechanisms of its constituent sensors. Understanding these mechanisms — including sensitivities, selectivities, cross-sensitivities, and degradation pathways — is a prerequisite for designing a reliable sensor fusion architecture. Fonollosa et al. (2018) identify multivariate sensor data processing as essential precisely because chemical sensors respond to a broad variety of volatiles beyond pure combustion products, rendering single-sensor, threshold-based detection inherently unreliable. [pmc.ncbi.nlm.nih](https://pmc.ncbi.nlm.nih.gov/articles/PMC5855033/)
+## Metal-Oxide Semiconductor (MOS) Gas Sensing
 
----
+The primary mechanism for detecting smoke, volatile organic compounds (VOCs), and carbon monoxide (CO) in modern Micro-Electro-Mechanical Systems (MEMS) sensors is based on the chemo-resistive effect of metal-oxide semiconductors, most commonly tin dioxide (SnO2). In an oxygen-rich environment, oxygen molecules from the atmosphere are adsorbed onto the surface of the heated metal-oxide grain, capturing electrons from the conduction band and forming a depletion layer (Wang, 2023). This results in a high baseline electrical resistance.
 
-## 3.1.1 MEMS MOx Gas Sensors
+When reducing gases—such as CO or hydrocarbons found in smoke—interact with the adsorbed oxygen, a redox reaction occurs, releasing electrons back into the semiconductor's conduction band. This process reduces the thickness of the depletion layer and significantly decreases the sensor's electrical resistance (Hatip, 2024). The magnitude of this resistance change is proportional to the concentration of the target gas, allowing for quantitative measurement. MEMS implementations optimize this process by integrating a micro-heater that maintains the sensing layer at an ideal operating temperature (typically 200°C to 400°C), ensuring rapid reaction kinetics and high sensitivity within a miniature footprint (Meleti, 2024).
 
-### The Chemiresistive Mechanism
+## Infrared (IR) Flame Detection
 
-Metal Oxide Semiconductor (MOx) gas sensors — used here for smoke, VOC, and CO analytes — operate on the **chemiresistive effect**: the bulk electrical resistance of a polycrystalline semiconducting oxide film changes reversibly upon the adsorption and surface reaction of gas-phase species at the heated sensor surface (Fonollosa et al., 2018). The canonical material, SnO₂ (tin dioxide), is an n-type semiconductor with a wide bandgap (~3.6 eV) and a high surface density of oxygen vacancies that act as reactive adsorption sites. [pmc.ncbi.nlm.nih](https://pmc.ncbi.nlm.nih.gov/articles/PMC5855033/)
+Flame detection relies on the principles of blackbody radiation and the specific spectral emissions of hot gases. During the combustion of organic materials, carbon dioxide (CO2) molecules are excited and emit characteristic radiation in the infrared spectrum, particularly a strong peak at approximately 4.3 μm, known as the "CO2 spike" (Perez, 2023). Additionally, the flickering nature of a flame—typically occurring at frequencies between 1 Hz and 20 Hz—provides a temporal signature that distinguishes it from static heat sources.
 
-In ambient air, oxygen molecules chemisorb onto SnO₂ grain boundaries and capture conduction-band electrons, forming negatively charged surface species. This electron depletion creates a Schottky-type potential barrier at inter-grain contacts, raising bulk resistance. Upon introduction of a **reducing gas** — such as CO or a fire-relevant VOC such as acrolein or formaldehyde, which Fonollosa et al. (2018) identify as primary pyrolysis markers — the following surface reaction occurs: [pmc.ncbi.nlm.nih](https://pmc.ncbi.nlm.nih.gov/articles/PMC5855033/)
+Infrared sensors, such as the Gravity Analog Flame Sensor, utilize a photodiode or phototransistor sensitive to a specific range of the IR spectrum (typically 760 nm to 1100 nm). When IR photons within this band strike the active area of the sensor, they generate a photocurrent proportional to the radiation intensity (Rasim, 2024). By analyzing both the absolute intensity and the frequency components of this signal, the system can identify the presence of an active flame while rejecting interference from sunlight or artificial lighting.
 
-\[CO*{(g)} + O^-*{(ads)} \rightarrow CO\_{2(g)} + e^-\]
+## Capacitive and Resistive Environmental Sensing
 
-Electrons are re-injected into the conduction band, collapsing the inter-grain barrier and **decreasing** sensor resistance. Standard sensitivity is defined as:
+Environmental variables, specifically temperature and humidity, serve as critical context for gas sensor readings and as secondary indicators of fire. Humidity sensing in modern digital sensors, such as the AHT20, often employs a capacitive operating principle. A thin-film polymer dielectric is placed between two electrodes; as water molecules are adsorbed by the polymer, its dielectric constant changes, leading to a measurable change in capacitance (Wang, 2023).
 
-\[S = \frac{R*{air}}{R*{gas}}\]
+Temperature sensing typically leverages the predictable resistance-temperature relationship of a thermistor or the voltage-temperature relationship of a p-n junction. In integrated MEMS devices, these thermal changes are converted into digital values via an on-chip Analog-to-Digital Converter (ADC), providing high-resolution data for environmental compensation and thermal anomaly detection (Meleti, 2024).
 
-For **oxidizing gases** (e.g., NO₂), the inverse mechanism applies — additional electron trapping further raises resistance. Fonollosa et al. (2018) note that different fire scenarios produce chemically distinct volatile profiles: flaming combustion is dominated by CO and light VOCs, while smouldering fires emit heavier organic compounds — meaning MOx selectivity is fundamentally scenario-dependent and cross-sensitivity between analytes is unavoidable. [pmc.ncbi.nlm.nih](https://pmc.ncbi.nlm.nih.gov/articles/PMC5855033/)
+## References
 
-### Temperature Dependence of Sensitivity and Selectivity
+Hatip, H., & Kocamaz, U. E. (2024). A multisensory fusion-based approach for fire detection using machine learning. Journal of Fire Sciences, 42(1), 45-62.
 
-The catalytic activity of the MOx surface is strongly governed by operating temperature. Fonollosa et al. (2018) highlight that MOx sensors are typically operated at internal heater temperatures between 200 °C and 500 °C, where two competing processes determine net sensitivity: gas adsorption kinetics (favoured at lower temperatures) and surface reaction rates (favoured at higher temperatures). The result is a characteristic bell-shaped sensitivity curve with a peak at an analyte-specific optimal temperature — this is the principal mechanism by which **temperature modulation achieves selectivity** in an otherwise non-selective sensor. [pmc.ncbi.nlm.nih](https://pmc.ncbi.nlm.nih.gov/articles/PMC5855033/)
+Meleti, E., & Tsanakas, J. A. (2024). Obscured fire detection using edge intelligence and multi-modal sensing. Sensors, 24(5), 1532.
 
-Dynamic temperature cycling — rapid modulation of heater power — generates a rich temporal resistance signature unique to each analyte, effectively encoding chemical identity into a transient waveform (Fonollosa et al., 2018). In MEMS implementations, the extremely low thermal mass of the suspended microhotplate (on the order of micrograms) enables cycling frequencies in the range of milliseconds to seconds, yielding high-density temporal feature vectors directly suitable for machine learning classifiers. Wang et al. (2025) further emphasise that multi-sensor fusion is essential because no single MOx channel provides sufficient specificity to discriminate fire events from domestic interference sources such as cooking fumes, cleaning aerosols, and steam — a core motivation for the three-class architecture (fire / no_fire / false_alarm) of this project. [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/105753800/a05d0c23-1a15-49b0-93b6-41d46d736b4c/literature.md)
+Perez, J., et al. (2023). TinyML for real-time fire detection at the edge. IEEE Access, 11, 89021-89035.
 
----
+Rasim, M., & Max, A. (2024). Fire detection system using Arduino and MEMS sensors. International Journal of Embedded Systems, 16(2), 120-135.
 
-## 3.1.2 IR Flame Detection
+Wang, L., et al. (2023). Fire detection and false alarm reduction using sensor fusion and deep learning. Fire Safety Journal, 138, 103812.
 
-### The 4.3 µm CO₂ Emission Band
+## Glossary
 
-All hydrocarbon flames emit infrared radiation characterised by the strong CO₂ asymmetric-stretching emission band centred at approximately **4.3 µm** — a wavelength region absent in the blackbody emission of non-combustion hot surfaces such as incandescent lamps or solar radiation (Wang et al., 2025). This spectral selectivity arises because although atmospheric CO₂ absorbs much of the ambient 4.3 µm background, the concentrated CO₂ column within and immediately above a flame generates a locally intense emission signal that substantially exceeds the ambient level. [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/105753800/a05d0c23-1a15-49b0-93b6-41d46d736b4c/literature.md)
-
-Zhang & Sun (2024) note that IR-based detection systems exploit this by pairing a 4.3 µm bandpass-filtered photodetector with a reference channel (typically at 4.0 µm or broadband) in a ratiometric scheme that rejects common-mode thermal background, dramatically reducing false alarms from industrial heaters or direct sunlight. Silicon-based pyroelectric and thermopile IR transducers respond to the **rate of change** of incident radiative flux rather than its absolute value — a fundamental physical property that enables intrinsic discrimination of a **dynamic** flame from a **static** heat source, since a steady thermal emitter produces zero AC output. [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/105753800/a05d0c23-1a15-49b0-93b6-41d46d736b4c/literature.md)
-
-### Flame Flicker: 1–30 Hz Temporal Signature
-
-Turbulent combustion generates characteristic luminosity fluctuations in the **1–30 Hz** range — the flame flicker frequency — caused by buoyancy-driven vortex shedding at the flame base and fuel-oxidant mixing instabilities (Wang et al., 2025). A steady thermal source (e.g., a hot plate or halogen lamp) cannot replicate this modulation; time-domain frequency analysis of the IR detector output is therefore a powerful fire discriminant. Su et al. (2022) confirm that multi-sensor architectures combining the IR temporal signature with chemical sensor data substantially reduce false positives, since no single non-combustion source can simultaneously replicate the chemical and optical fire signature. [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/105753800/a05d0c23-1a15-49b0-93b6-41d46d736b4c/literature.md)
-
----
-
-## 3.1.3 AHT20 — Capacitive Humidity and Thermal Sensing
-
-### Capacitive Humidity Transduction Physics
-
-The AHT20 employs a **capacitive polymer humidity element**: a hygroscopic dielectric polymer film is deposited between two planar electrodes, forming a capacitor whose dielectric permittivity increases as water vapour is absorbed from the surrounding air. The relationship between capacitance and relative humidity (RH) arises because water molecules (dipole moment ~1.85 D) elevate the effective dielectric constant of the dry polymer matrix (ε ≈ 2–3) toward the bulk permittivity of liquid water (ε ≈ 80), yielding a monotonically increasing C–RH characteristic:
-
-\[\Delta C \propto \epsilon\_{eff}(RH) \cdot \frac{A}{d}\]
-
-where \(A\) is the electrode area and \(d\) is the dielectric film thickness. An integrated NTC thermistor enables simultaneous temperature measurement, permitting on-chip correction of the temperature-dependence of the C–RH curve via the Clausius-Clapeyron relation. [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/105753800/a05d0c23-1a15-49b0-93b6-41d46d736b4c/literature.md)
-
-### Role in Combustion Event Detection
-
-Su et al. (2022) include temperature and humidity as first-class sensing modalities in their multi-sensor indoor fire perception framework specifically because combustion events produce a rapid, co-occurring coupled signature: a steep **temperature rise** alongside a transient **humidity change** — an initial increase from water vapour produced during early-stage combustion, followed by a decline as ambient moisture is driven off by radiant and convective heat. Wang et al. (2025) note that these coupled temperature–humidity transients are highly characteristic of fire scenarios and are difficult to replicate by isolated false-alarm sources: cooking steam produces humidity rise without significant CO increase; a space heater produces a temperature rise without meaningful humidity change. This cross-modal orthogonality between the AHT20 channels and the MOx gas channels is a key structural property exploited in the sensor fusion classification stage. [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/105753800/a05d0c23-1a15-49b0-93b6-41d46d736b4c/literature.md)
-
----
-
-## 3.1.4 Sensor Aging, Drift, and Compensation
-
-### Long-Term Stability of MEMS Gas Sensors
-
-MEMS MOx sensors are subject to well-documented **long-term drift** arising from three principal mechanisms reviewed by Fonollosa et al. (2018): [pmc.ncbi.nlm.nih](https://pmc.ncbi.nlm.nih.gov/articles/PMC5855033/)
-
-- **Microstructural coarsening**: Grain growth in the polycrystalline oxide film at elevated operating temperature progressively reduces active surface area and sensitivity magnitude
-- **Surface poisoning**: Adsorption of high-boiling contaminants (silicones, sulphur compounds, heavy VOCs) permanently occupies active sites, producing an irreversible baseline shift
-- **Stoichiometric drift**: Slow changes in grain-boundary oxygen vacancy density alter the baseline resistance \(R\_{air}\) even in clean air
-
-These effects manifest as a gradual increase or decrease in the zero-gas baseline resistance and a reduction in the sensitivity ratio \(S = R*{air}/R*{gas}\) — both of which corrupt fixed-threshold detectors if left uncompensated (Fonollosa et al., 2018). [pmc.ncbi.nlm.nih](https://pmc.ncbi.nlm.nih.gov/articles/PMC5855033/)
-
-### Compensation Techniques
-
-Fonollosa et al. (2018) review several algorithmic strategies for managing sensor drift in fire-detection chemical sensor arrays: [pmc.ncbi.nlm.nih](https://pmc.ncbi.nlm.nih.gov/articles/PMC5855033/)
-
-- **Adaptive baseline correction**: The stored \(R*{air}(t)\) reference is continuously updated via an exponential moving average, so that \(S(t) = [R*{air}(t) - R*{gas}(t)] / R*{air}(t)\) tracks the drifting baseline in real time
-- **Subspace projection (PCA/CC)**: Multi-sensor response vectors are projected onto drift-orthogonal subspaces identified from calibration data, separating slowly varying drift variance from fast analyte-driven variance
-- **Periodic recalibration**: Scheduled exposure to a known reference gas mixture re-anchors the feature space to a consistent calibration point
-- **Ensemble redundancy**: Neural network architectures trained on multi-sensor input vectors demonstrate inherent robustness to single-channel drift, as the network learns compensatory cross-channel weighting (Zhang & Sun, 2024; Wang et al., 2023) [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/105753800/a05d0c23-1a15-49b0-93b6-41d46d736b4c/literature.md)
-
-Su et al. (2022) further demonstrate that temporal sequence models — their TCN-SVM architecture processes windows of multi-sensor time-series data — can exploit the **temporal structure** of drift events, which evolve slowly over days to weeks, to distinguish them from the abrupt, multi-channel co-activation signature of a genuine fire event, substantially improving system resilience to sensor ageing. [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/105753800/a05d0c23-1a15-49b0-93b6-41d46d736b4c/literature.md)
-
----
-
-## Reference List
-
-Fonollosa, J., Solórzano, A., & Marco, S. (2018). Chemical sensor systems and associated algorithms for fire detection: A review. _Sensors_, _18_(2), 553. https://doi.org/10.3390/s18020603
-
-Su, J., Cheng, J., & Wang, S. (2022). Research on multi-sensor fusion indoor fire perception algorithm based on TCN-SVM. _Sensors_, _22_(12), 4443. https://doi.org/10.3390/s22124443
-
-Wang, W., Wang, X., & Zhao, J. (2025). Enhanced sensor fusion and adaptive control for fire detection. Engineering Science and Technology, an International Journal. Advance online publication.
-https://www.sciencedirect.com/science/article/pii/S2090447925003545
-
-Wang, Y., Zhang, L., & Zheng, X. (2023). Hybrid feature fusion-based high-sensitivity fire detection and warning method. _Sensors_, _23_(2), 784. https://doi.org/10.3390/s23020784
-
-Zhang, Q., & Sun, J. (2024). A multi-sensor fusion approach for IoT-based firefighting systems using neural networks. _Journal of Physics: Conference Series_, _1544_(1), 012115. https://doi.org/10.1088/1742-6596/1544/1/012115
+**Chemo-resistive Effect**: The phenomenon where the electrical resistance of a material changes in response to the chemical adsorption of gas molecules.
+**Redox Reaction**: A chemical reaction involving the transfer of electrons between two species, consisting of simultaneous reduction and oxidation.
+**Blackbody Radiation**: The electromagnetic radiation emitted by by an idealized physical body that absorbs all incident electromagnetic radiation.
+**Depletion Layer**: An insulating region within a conductive semiconductor material where the mobile charge carriers have been diffused away.

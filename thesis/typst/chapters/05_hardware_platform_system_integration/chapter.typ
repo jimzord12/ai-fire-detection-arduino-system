@@ -1,4 +1,4 @@
-= Hardware Platform and System Integration <ch:hardware_platform_system_integration>
+= Hardware Platform and System Integration <ch:hardware_platform_and_system_integration>
 // Sections for Hardware Platform and System Integration will be included here
 
 #include "sections/5_1_the_autonomous_edge_node_architecture/content.typ"

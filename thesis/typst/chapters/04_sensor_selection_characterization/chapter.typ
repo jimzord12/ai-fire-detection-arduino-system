@@ -1,4 +1,4 @@
-= Sensor Selection and Characterization <ch:sensor_selection_characterization>
+= Sensor Selection and Characterization <ch:sensor_selection_and_characterization>
 // Sections for Sensor Selection and Characterization will be included here
 
 #include "sections/4_1_requirements_for_multi_modal_sensing/content.typ"
