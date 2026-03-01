@@ -2,6 +2,9 @@
   title: "",
   author: "",
   date: "",
+  university: "[University Name]",
+  department: "[Department Name]",
+  degree: "Bachelor of Engineering",
   abstract: [],
   acknowledgments: [],
   abbreviations: (),
@@ -26,19 +29,47 @@
     lang: "en",
   )
 
+  // Global styling rules
+  show heading: set block(below: 1.5em)
+  show outline: set block(below: 1.5em)
+
   // Title Page
   align(center)[
-    #v(5em)
-    #block(text(weight: 700, 2em, title))
-    #v(3em)
-    #text(1.5em, author)
+    #text(1.5em, weight: 700, university) \
+    #text(1.2em, department)
+    
+    #v(1fr)
+    
+    #block(text(weight: 700, 2.5em, title))
+    
+    #v(1fr)
+    
+    #text(1.5em, author) \
     #v(1em)
-    #text(1.2em, [A Thesis Submitted in Partial Fulfillment of the Requirements for the Degree of Bachelor of Engineering])
-    #v(10em)
+    #text(1.2em, [A Thesis Submitted in Partial Fulfillment of the Requirements for the Degree of]) \
+    #text(1.2em, weight: 700, degree)
+    
+    #v(2fr)
+    
     #date
   ]
 
   pagebreak()
+
+  // Footer setup (starting after title page)
+  set page(
+    footer: context [
+      #set text(8pt, style: "italic")
+      #line(length: 100%, stroke: 0.5pt)
+      #grid(
+        columns: (1fr, 1fr),
+        align(left, title),
+        align(right, author)
+      )
+      #v(-0.5em)
+      #align(center, counter(page).display(page.numbering))
+    ]
+  )
 
   // Acknowledgments
   if acknowledgments != [] {
