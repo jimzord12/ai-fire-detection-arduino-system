@@ -46,13 +46,21 @@ The thesis is written in a modular way. Each section is a standalone directory c
 
 ### Compilation
 
-To compile the thesis, run the following command from the project root:
+To compile the thesis and generate a PDF, you can use the provided scripts from the project root:
+
+```bash
+# Using Bash
+./tools/typst/compile.sh
+
+# Using PowerShell
+.\tools\typst\compile.ps1
+```
+
+Alternatively, you can use the Typst CLI to watch for changes and update the PDF automatically:
 
 ```bash
 typst watch thesis/typst/main.typ
 ```
-
-This will generate a PDF of the thesis and automatically update it whenever a `.typ` file is changed.
 
 ### Bibliography Management
 

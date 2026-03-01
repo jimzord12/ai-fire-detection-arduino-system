@@ -96,6 +96,18 @@ cd tools/legacy/logger-py && python logger.py
 ./tools/setup/check-edge-impulse-env.sh
 ```
 
+### Thesis Compilation
+
+After making changes to any `.typ` files, run the compilation script to update the PDF:
+
+```bash
+# Using Bash
+./tools/typst/compile.sh
+
+# Using PowerShell
+.\tools\typst\compile.ps1
+```
+
 ---
 
 ## Code Style Guidelines
