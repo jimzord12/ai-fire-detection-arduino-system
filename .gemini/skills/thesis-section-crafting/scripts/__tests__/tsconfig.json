@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    // "bundler" resolution correctly maps `.js` imports → `.ts` source files,
+    // which is what tsx does at runtime when resolving project imports.
+    "moduleResolution": "bundler",
+    // Required with bundler resolution when not emitting output
+    "noEmit": true
+  },
+  "include": ["*.test.ts"]
+}

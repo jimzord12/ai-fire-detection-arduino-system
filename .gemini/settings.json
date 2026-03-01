@@ -4,7 +4,7 @@
     "enablePromptCompletion": true,
     "enableAutoUpdateNotification": true,
 
-    "enableAutoUpdate": false,
+    "enableAutoUpdate": true,
     "checkpointing": {
       "enabled": true
     }
@@ -28,6 +28,6 @@
     }
   },
   "model": {
-    "name": "gemini-2.5-flash"
+    "name": "gemini-3-flash-preview"
   }
 }

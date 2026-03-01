@@ -7,7 +7,7 @@ import * as path from 'node:path';
 import pLimit from 'p-limit';
 import { chromium } from 'playwright';
 import * as stringSimilarity from 'string-similarity';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url'; // Changed 'url' to 'node:url'
 
 export interface RefMetadata {
   originalText: string;
@@ -163,6 +163,8 @@ export async function verifyWithCrossref(ref: RefMetadata): Promise<ValidationRe
       const confidence: 'high' | 'medium' | 'low' =
         confidenceScore >= 70 ? 'high' : confidenceScore >= 40 ? 'medium' : 'low';
 
+      console.log(`  Crossref - Confidence Score: ${confidenceScore}, Confidence: ${confidence}`); // DEBUG LOG
+
       return {
         ref,
         status: titleScore > 0.7 ? 'verified' : 'suspicious',
@@ -250,6 +252,10 @@ export async function verifyWithSemanticScholar(
 
       const confidence: 'high' | 'medium' | 'low' =
         confidenceScore >= 60 ? 'high' : confidenceScore >= 35 ? 'medium' : 'low';
+
+      console.log(
+        `  Semantic Scholar - Confidence Score: ${confidenceScore}, Confidence: ${confidence}`
+      ); // DEBUG LOG
 
       return {
         ref,
@@ -513,6 +519,10 @@ export async function verifyWithPlaywright(
     const confidence: 'high' | 'medium' | 'low' =
       confidenceScore >= 50 ? 'high' : confidenceScore >= 25 ? 'medium' : 'low';
 
+    console.log(
+      `  Playwright - Confidence Score: ${confidenceScore}, Confidence: ${confidence}`
+    ); // DEBUG LOG
+
     // Use higher threshold for verified status
     const isVerified = doiVerified || bestTitleScore > 0.5;
 
@@ -642,22 +652,31 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       const resolvedPath = path.isAbsolute(inputPath)
         ? inputPath
         : path.resolve(baseCwd, inputPath);
-      const content = fs.readFileSync(resolvedPath, 'utf-8');
-      const tree = fromMarkdown(content);
 
-      const references: RefMetadata[] = [];
+      const fileExtension = path.extname(resolvedPath).toLowerCase();
+      let references: RefMetadata[] = [];
 
-      // Extract list items
-      const traverse = (node: any) => {
-        if (node.type === 'listItem') {
-          const text = toString(node);
-          if (text.trim()) {
-            references.push(parseReference(text));
+      if (fileExtension === '.bib') {
+        // Handle BibTeX file
+        console.log(`Parsing BibTeX file: ${resolvedPath}`);
+        const bibContent = fs.readFileSync(resolvedPath, 'utf-8');
+        references = parseBibtexContent(bibContent); // New function to be implemented
+      } else {
+        // Existing Markdown parsing logic
+        const content = fs.readFileSync(resolvedPath, 'utf-8');
+        const tree = fromMarkdown(content);
+
+        const traverse = (node: any) => {
+          if (node.type === 'listItem') {
+            const text = toString(node);
+            if (text.trim()) {
+              references.push(parseReference(text));
+            }
           }
-        }
-        if (node.children) node.children.forEach(traverse);
-      };
-      traverse(tree);
+          if (node.children) node.children.forEach(traverse);
+        };
+        traverse(tree);
+      }
 
       console.log(`Found ${references.length} references. Starting validation...`);
       console.log('Using multi-source verification: Crossref → Semantic Scholar → Playwright\n');
@@ -732,48 +751,184 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       let report = `# Reference Validation Report\n\nGenerated on: ${new Date().toLocaleString()}\n\n`;
       report += `## Summary\n`;
       report += `- **Total:** ${results.length}\n`;
-      report += `- **Verified:** ${results.filter(r => r.status === 'verified').length}\n`;
-      report += `- **Suspicious:** ${results.filter(r => r.status === 'suspicious').length}\n`;
-      report += `- **Broken Links:** ${results.filter(r => r.status === 'broken_link').length}\n\n`;
+        report += `- **Verified:** ${results.filter(r => r.status === 'verified').length}\n`;
+        report += `- **Suspicious:** ${results.filter(r => r.status === 'suspicious').length}\n`;
+        report += `- **Broken Links:** ${results.filter(r => r.status === 'broken_link').length}\n\n`;
 
-      // Confidence breakdown
-      report += `### Confidence Levels\n`;
-      report += `- High Confidence: ${results.filter(r => r.confidence === 'high').length}\n`;
-      report += `- Medium Confidence: ${results.filter(r => r.confidence === 'medium').length}\n`;
-      report += `- Low Confidence: ${results.filter(r => r.confidence === 'low').length}\n\n`;
+        // Confidence breakdown
+        report += `### Confidence Levels\n`;
+        report += `- High Confidence: ${results.filter(r => r.confidence === 'high').length}\n`;
+        report += `- Medium Confidence: ${results.filter(r => r.confidence === 'medium').length}\n`;
+        report += `- Low Confidence: ${results.filter(r => r.confidence === 'low').length}\n\n`;
 
-      report += `## Detailed Findings\n\n`;
-      results.forEach((r, idx) => {
-        const statusIcon = r.status === 'verified' ? '✅' : r.status === 'suspicious' ? '⚠️' : '❌';
-        const confidenceIcon =
-          r.confidence === 'high' ? '🟢' : r.confidence === 'medium' ? '🟡' : '🔴';
-        report += `### ${idx + 1}. ${statusIcon} ${r.ref.title}\n`;
-        report += `- **Status:** ${r.status}\n`;
-        report += `- **Confidence:** ${confidenceIcon} ${r.confidence}\n`;
-        report += `- **Source:** ${r.source}\n`;
-        report += `- **Match Score:** ${(r.matchScore * 100).toFixed(1)}%\n`;
-        report += `- **Details:** ${r.details}\n`;
-        if (r.signals && r.signals.length > 0) {
-          report += `- **Signals:** ${r.signals.join(', ')}\n`;
-        }
-        if (r.metadata) {
-          report += `- **Found Metadata:**\n`;
-          if (r.metadata.title) report += `  - Title: ${r.metadata.title}\n`;
-          if (r.metadata.authors?.length)
-            report += `  - Authors: ${r.metadata.authors.join('; ')}\n`;
-          if (r.metadata.year) report += `  - Year: ${r.metadata.year}\n`;
-          if (r.metadata.journal) report += `  - Journal: ${r.metadata.journal}\n`;
-        }
-        report += `- **Original Text:** \`${r.ref.originalText}\`\n\n`;
-      });
+        report += `## Detailed Findings\n\n`;
+        results.forEach((r, idx) => {
+            const statusIcon = r.status === 'verified' ? '✅' : r.status === 'suspicious' ? '⚠️' : '❌';
+            const confidenceIcon =
+                r.confidence === 'high' ? '🟢' : r.confidence === 'medium' ? '🟡' : '🔴';
+            report += `### ${idx + 1}. ${statusIcon} ${r.ref.title}\n`;
+            report += `- **Status:** ${r.status}\n`;
+            report += `- **Confidence:** ${confidenceIcon} ${r.confidence}\n`;
+            report += `- **Source:** ${r.source}\n`;
+            report += `- **Match Score:** ${(r.matchScore * 100).toFixed(1)}%\n`;
+            report += `- **Details:** ${r.details}\n`;
+            if (r.signals && r.signals.length > 0) {
+                report += `- **Signals:** ${r.signals.join(', ')}\n`;
+            }
+            if (r.metadata) {
+                report += `- **Found Metadata:**\n`;
+                if (r.metadata.title) report += `  - Title: ${r.metadata.title}\n`;
+                if (r.metadata.authors?.length)
+                    report += `  - Authors: ${r.metadata.authors.join('; ')}\n`;
+                if (r.metadata.year) report += `  - Year: ${r.metadata.year}\n`;
+                if (r.metadata.journal) report += `  - Journal: ${r.metadata.journal}\n`;
+            }
+            report += `- **Original Text:** \`${r.ref.originalText}\`\n\n`;
+        });
 
-      // Resolve output path relative to INIT_CWD as well
-      const outputPath = path.isAbsolute(options.output)
-        ? options.output
-        : path.resolve(baseCwd, options.output);
-      fs.writeFileSync(outputPath, report);
-      console.log(`\nValidation complete. Report written to ${outputPath}`);
+        // Resolve output path relative to INIT_CWD as well
+        const outputPath = path.isAbsolute(options.output)
+            ? options.output
+            : path.resolve(baseCwd, options.output);
+        fs.writeFileSync(outputPath, report);
+        console.log(`\nValidation complete. Report written to ${outputPath}`);
     });
 
-  program.parse();
+    program.parse();
+}
+
+function parseBibtexContent(bibContent: string): RefMetadata[] {
+    const references: RefMetadata[] = [];
+    const entryRegex = /@(\w+){([^,]+),\s*([\s\S]*?)\n}/g;
+    let match;
+
+    while ((match = entryRegex.exec(bibContent)) !== null) {
+        const originalBibtexEntry = match[0];
+        const key = match[2];
+        const fields = match[3];
+
+        let title = '';
+        let authors: string[] = [];
+        let year = '';
+        let doi: string | undefined = undefined;
+        let url: string | undefined = undefined;
+
+        const getField = (fieldName: string) => {
+            const fieldMatch = new RegExp(`${fieldName}\\s*=\\s*{(.*?)}`, 'i').exec(fields);
+            return fieldMatch ? fieldMatch[1] : '';
+        };
+
+        // --- Extract from BibTeX fields primarily ---
+        let primaryTitle = getField('title');
+        let primaryYear = getField('year');
+        let primaryDoi = getField('doi');
+        let primaryUrl = getField('url');
+        let primaryAuthorField = getField('author');
+
+        // Default to primary fields
+        title = primaryTitle;
+        year = primaryYear;
+        doi = primaryDoi;
+        url = primaryUrl;
+
+        if (primaryAuthorField) {
+            authors = primaryAuthorField.split(/\s+and\s+/).map(a => {
+                const parts = a.split(',').map(p => p.trim());
+                if (parts.length > 1) { // Format "Last, First"
+                    return `${parts[0]}, ${parts.slice(1).join(' ')}`;
+                }
+                return a.trim(); // Assume "First Last" or already formatted
+            });
+        }
+
+        // --- Secondary extraction from 'note' field (fallback if primary fields are empty or generic) ---
+        const noteContent = getField('note');
+        if (noteContent) {
+            let workingContent = noteContent;
+
+            // Robust Year Extraction from noteContent if not already found or generic
+            if (!year || year === '0000' || year.includes('Placeholder') || year.length !== 4) {
+                const noteYearMatch = workingContent.match(/\((\d{4})\)/);
+                if (noteYearMatch) {
+                    year = noteYearMatch[1];
+                    workingContent = workingContent.replace(noteYearMatch[0], '').trim();
+                }
+            }
+            
+            // Robust Authors Extraction from noteContent if not already found or generic
+            if (authors.length === 0 || authors[0].includes('Placeholder') || authors[0] === 'UNKNOWN' || authors[0].length < 3) { // Small authors list
+                // Try to extract authors from the beginning of noteContent
+                // More robust author pattern that handles "Last, F.M." or "F.M. Last" and multiple authors and "and"/"&" separators
+                const noteAuthorsMatch = workingContent.match(/^(?:[A-Z][a-zA-Z.'-]+\s*(?:[A-Z][a-zA-Z.'-]*\s*)*,?)+(?:\s*(?:and|&)\s*(?:[A-Z][a-zA-Z.'-]+\s*(?:[A-Z][a-zA-Z.'-]*\s*)*,?)+)*\.?/);
+                
+                if (noteAuthorsMatch && noteAuthorsMatch[0].length > 5) { // Avoid matching very short phrases
+                    authors = noteAuthorsMatch[0].replace(/\.$/, '') // Remove trailing period before splitting
+                                                .split(/,\s*&?\s*|\s+and\s+/)
+                                                .map(a => a.trim())
+                                                .filter(a => a.length > 0); // Remove empty strings
+
+                    // Optional: Further reformat authors to "Last, First"
+                    authors = authors.map(author => {
+                        const nameParts = author.split(' ');
+                        // If it looks like "First Last" convert to "Last, First"
+                        if (nameParts.length > 1 && !author.includes(',')) {
+                            return `${nameParts[nameParts.length - 1]}, ${nameParts.slice(0, -1).join(' ')}`;
+                        }
+                        return author;
+                    });
+                    workingContent = workingContent.replace(noteAuthorsMatch[0], '').trim();
+                } else {
+                    // If no clear author match, and the beginning looks like a title, leave authors empty.
+                    // The workingContent will start with title or remaining author/title.
+                }
+            }
+            
+            // Robust Title Extraction from noteContent if not already found or generic
+            if (!title || title.includes('Journal Name') || title.includes('Placeholder') || title.length < 10) {
+                // Clean working content from year, doi, url that might still be there
+                workingContent = workingContent.replace(year, '').replace(doi || '', '').replace(url || '', '').trim();
+
+                // Try to extract from text within asterisks IF it doesn't look like a placeholder
+                const noteTitleAsteriskMatch = workingContent.match(/\*\s*(?!Journal Name|Volume|Issue|pages)(.*?)\s*\*/i);
+                if (noteTitleAsteriskMatch && noteTitleAsteriskMatch[1].length > 10) {
+                    title = noteTitleAsteriskMatch[1].trim();
+                } else {
+                    // Fallback: take the first substantial phrase from workingContent that is not a placeholder
+                    const potentialTitleMatch = workingContent.match(/^(.*?)(?:\.\s*[A-Z]|\.\s*\w+\s*,|\.\s*https?:\/\/|\.$|$)/i);
+                    if(potentialTitleMatch && potentialTitleMatch[1]) {
+                        const extracted = potentialTitleMatch[1].trim();
+                        if (!extracted.match(/Journal Name|Volume|Issue|pages|Placeholder/i) && extracted.length > 10) {
+                            title = extracted;
+                            if (title.endsWith('.')) title = title.substring(0, title.length - 1); // Remove trailing period
+                            title = title.replace(/,\s*$/, '').trim(); // Remove trailing commas
+                        }
+                    }
+                }
+            }
+            
+            // Final check for DOI/URL from noteContent if not found initially
+            if (!doi && !url) {
+                const noteDoiMatch = noteContent.match(/(doi:\s*10\.\d{4,9}\/[^\s)]+)/i);
+                if (noteDoiMatch) {
+                    doi = noteDoiMatch[0];
+                    url = `https://doi.org/${noteDoiMatch[0].substring(4).trim()}`;
+                } else {
+                    const noteUrlMatch = noteContent.match(/(https?:\/\/\S+)/);
+                    if (noteUrlMatch) url = noteUrlMatch[0];
+                }
+            }
+        }
+
+
+        references.push({
+            originalText: originalBibtexEntry,
+            authors,
+            year,
+            title: title || key, // Fallback to BibTeX key if title is still empty
+            doi,
+            url,
+        });
+    }
+
+    return references;
 }

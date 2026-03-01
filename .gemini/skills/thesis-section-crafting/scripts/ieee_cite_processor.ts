@@ -3,9 +3,20 @@ import * as fs from 'fs';
 // Helper to remove all References and Glossary sections from content
 // This is now used to aggressively clean the content before processing
 function removeAllReferencesAndGlossaryBlocks(content: string): string {
-  // Regex to match any ### References or ### Glossary section including its content
-  // Uses a non-greedy match (.*?) to ensure it stops at the next heading or end of file.
-  const regex = /^(#{1,6})\s*(References|Glossary)\s*$(.*?)(?=^#{1,6}\s*|$)/gims;
+  // Matches a References/Glossary heading at any level, then consumes every
+  // subsequent line that does NOT itself start a new heading.
+  //
+  // Why the old /gims regex was broken:
+  //   The lookahead `(?=^#{1,6}\s*|$)` used `$` which, under the `m` (multiline)
+  //   flag, matches the end of *every* line — not the end of the string.  Combined
+  //   with a non-greedy `.*?`, the capture stopped after a single newline, leaving
+  //   the entire body of the section un-stripped.
+  //
+  // This version uses `gim` (no `s`/dotAll) with explicit line matching instead:
+  //   • `[^\n]*\n` — the rest of the heading line + its newline
+  //   • `(?:(?!#{1,6}[ \t])[^\n]*\n?)*` — zero or more following lines whose
+  //     first non-empty characters do NOT start a new Markdown heading
+  const regex = /^(#{1,6})\s*(References|Glossary)[^\n]*\n(?:(?!#{1,6}[ \t])[^\n]*\n?)*/gim;
   return content.replace(regex, '').trim();
 }
 
@@ -68,7 +79,8 @@ function processCitations(
   let currentBody = bodyContent; // Use a mutable copy for replacements
 
   // Regex to find APA-style in-text citations: (Author, Year) or (Author & Author, Year)
-  const apaInTextCitationPattern = /\(([^,]+(?:,\s*[^)]+)*),\s*(\d{4})\)/g;
+  // MODIFIED to use a simpler pattern for authors to reduce backtracking.
+  const apaInTextCitationPattern = /\(([\w\s.&,-]+),\s*(\d{4}|n\.d\.)\)/g;
 
   let citationMatches: {
     originalText: string;
@@ -87,6 +99,7 @@ function processCitations(
       end: apaMatch.index + apaMatch[0].length,
     });
   }
+  console.log('Number of APA in-text citations found:', citationMatches.length); // DEBUG
 
   // Sort matches by their starting position to ensure "first appearance" logic holds
   citationMatches.sort((a, b) => a.start - b.start);
@@ -211,9 +224,9 @@ async function main() {
 
   fs.writeFileSync(outputFilePath, finalOutputContent.trim(), 'utf-8');
 
-  fs.unlinkSync(inputFilePath);
+  // fs.unlinkSync(inputFilePath); // COMMENTED OUT: Do not delete original file
   console.log(`Processed citations and saved to ${outputFilePath}`);
-  console.log(`Original file ${inputFilePath} deleted.`);
+  // console.log(`Original file ${inputFilePath} deleted.`); // COMMENTED OUT: No longer deleting
 }
 
 main();

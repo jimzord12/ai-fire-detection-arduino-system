@@ -5,6 +5,7 @@
   "type": "module",
   "main": "markdown_to_typst_converter.ts",
   "scripts": {
+    "test": "node --import tsx/esm --test __tests__/extract_bibliography.test.ts",
     "convert:md-to-typst": "tsx markdown_to_typst_converter.ts",
     "extract:bibliography": "tsx extract_bibliography.ts",
     "extract:glossary": "tsx extract_glossary_terms.ts",
