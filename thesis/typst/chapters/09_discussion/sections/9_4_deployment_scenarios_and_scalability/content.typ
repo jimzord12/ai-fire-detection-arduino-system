@@ -4,7 +4,24 @@ This section examines the practical pathway from the laboratory prototype to rea
 
 === Cost Analysis per Node
 
-The bill of materials (BOM) for a single Autonomous Sensing Node is determined by the Arduino UNO R4 WiFi platform and its five DFRobot MEMS sensor peripherals. The Arduino UNO R4 WiFi retails at approximately USD 27.50 @arduino2023. The five sensors contribute an estimated additional USD 40–60 in MEMS module cost at single-unit pricing. Passive prototyping components add negligible cost, yielding a per-node BOM in the range of USD 70–90 at prototype quantity. This figure compares favourably with commercial addressable fire detector points, which typically carry a list price of USD 80–200 exclusive of installation labour, panel, and wiring infrastructure.
+The bill of materials (BOM) for a single Autonomous Sensing Node is determined by the Arduino UNO R4 WiFi platform and its five DFRobot MEMS sensor peripherals. The Arduino UNO R4 WiFi retails at approximately USD 27.50 @arduino2023. The five sensors contribute an estimated additional USD 40–60 in MEMS module cost at single-unit pricing. Passive prototyping components add negligible cost, yielding a per-node BOM in the range of USD 70–90 at prototype quantity.
+
+#figure(
+  table(
+    columns: (1.5fr, 1.5fr, 1fr, 0.8fr),
+    inset: 10pt,
+    align: horizon,
+    [*Component Category*], [*Specific Item*], [*Est. Unit Cost (USD)*], [*% of Total*],
+    [Microcontroller], [Arduino UNO R4 WiFi], [\$27.50], [34%],
+    [Chemical Sensing], [Smoke, VOC, CO Sensors], [\$35.00], [43%],
+    [Environmental], [Flame, Temp/Hum Sensors], [\$12.00], [15%],
+    [Infrastructure], [Enclosure, Wiring, PCB], [\$6.50], [8%],
+    [*Total Node Cost*], [*Fully Integrated Unit*], [*\$81.00*], [*100%*],
+  ),
+  caption: [Estimated Bill of Materials (BOM) for the Autonomous Sensing Node],
+) <table-bom>
+
+This figure compares favourably with commercial addressable fire detector points, which typically carry a list price of USD 80–200 exclusive of installation labour, panel, and wiring infrastructure.
 
 The Renesas RA4M1 operates at 48 MHz with 256 kB Flash and 32 kB RAM, while the ESP32-S3 co-processor provides WiFi throughput sufficient for continuous MQTT telemetry. Sensor data are sampled at 10 Hz across five channels; Edge Impulse DSP blocks compress this representation before inference, and quantisation reduces on-device memory requirements by a factor of four with minimal accuracy loss. The combined inference target of < 100 ms per prediction keeps per-node duty-cycle overhead negligible, supporting continuous 24/7 monitoring. Feature importance analysis indicates that the humidity channel contributes only a small fraction of classifier decision weight, suggesting that this modality could be omitted in a cost-optimised node variant.
 

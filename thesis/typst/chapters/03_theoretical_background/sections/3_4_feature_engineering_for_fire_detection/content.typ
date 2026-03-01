@@ -24,6 +24,11 @@ Beyond band energy, additional spectral descriptors extracted from the FFT magni
 
 The strongest discriminative signal in a multi-modal system often resides in the relationships between channels. During genuine combustion, CO, VOC, temperature, and IR intensity co-vary in a physically constrained manner: CO and VOC concentrations both rise because they share the same combustion source, temperature increases as a consequence of heat release, and IR intensity fluctuates at the flicker frequency @fonollosa2018chemical.
 
+#figure(
+  image("../../../../assets/figures/data_analysis/sensor_correlation.png", width: 80%),
+  caption: [Sensor Correlation Matrix. A heatmap showing the Pearson correlation coefficients between the six sensors. Low correlation between certain sensors (e.g., CO and Humidity) indicates they provide unique, non-redundant information for the fusion model.],
+) <fig-sensor-correlation>
+
 Pearson's cross-correlation coefficient between channels provides a windowed coupling measure that is physically interpretable and computationally inexpensive. However, computing all pairwise correlations across multiple sensor channels yields a high-dimensional feature vector. Principal Component Analysis (PCA) addresses this by projecting the feature matrix onto its eigenvectors of maximum variance, retaining only the components needed to explain most of the total variance while discarding redundant or noisy dimensions. Studies have demonstrated this benefit directly in incipient fire detection, where PCA reduced feature dimensionality without information loss and improved classification accuracy @zakaria2016multi.
 
 Alternative supervised dimensionality reduction methods, such as Linear Discriminant Analysis (LDA), maximize between-class scatter relative to within-class scatter. These methods are essential for generalizing learned multi-sensor fire signatures across different environments @vorwerk2024classification. In the context of this project, PCA is used to reduce the combined feature vector to a fixed-length input for the neural network classifier.

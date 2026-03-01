@@ -24,6 +24,4 @@ This temporal integration ensures that the detected event is persistent and not 
 
 ### References
 
-AI Fire Detection Arduino System. (n.d.). *Data Collection Guide*. [docs/guides/DATA_COLLECTION_GUIDE.md]
 
-AI Fire Detection Arduino System. (n.d.). *GEMINI.md: AI Fire Detection Arduino System Documentation*. [GEMINI.md]

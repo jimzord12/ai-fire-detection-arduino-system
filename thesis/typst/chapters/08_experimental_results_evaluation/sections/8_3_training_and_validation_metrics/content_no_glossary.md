@@ -1,6 +1,5 @@
 # Training and Validation Metrics
 
-The performance of the TinyML model developed for multi-sensor fire detection was rigorously assessed using standard training and validation metrics. These metrics provide quantitative insights into the model's ability to learn from the training data and generalize to unseen data, specifically focusing on its accuracy in classifying fire, no_fire, and false alarm states, as well as the behavior of the loss function during training. The evaluation relies on data presented in `data/analysis/analysis_results.json`.
 
 ## 8.3.1 Accuracy
 
@@ -26,6 +25,4 @@ The exceptional accuracy and implicit low loss achieved on the validation set ar
 
 ### References
 
-AI Fire Detection Arduino System. (n.d.). *Data Collection Guide*. [docs/guides/DATA_COLLECTION_GUIDE.md]
 
-AI Fire Detection Arduino System. (n.d.). *GEMINI.md: AI Fire Detection Arduino System Documentation*. [GEMINI.md]

@@ -6,7 +6,14 @@ This section describes the neural network topology designed for three-class fire
 
 The classification model follows a fully connected, feed-forward architecture — commonly referred to as a multi-layer perceptron (MLP) — operating on the spectral feature vector produced by the DSP block. This architectural choice is well-motivated by the structured, tabular nature of the fused sensor feature space: because the input consists of pre-computed spectral statistics rather than raw spatial data, convolutional or recurrent layers would introduce unnecessary parameter overhead without proportional accuracy gains on resource-constrained hardware @alajlan2022tinyml. The primary constraint imposed by the target necessitates that the model's weight footprint remain well under the available Flash budget.
 
-The selected topology consists of three dense layers. The input layer receives the flattened spectral feature vector; two hidden layers apply non-linear transformations; and the output layer applies a Softmax activation to produce calibrated class probabilities across the three target classes. The Rectified Linear Unit (ReLU) activation function is used for all hidden layers. ReLU is preferred over sigmoid or tanh activations in shallow embedded networks because it mitigates the vanishing gradient problem during backpropagation and reduces inference computational cost @li2022research. A Dropout layer is inserted after each hidden layer to act as a regulariser during training; dropout has been shown empirically to stabilise training curves and prevent co-adaptation of neurons @li2022research.
+The selected topology consists of three dense layers. The input layer receives the flattened spectral feature vector; two hidden layers apply non-linear transformations; and the output layer applies a Softmax activation to produce calibrated class probabilities across the three target classes.
+
+#figure(
+  image("../../../../assets/figures/edge-impulse/006-platform-classifier.png", width: 80%),
+  caption: [Classifier Training Configuration. The training interface in Edge Impulse, detailing the neural network topology, learning rate, and training cycles (epochs) used for the fire detection model.],
+) <fig-ei-classifier-config>
+
+The Rectified Linear Unit (ReLU) activation function is used for all hidden layers. ReLU is preferred over sigmoid or tanh activations in shallow embedded networks because it mitigates the vanishing gradient problem during backpropagation and reduces inference computational cost @li2022research. A Dropout layer is inserted after each hidden layer to act as a regulariser during training; dropout has been shown empirically to stabilise training curves and prevent co-adaptation of neurons @li2022research.
 
 The output layer uses Softmax normalisation, which converts raw logit scores into probability distributions that sum to unity. This is particularly valuable in a safety-critical detection context because the softmax output directly supports confidence-threshold gating: an alarm is only escalated when the fire class probability exceeds a defined threshold, rather than relying solely on an argmax decision @xiao2023hybrid. The three-class formulation is a deliberate departure from binary fire/no-fire paradigms; prior work has demonstrated that distinguishing smouldering and false-alarm-inducing scenarios as separate classes systematically improves overall classification accuracy @li2022research.
 
@@ -33,4 +40,11 @@ The table below summarises the final hyperparameter configuration:
 | Batch size               | 32                        |
 | Loss function            | Categorical cross-entropy |
 
-The model was trained and validated using the train/test split managed by Edge Impulse. Upon completion of training, validation accuracy and loss were recorded, together with the per-class F1 score and the confusion matrix, which were used to verify that no single class dominated the training signal @alajlan2022tinyml. The three-class design also serves the broader goal of reducing nuisance alarms: research showed that incorporating distinct smoulder and false-positive classes in the classification target improves early warning reliability, achieving over 96% accuracy across multiple fire material types @xiao2023hybrid.
+The model was trained and validated using the train/test split managed by Edge Impulse. Upon completion of training, validation accuracy and loss were recorded, together with the per-class F1 score and the confusion matrix, which were used to verify that no single class dominated the training signal @alajlan2022tinyml.
+
+#figure(
+  image("../../../../assets/figures/edge-impulse/007-platform-model-testing.png", width: 80%),
+  caption: [Live Model Testing and Validation. A screenshot of the model testing results within the Edge Impulse platform, showing the classification accuracy on the hold-out test dataset.],
+) <fig-ei-model-testing>
+
+The three-class design also serves the broader goal of reducing nuisance alarms: research showed that incorporating distinct smoulder and false-positive classes in the classification target improves early warning reliability, achieving over 96% accuracy across multiple fire material types @xiao2023hybrid.

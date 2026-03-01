@@ -7,7 +7,13 @@ The robustness of an autonomous fire detection system is fundamentally linked to
 To build a representative dataset, sensor data was collected in three distinct environmental contexts, each presenting a unique set of challenges for sensor fusion:
 
 + *Indoor Residential/Office*: Characterized by stable temperatures and low background gas concentrations, but subject to high-frequency nuisance events such as cooking steam or aerosol usage.
-+ *Outdoor Urban/City*: Exposed to variable background VOC levels from vehicular emissions and fluctuating humidity, which can influence the baseline resistance of MEMS gas sensors @hatip2024multisensory.
++ *Outdoor Urban/City*: Exposed to variable background VOC levels from vehicular emissions and fluctuating humidity, which can influence the baseline resistance of MEMS gas sensors @pathan2024multisensory.
+
+#figure(
+  image("../../../../assets/figures/data-collection-evidence/004-flame-smoke-outdoors.jpg", width: 80%),
+  caption: [Outdoor Night Data Collection. The sensor node capturing fire signatures in an outdoor environment to account for ambient noise and variance.],
+) <fig-outdoor-collection>
+
 + *Simulated Outdoor/Transition*: Controlled experiments where the node was exposed to varying airflow rates to simulate wind interference, which is known to disperse smoke plumes and modulate flame flicker frequencies @fonollosa2018chemical.
 
 By recording "no_fire" baselines in each of these environments, the system ensures that the TinyML model learns to ignore localized background drift and seasonal variations in temperature and humidity.

@@ -6,7 +6,6 @@ The experimental setup for data collection and model evaluation was designed to 
 
 The central hardware component of the test environment was the **Arduino UNO R4 WiFi** microcontroller board, serving as the autonomous sensing node. This board was connected via USB to a host PC, which facilitated data logging and interaction with the Edge Impulse platform. The sensor array comprised five DFRobot MEMS sensors: smoke (analog A0), VOC (analog A1), CO (analog A2), flame (analog A3), and an AHT20 for temperature and humidity (I2C via A4/A5). All sensors were calibrated and their operational status was verified prior to data collection.
 
-On the software side, the Arduino UNO R4 WiFi was programmed with a custom data collection firmware (a variant of `firmware/main/fire-detection-main/fire-detection-main.ino`, optimized for 10 Hz serial output). The host PC ran the **Edge Impulse Data Forwarder**, a utility responsible for streaming live sensor data from the Arduino's serial port to the Edge Impulse Studio. The **Edge Impulse Studio** served as the primary platform for data management, labeling (`fire`, `no_fire`, `false_alarm`), feature engineering, model training, and deployment. All necessary drivers and serial communication software were ensured to be operational.
 
 ## 8.1.2 Physical Setup and Scenario Execution
 
@@ -14,10 +13,9 @@ The physical environment for data collection was carefully controlled to simulat
 
 *   **Sensor Array Placement**: The DFRobot sensor array was mounted on a stable surface, ensuring consistent positioning relative to fire sources or nuisance triggers.
 *   **Environmental Control**: Scenarios involved manipulating environmental factors such as ventilation (e.g., closing windows/doors for low ventilation, opening them for normal/open space airflow) and the introduction of specific stimuli (e.g., controlled flames, cooking fumes, steam, aerosol sprays).
-*   **Safety Protocols**: Strict safety measures, as outlined in the project's data collection guidelines (Data Collection Guide, n.d.), were observed during all fire and false alarm scenarios, including appropriate ventilation, fire containment, and personal protective equipment.
+*   **Safety Protocols**: Strict safety measures, as outlined in the project's data collection guidelines (the established data collection protocols), were observed during all fire and false alarm scenarios, including appropriate ventilation, fire containment, and personal protective equipment.
 *   **Warm-up Period**: Prior to any data collection, the sensor array was subjected to a warm-up period of at least 30 minutes to ensure sensor stability and accurate readings.
 
-The workflow for each scenario (as detailed in `docs/research/data-collection/procedure.md`) involved initializing the sensor array, starting the Edge Impulse Data Forwarder stream, triggering the specific scenario condition, allowing a brief stabilization period (2–3 seconds), and then capturing 10-second samples. Each scenario was typically repeated 30 times to build a statistically significant dataset.
 
 ## 8.1.3 Quality Assurance and Data Verification
 
@@ -33,6 +31,4 @@ These procedures collectively ensured that the data generated in the test enviro
 
 ### References
 
-AI Fire Detection Arduino System. (n.d.). *Data Collection Guide*. [docs/guides/DATA_COLLECTION_GUIDE.md]
 
-AI Fire Detection Arduino System. (n.d.). *GEMINI.md: AI Fire Detection Arduino System Documentation*. [GEMINI.md]

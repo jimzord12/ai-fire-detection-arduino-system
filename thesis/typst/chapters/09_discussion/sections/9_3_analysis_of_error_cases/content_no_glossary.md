@@ -1,6 +1,5 @@
 # Analysis of Error Cases
 
-Understanding the circumstances under which a fire detection system might fail or generate false alarms is paramount for improving its robustness and reliability in real-world deployment. This section delves into a conceptual analysis of potential error cases, particularly focusing on false alarms, even though the current model achieved perfect classification accuracy on its validation dataset. This discussion draws insights from the dataset characteristics (`data/analysis/analysis_results.json`) and the detailed observations from the `data/analysis/DATA_ANALYSIS_REPORT.md`.
 
 ## 9.3.1 Why Did False Alarms Happen (Potentially in Real-World Scenarios)?
 
@@ -22,6 +21,4 @@ Despite the 100% accuracy on the validation set, the analysis of potential error
 
 ### References
 
-AI Fire Detection Arduino System. (n.d.). *Data Collection Guide*. [docs/guides/DATA_COLLECTION_GUIDE.md]
 
-AI Fire Detection Arduino System. (n.d.). *GEMINI.md: AI Fire Detection Arduino System Documentation*. [GEMINI.md]

@@ -12,7 +12,14 @@ Edge Impulse was selected as the primary development platform for this project d
 
 A new Edge Impulse project was initialized and configured to accept multi-channel time-series data from the five onboard sensors: smoke, VOC, CO, IR flame, and temperature/humidity. Data was ingested using the Edge Impulse CLI Data Forwarder, which streams live sensor readings from the target device via a serial USB connection at a sampling frequency of 10 Hz. This approach aligns with the platform's data-centric design philosophy, which prioritizes real-world, on-device data collection over reliance on synthetic or third-party datasets @hymel2023edge.
 
-Each recorded sample was assigned one of three class labels: fire, no_fire, or false_alarm. The three-class taxonomy was established based on the documented inadequacy of binary fire/no-fire classifiers in distinguishing genuine combustion events from nuisance stimuli such as cooking fumes or alcohol vapors. Research demonstrates that TinyML models deployed on Cortex-M class microcontrollers can achieve reliable real-time multi-class inference when training datasets are curated with semantically distinct class boundaries @alajlan2022tinyml.
+Each recorded sample was assigned one of three class labels: fire, no_fire, or false_alarm.
+
+#figure(
+  image("../../../../assets/figures/edge-impulse/001-platform-data-acquisition.png", width: 80%),
+  caption: [Edge Impulse Data Acquisition Interface. A screenshot of the platform's data ingestion page, showing the raw time-series data from the multi-sensor array after being uploaded from the Arduino.],
+) <fig-ei-data-acquisition>
+
+The three-class taxonomy was established based on the documented inadequacy of binary fire/no-fire classifiers in distinguishing genuine combustion events from nuisance stimuli such as cooking fumes or alcohol vapors. Research demonstrates that TinyML models deployed on Cortex-M class microcontrollers can achieve reliable real-time multi-class inference when training datasets are curated with semantically distinct class boundaries @alajlan2022tinyml.
 
 === Target Hardware Configuration and Resource Profiling
 

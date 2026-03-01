@@ -1,6 +1,5 @@
 # Dataset Summary
 
-The foundation of any robust machine learning system lies in its dataset. For the autonomous multi-sensor fire detection node, a comprehensive dataset was meticulously curated to support the three-class classification objective: "fire," "no_fire," and "false_alarm." This section provides a summary of the dataset's characteristics, including its distribution, balance across classes, and key statistical properties, drawing insights from `data/analysis/analysis_results.json` and `data/analysis/aggregated_data.csv`.
 
 ## 8.2.1 Distribution and Balance
 
@@ -10,7 +9,6 @@ The dataset comprises a total of **5940 samples**, systematically distributed ac
 *   **Fire Class**: 1781 samples
 *   **False_Alarm Class**: 1792 samples
 
-This near-balanced distribution (approximately 40% no_fire, 30% fire, 30% false_alarm) ensures that the model is adequately exposed to each class during training. The `label` and `scenario` columns within the `aggregated_data.csv` (`timestamp,smoke,voc,co,flame,temp,hum,label,scenario,filename,humid`) explicitly link each data point to its corresponding class and collection context, enabling detailed analysis of scenario-specific variations. The raw data structure in `data/raw/{class}/{scenario}/` further reinforces this organization, providing direct traceability to the original collection events.
 
 ### Sensor Statistics by Class
 

@@ -8,7 +8,7 @@ A significant ethical challenge in using neural networks for fire detection is t
 
 === Bias and Data Integrity
 
-The ethical integrity of an AI system is only as good as the data it is trained on. If the training dataset is biased—for example, if it only includes fire scenarios from a specific type of building or material—the resulting model may fail to generalize to other environments, potentially leaving certain populations or facilities at higher risk. This research addresses this by collecting data across diverse materials and environmental contexts (Section 6.5). However, continuous monitoring for "data drift" and the ongoing collection of diverse, real-world fire signatures are necessary ethical practices to prevent the development of localized performance biases @kapalamula2025edge.
+The ethical integrity of an AI system is only as good as the data it is trained on. If the training dataset is biased—for example, if it only includes fire scenarios from a specific type of building or material—the resulting model may fail to generalize to other environments, potentially leaving certain populations or facilities at higher risk. This research addresses this by collecting data across diverse materials and environmental contexts (Section 6.5). However, continuous monitoring for "data drift" and the ongoing collection of diverse, real-world fire signatures are necessary ethical practices to prevent the development of localized performance biases @novac2021quantization.
 
 === Fail-Safe Design and Reliability
 

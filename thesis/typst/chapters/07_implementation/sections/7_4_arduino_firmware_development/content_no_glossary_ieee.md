@@ -11,7 +11,6 @@ The Data Forwarder Sketch, exemplified by aspects of the `fire-detection-main.in
 *   **CSV Output**: Formatting the collected sensor readings into a comma-separated value (CSV) string and printing it to the Serial monitor (`Serial.print(...)` and `Serial.println()`). The format ensures easy parsing by external tools (e.g., Python scripts for data logging) and direct compatibility with Edge Impulse data ingestion pipelines.
 *   **AHT20 Management**: Includes logic for I2C AHT20 sensor initialization (`_aht.begin()`) and periodic re-initialization attempts (`_ahtReinitInterval`) to ensure reliable data streams, addressing potential sensor communication issues.
 
-For dedicated data collection, a simplified version of this logic, often found in `firmware/examples/` like `analog_smoke_sensor.ino` or `temp_humidity_sensor.ino`, can be used in conjunction with host-side scripts (e.g., `tools/collection/automated_data_collection.sh`). These examples demonstrate basic sensor readout for individual sensors, forming the building blocks of a comprehensive data forwarder. The `automated_data_collection.sh` script leverages this serial output to capture and store labeled raw data, essential for building the three-class classification dataset.
 
 ## 7.4.2 Real-Time Inference Sketch (Deployment)
 

@@ -1,6 +1,5 @@
 # Interpretation of Class Separability
 
-The efficacy of a multi-sensor fire detection system hinges on its ability to clearly differentiate between distinct environmental states: true fire, ambient "no-fire" conditions, and various sources of false alarms. This section interprets the underlying sensor data distributions and statistical analyses to explain how these three classes are separable in the feature space, with particular emphasis on identifying key "truth sensors" and debunking common assumptions, such as the reliability of simple thermal detection. This interpretation is directly supported by the findings presented in `data/analysis/analysis_results.json` and elaborated in `data/analysis/DATA_ANALYSIS_REPORT.md`.
 
 ## 9.1.1 The "Truth Sensor" and "Thermal Anomaly" Analysis
 
@@ -8,7 +7,6 @@ The core of class separability within this multi-sensor system is illuminated by
 
 ### The CO "Truth Sensor" for Combustion Verification
 
-The Carbon Monoxide (CO) sensor plays a pivotal role in disambiguating fire from false alarm scenarios, thus earning its designation as a "Truth Sensor" for combustion verification. As detailed in "The CO 'Sanity Check'" (`data/analysis/DATA_ANALYSIS_REPORT.md`, Section 5.2):
 
 *   **Distinct Signatures**: While `smoke` and `voc` sensors exhibit elevated readings for both "fire" and "false_alarm" conditions (e.g., from cooking fumes or aerosol sprays), the CO sensor shows a profound divergence. "Fire" events average approximately 494 units of CO, whereas "false_alarm" events average a significantly lower ~123 units (from `analysis_results.json`, `sensor_stats`).
 *   **Fundamental Differentiator**: This stark difference in CO levels is attributed to its nature as a product of incomplete combustion. False alarms, such as cooking or spraying aerosols, may produce particulates (smoke) and volatile organic compounds (VOCs), but they do not typically generate significant quantities of CO. Conversely, any genuine fire, whether flaming or smoldering, will produce CO.
@@ -16,7 +14,6 @@ The Carbon Monoxide (CO) sensor plays a pivotal role in disambiguating fire from
 
 ### The "Heat Paradox" and the Limits of Thermal-Only Detection
 
-Traditional fire detection systems often rely heavily on heat sensors, assuming that a high temperature is a reliable indicator of fire. However, the data analysis uncovered a "Heat Paradox," challenging this assumption and highlighting a thermal anomaly that necessitates sensor fusion. As described in "The 'Heat' Paradox" (`data/analysis/DATA_ANALYSIS_REPORT.md`, Section 5.1):
 
 *   **Counterintuitive Finding**: Counterintuitively, the average temperature recorded during "false_alarm" scenarios (specifically cooking and steam) was higher (34.9°C) than during active "fire" events (25.7°C) in the early stages of data collection.
 *   **Implications for Single-Sensor Systems**: This finding has profound implications for systems relying solely on thermal detection. A simple heat detector, set to a threshold based on fire temperatures, would be highly susceptible to false alarms from cooking or steam. Conversely, setting the threshold too high to avoid these false alarms would delay the detection of actual fires, especially in their incipient stages.
@@ -26,6 +23,4 @@ The combined evidence from the CO "Truth Sensor" and the "Heat Paradox" demonstr
 
 ### References
 
-AI Fire Detection Arduino System. (n.d.). *Data Collection Guide*. [docs/guides/DATA_COLLECTION_GUIDE.md]
 
-AI Fire Detection Arduino System. (n.d.). *GEMINI.md: AI Fire Detection Arduino System Documentation*. [GEMINI.md]

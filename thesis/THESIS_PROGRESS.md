@@ -2,6 +2,7 @@
 
 | Chapter                                         | Section                                                                  | Status               | Stage                       | Notes                             | Source      |
 | :---------------------------------------------- | :----------------------------------------------------------------------- | :------------------- | :-------------------------- | :-------------------------------- | :---------- |
+| **Front Matter**                               | **Abstract**                                                             | ✅ Done              | included in main.typ        | Comprehensive summary completed   | local       |
 | **1: Introduction**                             | 1.1 Background                                                           | ✅ Done              | included in chapter         | Framed as Autonomous Sensing Node | web + local |
 |                                                 | 1.2 Problem Statement                                                    | ✅ Done              | included in chapter         |                                   | web + local |
 |                                                 | 1.3 Research Questions                                                   | ✅ Done              | included in chapter         |                                   | web + local |

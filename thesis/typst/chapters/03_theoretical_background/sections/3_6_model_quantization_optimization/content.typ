@@ -12,7 +12,7 @@ Post-Training Quantization is a common TinyML optimization technique where a pre
 
 $q = round(r/S + Z)$
 
-where $r$ is the real value, $S$ is a scaling factor, and $Z$ is the zero-point offset @perez2023tinyml. By converting weights from 4-byte floats to 1-byte integers, the model's storage footprint is reduced by approximately 75%, allowing complex models to fit within the 256 KB Flash of the Renesas RA4M1 microcontroller used in this project.
+where $r$ is the real value, $S$ is a scaling factor, and $Z$ is the zero-point offset @nekhil2023fire. By converting weights from 4-byte floats to 1-byte integers, the model's storage footprint is reduced by approximately 75%, allowing complex models to fit within the 256 KB Flash of the Renesas RA4M1 microcontroller used in this project.
 
 ==== Quantization-Aware Training (QAT)
 
@@ -20,7 +20,7 @@ While PTQ is efficient, it can introduce quantization noise that degrades classi
 
 === Performance Optimization and Latency Reduction
 
-Beyond memory savings, quantization significantly enhances inference speed. Microcontrollers like the Renesas RA4M1 feature specialized instructions (e.g., SIMD - Single Instruction, Multiple Data) that can process multiple integer operations in a single clock cycle. By utilizing these instructions, an INT8-quantized model can achieve a 2x to 4x reduction in inference latency compared to its floating-point counterpart, which is critical for meeting the < 100ms real-time response target for fire detection @perez2023tinyml.
+Beyond memory savings, quantization significantly enhances inference speed. Microcontrollers like the Renesas RA4M1 feature specialized instructions (e.g., SIMD - Single Instruction, Multiple Data) that can process multiple integer operations in a single clock cycle. By utilizing these instructions, an INT8-quantized model can achieve a 2x to 4x reduction in inference latency compared to its floating-point counterpart, which is critical for meeting the < 100ms real-time response target for fire detection @nekhil2023fire.
 
 === Pruning and Architectural Compression
 

@@ -16,7 +16,7 @@ However, trustworthiness also requires addressing potential failure modes. The c
 
 AI models can inadvertently inherit biases present in their training data. In fire detection, bias could manifest if the training dataset disproportionately represents certain fire types, materials, or environmental conditions, leading to suboptimal performance in underrepresented scenarios. For instance, if the model is primarily trained on fires involving wood and paper, it might perform poorly with fires involving less common materials.
 
-*   **Data Diversity**: Mitigating bias requires diverse and representative training data. The data collection methodology (Data Collection Guide, n.d.) aimed for a variety of fire, no-fire, and false alarm scenarios to minimize such biases.
+*   **Data Diversity**: Mitigating bias requires diverse and representative training data. The data collection methodology (the established data collection protocols) aimed for a variety of fire, no-fire, and false alarm scenarios to minimize such biases.
 *   **Transparency**: While deep learning models can be "black boxes," the system's design incorporates interpretable elements. The "CO Truth Sensor" (Interpretation of Class Separability, Section 9.1) and `feature_importance` analysis provide insights into which sensors drive decisions, offering a degree of transparency into the model's reasoning.
 
 Ensuring fairness means the system performs equally well across all relevant fire conditions and does not disproportionately impact specific populations or environments.
@@ -26,7 +26,6 @@ Ensuring fairness means the system performs equally well across all relevant fir
 The ability to understand *why* an AI system makes a particular decision is crucial for accountability, especially when human lives are at stake. While complex neural networks are inherently less transparent, efforts can be made:
 
 *   **Rule-Based Complements**: The hybrid triggering logic explicitly integrates human-interpretable rules (e.g., `rawSmoke > 60` or `rawFlame > 500`), offering explainability for the final alarm decision, even if the ML probability is opaque.
-*   **Feature Importance Analysis**: Identifying which sensors contribute most to the model's decision (`data/analysis/analysis_results.json`) helps understand the model's focus, even if the exact weighting is complex.
 
 For a life-critical system, operators and emergency services must trust the alarm, and a degree of explainability facilitates this trust.
 

@@ -1,6 +1,6 @@
 == Training and Validation Metrics
 
-The performance of the TinyML model developed for multi-sensor fire detection was rigorously assessed using standard training and validation metrics. These metrics provide quantitative insights into the model's ability to learn from the training data and generalize to unseen data, specifically focusing on its accuracy in classifying fire, no_fire, and false alarm states, as well as the behavior of the loss function during training. The evaluation relies on data presented in `data/analysis/analysis_results.json`.
+The performance of the TinyML model developed for multi-sensor fire detection was rigorously assessed using standard training and validation metrics. These metrics provide quantitative insights into the model's ability to learn from the training data and generalize to unseen data, specifically focusing on its accuracy in classifying fire, no_fire, and false alarm states, as well as the behavior of the loss function during training. The evaluation relies on data presented in `the experimental analysis results`.
 
 ==== Accuracy
 
@@ -13,6 +13,11 @@ Beyond overall accuracy, a more detailed understanding of the model's performanc
 - *No_Fire Class*: Precision: 1.0, Recall: 1.0, F1-score: 1.0, Support: 2367 samples.
 
 A precision of 1.0 for all classes indicates that when the model predicts a class, it is always correct (no false positives for any class). A recall of 1.0 signifies that the model correctly identifies all actual instances of each class (no false negatives for any class). Consequently, an F1-score of 1.0 across all classes demonstrates perfect balance between precision and recall.
+
+#figure(
+  image("../../../../assets/figures/data_analysis/confusion_matrix.png", width: 80%),
+  caption: [Model Confusion Matrix. A matrix visualizing the predicted vs. actual class labels. The 100% accuracy in this controlled environment demonstrates the mathematical separability of the fire and false alarm classes.],
+) <fig-confusion-matrix>
 
 The confusion matrix, visually represented in `thesis/assets/figures/data_analysis/confusion_matrix.png` and numerically in `analysis_results.json`, further confirms these results. It shows a perfect diagonal with zero off-diagonal elements, meaning there were no misclassifications between any of the "false_alarm," "fire," and "no_fire" classes. This high accuracy, precision, and recall across all classes on the validation set suggests that the model has learned distinct and separable features for each class from the provided dataset.
 

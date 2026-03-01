@@ -1,6 +1,6 @@
 == Environment-Specific Performance
 
-The evaluation of the multi-sensor fire detection system extends beyond overall accuracy to consider its performance across different environmental contexts. While the primary dataset encompasses a variety of scenarios (as detailed in Section 6.4), a comprehensive analysis of environment-specific performance aims to understand how the model behaves when deployed in diverse settings such as urban, indoor, or outdoor environments. The evaluation in this section primarily draws upon the overall classification results available in `data/analysis/analysis_results.json`, given the aggregated nature of the current metrics.
+The evaluation of the multi-sensor fire detection system extends beyond overall accuracy to consider its performance across different environmental contexts. While the primary dataset encompasses a variety of scenarios (as detailed in Section 6.4), a comprehensive analysis of environment-specific performance aims to understand how the model behaves when deployed in diverse settings such as urban, indoor, or outdoor environments. The evaluation in this section primarily draws upon the overall classification results available in `the experimental analysis results`, given the aggregated nature of the current metrics.
 
 ==== Overall Confusion Matrix and Environmental Context
 

@@ -11,11 +11,16 @@ The Data Forwarder Sketch, exemplified by aspects of the `fire-detection-main.in
 - *CSV Output*: Formatting the collected sensor readings into a comma-separated value (CSV) string and printing it to the Serial monitor (`Serial.print(...)` and `Serial.println()`). The format ensures easy parsing by external tools (e.g., Python scripts for data logging) and direct compatibility with Edge Impulse data ingestion pipelines.
 - *AHT20 Management*: Includes logic for I2C AHT20 sensor initialization (`_aht.begin()`) and periodic re-initialization attempts (`_ahtReinitInterval`) to ensure reliable data streams, addressing potential sensor communication issues.
 
-For dedicated data collection, a simplified version of this logic, often found in `firmware/examples/` like `analog_smoke_sensor.ino` or `temp_humidity_sensor.ino`, can be used in conjunction with host-side scripts (e.g., `tools/collection/automated_data_collection.sh`). These examples demonstrate basic sensor readout for individual sensors, forming the building blocks of a comprehensive data forwarder. The `automated_data_collection.sh` script leverages this serial output to capture and store labeled raw data, essential for building the three-class classification dataset.
+For dedicated data collection, a simplified version of this logic, often found in `the sensor integration examples` like `analog_smoke_sensor.ino` or `temp_humidity_sensor.ino`, can be used in conjunction with host-side scripts (e.g., `the automated data collection utility`). These examples demonstrate basic sensor readout for individual sensors, forming the building blocks of a comprehensive data forwarder. The `the data collection script` script leverages this serial output to capture and store labeled raw data, essential for building the three-class classification dataset.
 
 ==== Real-Time Inference Sketch (Deployment)
 
 The `fire-detection-main.ino` firmware's core functionality is its role as the Real-Time Inference Sketch, enabling on-device TinyML model execution for autonomous fire detection. This sketch integrates the trained Edge Impulse model and orchestrates the inference process.
+
+#figure(
+  image("../../../../assets/figures/edge-impulse/009-platform-deployment.png", width: 80%),
+  caption: [Deployment Target Selection. The deployment page showing the various export options, specifically the selection of the Arduino library for integration into the custom firmware.],
+) <fig-ei-deployment>
 
 - *Sensor Data Acquisition*: The `pushSampleToEiBuffer()` function continuously reads the current state of all physical sensors and populates a feature buffer (`_features`). The order and count of these features (`EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE`) are strictly defined by the Edge Impulse project configuration, ensuring compatibility with the deployed model.
 - *TinyML Model Integration*: The firmware includes an Edge Impulse-generated C++ library (`#include <fire-detector-fusion_inferencing.h>`), which provides the `run_classifier()` function. This function takes the populated feature buffer (`_features`) as input and executes the optimized neural network model on the Renesas RA4M1 microcontroller.
