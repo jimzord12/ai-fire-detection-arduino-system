@@ -18,7 +18,7 @@ The MEMS CO sensor (SEN0564) is optimized for the detection of CO, a critical ma
 
 ==== Infrared (IR) Flame Sensor (DFR0076)
 
-The Gravity Analog Flame Sensor (DFR0076) is a phototransistor-based device designed to detect radiation in the 760 nm to 1100 nm wavelength range. This band corresponds to the infrared emissions of a typical flame. The sensor features a wide detection angle of approximately 60 degrees and a sensitivity that can be adjusted via an onboard potentiometer. Its response time is nearly instantaneous (< 1 ms), allowing for the capture of the high-frequency flicker characteristic of open flames @rasimmax2024fire. A significant limitation of this sensor modality is its line-of-sight requirement and susceptibility to intense IR interference from sunlight or incandescent lighting, necessitating its fusion with non-optical gas sensors to reduce false positives @meleti2024obscured.
+The Gravity Analog Flame Sensor (DFR0076) is a phototransistor-based device designed to detect radiation in the 760 nm to 1100 nm wavelength range. This band corresponds to the infrared emissions of a typical flame. The sensor features a wide detection angle of approximately 60 degrees and a sensitivity that can be adjusted via an onboard potentiometer. Its response time is nearly instantaneous (< 1 ms), allowing for the capture of the high-frequency flicker characteristic of open flames @toreyin2012wavelet. A significant limitation of this sensor modality is its line-of-sight requirement and susceptibility to intense IR interference from sunlight or incandescent lighting, necessitating its fusion with non-optical gas sensors to reduce false positives @meleti2024obscured.
 
 ==== Environmental Monitoring (AHT20)
 

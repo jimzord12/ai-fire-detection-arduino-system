@@ -10,9 +10,9 @@ When reducing gases—such as CO or hydrocarbons found in smoke—interact with 
 
 ==== Infrared (IR) Flame Detection
 
-Flame detection relies on the principles of blackbody radiation and the specific spectral emissions of hot gases. During the combustion of organic materials, carbon dioxide (CO2) molecules are excited and emit characteristic radiation in the infrared spectrum, particularly a strong peak at approximately 4.3 μm, known as the "CO2 spike" @nekhil2023fire. Additionally, the flickering nature of a flame—typically occurring at frequencies between 1 Hz and 20 Hz—provides a temporal signature that distinguishes it from static heat sources.
+Flame detection relies on the principles of blackbody radiation and the specific spectral emissions of hot gases. During the combustion of organic materials, carbon dioxide (CO2) molecules are excited and emit characteristic radiation in the infrared spectrum, particularly a strong peak at approximately 4.3 μm, known as the "CO2 spike" @deng2023indoor. Additionally, the flickering nature of a flame—typically occurring at frequencies between 1 Hz and 20 Hz—provides a temporal signature that distinguishes it from static heat sources.
 
-Infrared sensors, such as the Gravity Analog Flame Sensor, utilize a photodiode or phototransistor sensitive to a specific range of the IR spectrum (typically 760 nm to 1100 nm). When IR photons within this band strike the active area of the sensor, they generate a photocurrent proportional to the radiation intensity @rasimmax2024fire. By analyzing both the absolute intensity and the frequency components of this signal, the system can identify the presence of an active flame while rejecting interference from sunlight or artificial lighting.
+Infrared sensors, such as the Gravity Analog Flame Sensor, utilize a photodiode or phototransistor sensitive to a specific range of the IR spectrum (typically 760 nm to 1100 nm). When IR photons within this band strike the active area of the sensor, they generate a photocurrent proportional to the radiation intensity @toreyin2012wavelet. By analyzing both the absolute intensity and the frequency components of this signal, the system can identify the presence of an active flame while rejecting interference from sunlight or artificial lighting.
 
 ==== Capacitive and Resistive Environmental Sensing
 

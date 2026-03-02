@@ -12,7 +12,7 @@ To account for long-term sensor drift and varying ambient air quality, the syste
 
 ==== Differential Sensing Logic
 
-Rather than relying on absolute voltage thresholds, the node's inference logic is based on the differential change from the established baseline (delta R/R_0). During the first 10 seconds of stable operation (after the warm-up period), the firmware calculates the mean and standard deviation of each gas sensor channel to define the ambient baseline @rasimmax2024fire. This allows the system to adapt to different rooms or seasonal variations in background gas concentrations. As implemented in the main firmware, the system performs continuous "sanity checks" to ensure that the baseline remains within expected physiological limits before permitting the machine learning model to trigger an alarm.
+Rather than relying on absolute voltage thresholds, the node's inference logic is based on the differential change from the established baseline (delta R/R_0). During the first 10 seconds of stable operation (after the warm-up period), the firmware calculates the mean and standard deviation of each gas sensor channel to define the ambient baseline @salhi2024early. This allows the system to adapt to different rooms or seasonal variations in background gas concentrations. As implemented in the main firmware, the system performs continuous "sanity checks" to ensure that the baseline remains within expected physiological limits before permitting the machine learning model to trigger an alarm.
 
 === Flame Sensor Sensitivity Adjustment
 

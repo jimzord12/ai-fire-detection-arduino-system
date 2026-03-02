@@ -8,7 +8,7 @@ Sensor fusion can be categorized into three hierarchical levels based on the sta
 
 ===== Data-Level and Feature-Level Fusion
 
-Data-level fusion involves the direct integration of raw sensor signals. This approach preserves the highest degree of information but requires significant bandwidth and computational resources, as the fusion center must process high-dimensional raw data. Feature-level fusion, which is the primary approach used in this research, involves extracting relevant characteristics (features) from each sensor modality—such as mean gas concentration, thermal gradients, or the frequency components of a flame signal—before combining them into a single feature vector @pathan2024multisensory. This vector then serves as the input for a machine learning classifier. Feature fusion is particularly effective for TinyML applications, as it reduces the input dimensionality while preserving the discriminatory patterns necessary for accurate classification @nekhil2023fire.
+Data-level fusion involves the direct integration of raw sensor signals. This approach preserves the highest degree of information but requires significant bandwidth and computational resources, as the fusion center must process high-dimensional raw data. Feature-level fusion, which is the primary approach used in this research, involves extracting relevant characteristics (features) from each sensor modality—such as mean gas concentration, thermal gradients, or the frequency components of a flame signal—before combining them into a single feature vector @pathan2024multisensory. This vector then serves as the input for a machine learning classifier. Feature fusion is particularly effective for TinyML applications, as it reduces the input dimensionality while preserving the discriminatory patterns necessary for accurate classification @sailesh2022novel.
 
 ===== Decision-Level Fusion
 
@@ -19,7 +19,7 @@ Decision-level fusion involves combining the independent outputs of multiple cla
 The effectiveness of fusion in the fire detection domain relies on both redundant and complementary sensor configurations.
 
 - *Redundant Fusion*: Multiple sensors of the same or similar types (e.g., Smoke and VOC sensors) monitor the same phenomenon. This provides fault tolerance and improves the signal-to-noise ratio, as a genuine fire will typically influence multiple sensors simultaneously @meleti2024obscured.
-- *Complementary Fusion*: Sensors monitor different, yet related, physical phenomena (e.g., gas concentration vs. IR radiation). Complementary fusion is critical for false alarm rejection. As identified in the data analysis, the CO sensor acts as a "truth sensor" because its readings are rarely elevated in non-combustion scenarios like cooking steam, effectively contextualizing high smoke readings @rasimmax2024fire.
+- *Complementary Fusion*: Sensors monitor different, yet related, physical phenomena (e.g., gas concentration vs. IR radiation). Complementary fusion is critical for false alarm rejection. As identified in the data analysis, the CO sensor acts as a "truth sensor" because its readings are rarely elevated in non-combustion scenarios like cooking steam, effectively contextualizing high smoke readings @salhi2024early.
 
 ==== Non-Linear Discrimination via Machine Learning
 

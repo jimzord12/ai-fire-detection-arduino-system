@@ -8,13 +8,13 @@ The fundamental building block of an ANN is the artificial neuron, a computation
 
 $y = sigma(sum_(i=1)^n w_i x_i + b)$
 
-where $w_i$ represents the synaptic weights, $b$ is the bias term, and $sigma$ is the activation function @nekhil2023fire. In an MLP, these neurons are organized into a structured hierarchy consisting of an input layer, one or more hidden layers, and an output layer. The hidden layers enable the network to learn complex, high-dimensional decision boundaries that are inaccessible to linear classifiers @pathan2024multisensory.
+where $w_i$ represents the synaptic weights, $b$ is the bias term, and $sigma$ is the activation function @sailesh2022novel. In an MLP, these neurons are organized into a structured hierarchy consisting of an input layer, one or more hidden layers, and an output layer. The hidden layers enable the network to learn complex, high-dimensional decision boundaries that are inaccessible to linear classifiers @pathan2024multisensory.
 
 === Activation Functions: ReLU and Softmax
 
 Activation functions introduce the non-linearity necessary for the network to approximate complex functions.
 
-- *Rectified Linear Unit (ReLU)*: In the hidden layers, the ReLU function, defined as $f(x) = max(0, x)$, is commonly employed. ReLU is computationally efficient for TinyML applications as it involves only a simple thresholding operation, and it mitigates the vanishing gradient problem during training @nekhil2023fire.
+- *Rectified Linear Unit (ReLU)*: In the hidden layers, the ReLU function, defined as $f(x) = max(0, x)$, is commonly employed. ReLU is computationally efficient for TinyML applications as it involves only a simple thresholding operation, and it mitigates the vanishing gradient problem during training @sailesh2022novel.
 - *Softmax*: For multi-class classification, the output layer typically utilizes the Softmax activation function. Softmax squashes a vector of $K$ real values into a probability distribution consisting of $K$ probabilities proportional to the exponentials of the input numbers. This allows the autonomous node to interpret the model's output as the confidence or probability of each class (fire, no_fire, or false_alarm) @wang2023fire.
 
 === Training via Backpropagation and Gradient Descent

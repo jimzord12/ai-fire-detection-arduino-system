@@ -10,10 +10,10 @@ Digital communication is centralized on the Inter-Integrated Circuit (I2C) bus, 
 
 The MOS-based gas sensors and the IR flame sensor utilize the RA4M1's high-resolution Analog-to-Digital Converters (ADCs) for signal transduction. This mapping is critical for capturing the subtle voltage fluctuations associated with incipient fire signatures.
 
-- *Smoke and VOC Sensors*: The MEMS smoke and VOC sensors are mapped to dedicated analog input pins. The firmware reads the voltage divider output from these sensors, where the resistance change of the sensing layer is converted into a proportional voltage signal @rasimmax2024fire.
+- *Smoke and VOC Sensors*: The MEMS smoke and VOC sensors are mapped to dedicated analog input pins. The firmware reads the voltage divider output from these sensors, where the resistance change of the sensing layer is converted into a proportional voltage signal @salhi2024early.
 - *Carbon Monoxide (CO) Sensor*: The MEMS CO sensor is mapped to a high-priority analog pin, reflecting its role as the "truth sensor."
 - *Infrared Flame Sensor*: The Gravity Analog Flame Sensor provides a continuous voltage output to a dedicated analog pin, enabling the capture of high-frequency flicker @meleti2024obscured.
 
 === Power Distribution and Grounding
 
-The schematic implements a parallel power distribution strategy. All sensor heaters are tied to the Arduino's 5V rail, while the digital logic of the environmental sensor is powered by the 3.3V rail. A "common ground" star topology is employed to minimize ground loops and signal interference, ensuring that the analog baselines remain stable across all modalities @nekhil2023fire.
+The schematic implements a parallel power distribution strategy. All sensor heaters are tied to the Arduino's 5V rail, while the digital logic of the environmental sensor is powered by the 3.3V rail. A "common ground" star topology is employed to minimize ground loops and signal interference, ensuring that the analog baselines remain stable across all modalities @sailesh2022novel.

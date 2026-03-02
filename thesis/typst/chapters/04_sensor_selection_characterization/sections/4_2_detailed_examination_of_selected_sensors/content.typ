@@ -23,7 +23,7 @@ The SEN0570 is a Micro-Electro-Mechanical Systems (MEMS) based smoke sensor desi
 
 ==== Gravity Analog Flame Sensor (DFR0076)
 
-The Gravity Analog Flame Sensor is an infrared (IR) based device optimized for detecting radiation in the 760 nm to 1100 nm wavelength band. This spectrum is characteristic of the thermal emissions of an open flame. The sensor utilizes a phototransistor with a wide detection angle of approximately 60 degrees and a response time of less than 1 ms, enabling the capture of high-frequency flame flicker @rasimmax2024fire. The onboard potentiometer allows for hardware-level sensitivity adjustment, providing a first line of defense against static IR interference before digital signal processing.
+The Gravity Analog Flame Sensor is an infrared (IR) based device optimized for detecting radiation in the 760 nm to 1100 nm wavelength band. This spectrum is characteristic of the thermal emissions of an open flame. The sensor utilizes a phototransistor with a wide detection angle of approximately 60 degrees and a response time of less than 1 ms, enabling the capture of high-frequency flame flicker @toreyin2012wavelet. The onboard potentiometer allows for hardware-level sensitivity adjustment, providing a first line of defense against static IR interference before digital signal processing.
 
 ==== Fermion VOC Gas Sensor (SEN0566)
 
