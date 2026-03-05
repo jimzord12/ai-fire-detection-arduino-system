@@ -4,27 +4,24 @@ The performance of the TinyML model developed for multi-sensor fire detection wa
 
 ==== Accuracy
 
-Accuracy is a fundamental metric that quantifies the proportion of correctly classified instances out of the total instances. For a multi-class classification problem like fire detection, overall accuracy provides a high-level overview of the model's performance. The `analysis_results.json` reports an impressive overall accuracy of 1.0 (100%) for the trained model on its validation set. This indicates that all 5940 samples in the validation dataset were correctly classified across the three target classes.
+Accuracy is a fundamental metric that quantifies the proportion of correctly classified instances out of the total instances. For a multi-class classification problem like fire detection, overall accuracy provides a high-level overview of the model's performance. The `analysis_results.json` reports an overall accuracy of 1.0 (100%) for the trained model on its validation set. While this suggests perfect classification of all 5940 samples in the validation dataset, it must be interpreted as a **baseline feasibility result achieved within a strictly controlled laboratory environment**. Such "perfect" separability is often characteristic of initial TinyML studies where the variance of environmental noise (e.g., dust, fluctuating air currents, or aging sensors) is minimized compared to real-world field conditions @muller2024classification.
 
 Beyond overall accuracy, a more detailed understanding of the model's performance per class is provided by precision, recall, and F1-score, as detailed in the `classification_report` within `analysis_results.json`:
 
-- *False_Alarm Class*: Precision: 1.0, Recall: 1.0, F1-score: 1.0, Support: 1792 samples.
-- *Fire Class*: Precision: 1.0, Recall: 1.0, F1-score: 1.0, Support: 1781 samples.
-- *No_Fire Class*: Precision: 1.0, Recall: 1.0, F1-score: 1.0, Support: 2367 samples.
+- *False_Alarm Class*: Precision: 1.0, Recall: 1.0, F1-score: 1.0.
+- *Fire Class*: Precision: 1.0, Recall: 1.0, F1-score: 1.0.
+- *No_Fire Class*: Precision: 1.0, Recall: 1.0, F1-score: 1.0.
 
-A precision of 1.0 for all classes indicates that when the model predicts a class, it is always correct (no false positives for any class). A recall of 1.0 signifies that the model correctly identifies all actual instances of each class (no false negatives for any class). Consequently, an F1-score of 1.0 across all classes demonstrates perfect balance between precision and recall.
+A precision and recall of 1.0 for all classes signifies that, within the scope of the current dataset, the features extracted by the sensor fusion suite are highly discriminative. However, this level of performance should be viewed as an indicator of the model's strong potential rather than a guarantee of error-free operation in noisy, non-stationary environments.
 
 #figure(
   image("../../../../assets/figures/data_analysis/confusion_matrix.png", width: 80%),
-  caption: [Model Confusion Matrix. A matrix visualizing the predicted vs. actual class labels. The 100% accuracy in this controlled environment demonstrates the mathematical separability of the fire and false alarm classes.],
+  caption: [Model Confusion Matrix. A matrix visualizing the predicted vs. actual class labels. The 100% accuracy in this controlled environment demonstrates the high mathematical separability of the fire and false alarm classes under ideal conditions.],
 ) <fig-confusion-matrix>
 
-The confusion matrix, visually represented in `thesis/assets/figures/data_analysis/confusion_matrix.png` and numerically in `analysis_results.json`, further confirms these results. It shows a perfect diagonal with zero off-diagonal elements, meaning there were no misclassifications between any of the "false_alarm," "fire," and "no_fire" classes. This high accuracy, precision, and recall across all classes on the validation set suggests that the model has learned distinct and separable features for each class from the provided dataset.
+The confusion matrix, visually represented in @fig-confusion-matrix, further confirms these results, showing a perfect diagonal with zero off-diagonal elements. This indicates that misclassifications between "false_alarm," "fire," and "no_fire" classes were not observed during validation. This suggests that the model has successfully identified the distinct multi-modal signatures of each class in the training environment, providing a robust starting point for subsequent field testing and longitudinal reliability analysis.
 
 ==== Loss
 
-The loss function quantifies the error between the model's predictions and the true labels during training. The objective of the training process is to minimize this loss. While `analysis_results.json` does not explicitly provide a training loss curve or final loss value, a typical training process for such a high-performing model (achieving 100% accuracy) would involve the iterative reduction of a chosen loss function (e.g., Categorical Cross-Entropy for multi-class classification) over epochs.
+The loss function quantifies the error between the model's predictions and the true labels during training. The objective of the training process is to minimize this loss. A perfectly trained model, especially one achieving high accuracy on its validation set, implies that the training loss converged to a very low value, approaching zero, and that the model effectively learned the underlying patterns of the provided dataset. The absence of any misclassifications in the confusion matrix suggests that the model's weights and biases were successfully optimized for the specific feature space generated during laboratory data collection. In a practical deployment, monitoring for a "Lab-to-Real-World" performance gap is critical, as the implicit low loss on validation data does not necessarily account for the stochastic nature of real-world fire transients @solorzano2021early.
 
-A perfectly trained model, especially one achieving 100% accuracy on its validation set, implies that the training loss converged to a very low value, approaching zero, and that the model effectively learned the underlying patterns without significant overfitting to this specific validation set. The absence of any misclassifications in the confusion matrix suggests that the model's weights and biases were successfully optimized to classify the features of each class distinctly. In a practical scenario, monitoring the training and validation loss curves (not directly presented here but standard practice in model development) would typically show a decreasing trend, indicating effective learning and convergence.
-
-The exceptional accuracy and implicit low loss achieved on the validation set are strong indicators of the model's capability to differentiate between fire, no_fire, and false alarm conditions based on the multi-sensor input.

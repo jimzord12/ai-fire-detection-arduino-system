@@ -6,7 +6,9 @@ The development of the autonomous multi-sensor fire detection node provides a fo
 
 A critical next step for the autonomous sensing node is the implementation of robust Over-the-Air (OTA) update mechanisms. In practical deployment scenarios, manually accessing each node for firmware updates is labor-intensive and inefficient. Future work should focus on utilizing the secondary co-processor to perform background updates of the TinyML model. This would allow for the seamless redeployment of optimized neural networks as new training data is collected and processed in the cloud @hymel2023edge.
 
-=== Transition to Long-Range Protocols for Forest Deployment
+=== Stress Testing and Noise-Injection for Reliability
+
+Given the safety-critical nature of fire detection, future validation should move beyond static datasets toward dynamic **stress testing and noise-injection**. This involves intentionally corrupting sensor inputs with synthetic noise, simulated sensor drift, or adversarial environmental transients to identify the limits of the model's robustness. Such testing is essential for verifying that the "perfect" separability observed in laboratory conditions translates to a reliable safety margin in high-entropy real-world environments @muller2024classification.
 
 While the current prototype utilizes WiFi for indoor telemetry, many high-risk fire zones lack stable network infrastructure. Integrating long-range, low-power protocols like LoRaWAN represents a significant scalability opportunity. Future research should examine the trade-offs between the low bandwidth of LoRaWAN and the high-frequency sampling requirements of the multi-sensor array. A hybrid-edge approach would enable the deployment of wide-area sensing fabrics for early wildfire detection @alajlan2022tinyml.
 
