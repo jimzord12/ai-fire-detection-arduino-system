@@ -70,3 +70,17 @@ typst watch thesis/typst/main.typ
     ./tools/utils/sync-bib.sh
     ```
 -   **De-duplication:** Typst's bibliography processing (via `#bibliography`) automatically handles de-duplication. Multiple in-text citations referencing the same unique key in `bibliography.bib` will only result in a single entry in the final reference list. This ensures consistency and avoids redundancy.
+
+## Academic Standards & Rigor
+
+### 1. Reference Validation
+All bibliography entries must be verified for academic validity. Hobbyist blogs, YouTube videos, and "expert network" posts are **not permitted** as primary sources for technical claims.
+-   **Tool:** Use `npx tsx .gemini/v1/cli-tools/ref-tools/verify-references.ts thesis/typst/bibliography.bib` to check for broken links and low-confidence metadata.
+-   **Replacement Strategy:** If a source is flagged as non-academic, search for peer-reviewed alternatives in *IEEE Sensors*, *Information Fusion*, *Elsevier Fire Safety Journal*, or *ACM Transactions*.
+
+### 2. Academic Humility
+When reporting experimental results:
+-   **Avoid Hyperbole:** Avoid terms like "perfect accuracy" or "total success" without qualification.
+-   **Controlled Environment Disclaimer:** Always frame high performance (e.g., 100% accuracy) as a **baseline feasibility result achieved in controlled conditions**.
+-   **Limitation Awareness:** Explicitly discuss the "Lab-to-Real-World gap," sensor drift, and compound interference scenarios (e.g., simultaneous false alarm sources).
+-   **Safety-Critical Verification:** For life-safety systems, emphasize the need for longitudinal analysis, noise-injection, and stress testing in future work sections.

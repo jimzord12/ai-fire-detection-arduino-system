@@ -54,10 +54,10 @@ An autonomous multi-sensor fire detection node leveraging sensor fusion and Tiny
 
 Key findings from the multi-sensor fusion analysis (v1.0):
 
-- **100% Separability**: Fire, no-fire, and false alarm (steam, cooking, sprays) classes are mathematically distinct in the current feature space.
-- **The CO "Truth Sensor"**: CO levels are the most reliable differentiator for active combustion. Spray/steam scenarios exhibit high VOC/Smoke but negligible CO spikes.
-- **The Heat Paradox**: False alarms (steam/cooking) often show higher temperature spikes than early-stage fires, making simple heat-based detection unreliable compared to sensor fusion.
-- **Feature Importance**: Smoke (~33%) and VOC (~18%) are primary indicators, while Humidity (~3%) provides the least unique information.
+-   **High Separability**: Fire, no-fire, and false alarm (steam, cooking, sprays) classes demonstrate high mathematical separability in the current feature space. **Note**: This is a baseline result achieved in controlled laboratory conditions; real-world performance may vary due to environmental noise and sensor aging.
+-   **The CO "Truth Sensor"**: CO levels are the most reliable differentiator for active combustion. Spray/steam scenarios exhibit high VOC/Smoke but negligible CO spikes.
+-   **The Heat Paradox**: False alarms (steam/cooking) often show higher temperature spikes than early-stage fires, making simple heat-based detection unreliable compared to sensor fusion.
+-   **Feature Importance**: Smoke (~33%) and VOC (~18%) are primary indicators, while Humidity (~3%) provides the least unique information.
 
 ---
 
@@ -127,6 +127,19 @@ After making changes to any `.typ` files, run the compilation script to update t
 - **I2C Stability**: 500ms wait after initialization; 5s retry interval for AHT20
 - **Serial Output**: CSV format with timestamp, 6 sensor values
 - **Diagnostics**: Built-in sensor health checks; fault flags
+
+---
+
+## Academic Standards
+
+### 1. Source Integrity
+-   **No Hobbyist Sources**: Technical claims must be supported by peer-reviewed academic literature (e.g., IEEE, ACM, Elsevier, Springer). YouTube videos, blogs, and "expert network" posts are prohibited for primary documentation.
+-   **Verification**: Use the `verify-references.ts` tool in `.gemini/v1/cli-tools` to validate bibliography entries.
+
+### 2. Scientific Humility
+-   **Classification Accuracy**: Frame high performance (e.g., 100% accuracy) as a "baseline feasibility result in controlled conditions." Avoid definitive claims of perfection.
+-   **Error Awareness**: Explicitly document failure modes, sensor drift, and compound interference scenarios.
+-   **Safety-Critical Validation**: Prioritize longitudinal analysis and noise-injection testing as essential future work for any life-safety system.
 
 ---
 

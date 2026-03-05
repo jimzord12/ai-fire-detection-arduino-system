@@ -8,7 +8,7 @@ The primary functional requirement for the sensor suite is the ability to provid
 
 + *Chemical Markers*: Continuous monitoring of combustion products, specifically smoke particulates, Volatile Organic Compounds (VOCs), and Carbon Monoxide (CO), is essential for incipient fire detection @fonollosa2018chemical.
 + *Optical Signature*: The detection of active flames via infrared (IR) radiation provides a high-confidence indicator of open combustion, distinguishing it from smoldering events.
-+ *Environmental Context*: High-resolution temperature and humidity data are required to contextualize gas sensor readings and identify thermal anomalies @wang2023fire.
++ *Environmental Context*: High-resolution temperature and humidity data are required to contextualize gas sensor readings and identify thermal anomalies @LIU2023103733.
 
 Physically, the sensors must be suitable for edge deployment in an "Autonomous Node" architecture. This requires low power consumption—allowing for long-term operation on battery or energy-harvesting systems—and a miniature footprint (MEMS-based) to ensure a compact and unobtrusive device design @meleti2024obscured.
 

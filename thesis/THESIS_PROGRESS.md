@@ -43,20 +43,20 @@
 |                                                 | 7.7 Quantization Strategy                                                | ✅ Done              | included in chapter         |                                   | local       |
 | **8: Experimental Results and Evaluation**      | 8.1 Test Environment Description                                         | ✅ Done              | included in chapter         |                                   | local       |
 |                                                 | 8.2 Dataset Summary                                                      | ✅ Done              | included in chapter         |                                   | local       |
-|                                                 | 8.3 Training and Validation Metrics                                      | ✅ Done              | included in chapter         |                                   | local       |
+|                                                 | 8.3 Training and Validation Metrics                                      | ✅ Done              | included in chapter         | Revised: Framed as baseline results in controlled env | local       |
 |                                                 | 8.4 Ablation Study                                                       | ✅ Done              | included in chapter         | Critical: Fusion > Single Sensor  | local       |
 |                                                 | 8.5 Environment-Specific Performance                                     | ✅ Done              | included in chapter         |                                   | local       |
 |                                                 | 8.6 On-Device Performance Metrics                                        | ✅ Done              | included in chapter         |                                   | local       |
 |                                                 | 8.7 Comparison with Baseline Approaches                                  | ✅ Done              | included in chapter         |                                   | local       |
 | **9: Discussion**                               | 9.1 Interpretation of Class Separability                                 | ✅ Done              | included in chapter         |                                   | local       |
 |                                                 | 9.2 Strengths of the "Autonomous Node" Approach                          | ✅ Done              | included in chapter         |                                   | local       |
-|                                                 | 9.3 Analysis of Error Cases                                              | ✅ Done              | included in chapter         |                                   | local       |
+|                                                 | 9.3 Analysis of Error Cases                                              | ✅ Done              | included in chapter         | Revised: Added compound nuisance scenarios | local       |
 |                                                 | 9.4 Deployment Scenarios and Scalability                                 | ✅ Done              | included in chapter         |                                   | local       |
 |                                                 | 9.5 Ethical and Safety Aspects of AI in Life-Critical Systems            | ✅ Done              | included in chapter         |                                   | web         |
 | **10: Conclusion and Future Work**              | 10.1 Limitations of This Study                                           | ✅ Done              | included in chapter         |                                   | local       |
 |                                                 | 10.2 Summary of Key Findings                                             | ✅ Done              | included in chapter         |                                   | local       |
 |                                                 | 10.3 Contributions to the Field                                          | ✅ Done              | included in chapter         |                                   | local       |
-|                                                 | 10.4 Future Work                                                         | ✅ Done              | included in chapter         |                                   | local       |
+|                                                 | 10.4 Future Work                                                         | ✅ Done              | included in chapter         | Revised: Added Noise-Injection testing | local       |
 
 **Legend:**
 

@@ -8,7 +8,8 @@ Quantization is the process of mapping continuous, high-precision floating-point
 
 Post-Training Quantization is a common TinyML optimization technique where a pre-trained floating-point model is converted to a fixed-point representation using a representative dataset to calibrate the dynamic range of activations. For an 8-bit integer (INT8) quantization, the mapping is defined as:
 
-$q = 	ext{round}\left(\frac{r}{S} + Zight)$
+$q = 	ext{round}\left(\frac{r}{S} + Z
+ight)$
 
 where $r$ is the real value, $S$ is a scaling factor, and $Z$ is the zero-point offset (Perez et al., 2023). By converting weights from 4-byte floats to 1-byte integers, the model's storage footprint is reduced by approximately 75%, allowing complex models to fit within the 256 KB Flash of the Renesas RA4M1 microcontroller used in this project.
 

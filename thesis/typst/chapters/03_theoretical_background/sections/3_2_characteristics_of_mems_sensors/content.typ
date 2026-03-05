@@ -14,7 +14,7 @@ The VOC sensor targets a broader range of organic compounds, including formaldeh
 
 ===== Carbon Monoxide Detection (SEN0564)
 
-The MEMS CO sensor (SEN0564) is optimized for the detection of CO, a critical marker of incomplete combustion. Unlike the broad-spectrum VOC sensor, the CO sensor's sensing layer is tailored to be highly selective for CO molecules, with a typical detection range of 1 to 1000 ppm @dfrobot2024co. In the context of fire detection, this sensor serves as a "truth sensor," as elevated CO levels are rarely present in common non-fire scenarios such as cooking steam or aerosol usage, providing a vital differentiator for the sensor fusion model @wang2023fire.
+The MEMS CO sensor (SEN0564) is optimized for the detection of CO, a critical marker of incomplete combustion. Unlike the broad-spectrum VOC sensor, the CO sensor's sensing layer is tailored to be highly selective for CO molecules, with a typical detection range of 1 to 1000 ppm @dfrobot2024co. In the context of fire detection, this sensor serves as a "truth sensor," as elevated CO levels are rarely present in common non-fire scenarios such as cooking steam or aerosol usage, providing a vital differentiator for the sensor fusion model @LIU2023103733.
 
 ==== Infrared (IR) Flame Sensor (DFR0076)
 

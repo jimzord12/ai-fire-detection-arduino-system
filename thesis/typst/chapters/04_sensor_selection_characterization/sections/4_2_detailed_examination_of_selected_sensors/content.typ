@@ -31,7 +31,7 @@ Volatile Organic Compounds (VOCs) are primary indicators of early-stage fire, es
 
 ==== Fermion MEMS Carbon Monoxide (CO) Sensor (SEN0564)
 
-The detection of Carbon Monoxide (CO) is the most reliable method for combustion verification, as CO is a byproduct of nearly all fire events but is rarely produced by common household nuisance sources like steam or aerosol sprays. The SEN0564 MEMS CO sensor provides high selectivity for CO molecules with a typical sensing range of 1 to 1000 ppm @dfrobot2024co. By acting as a "truth sensor" within the fusion model, the CO sensor significantly reduces the false alarm rate by providing a physical confirmation of incomplete combustion that must coincide with elevated smoke or VOC readings @wang2023fire.
+The detection of Carbon Monoxide (CO) is the most reliable method for combustion verification, as CO is a byproduct of nearly all fire events but is rarely produced by common household nuisance sources like steam or aerosol sprays. The SEN0564 MEMS CO sensor provides high selectivity for CO molecules with a typical sensing range of 1 to 1000 ppm @dfrobot2024co. By acting as a "truth sensor" within the fusion model, the CO sensor significantly reduces the false alarm rate by providing a physical confirmation of incomplete combustion that must coincide with elevated smoke or VOC readings @LIU2023103733.
 
 ==== Fermion AHT20 Temperature and Humidity Sensor
 

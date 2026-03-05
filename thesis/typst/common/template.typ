@@ -1,6 +1,7 @@
 #let project(
   title: "",
   author: "",
+  supervisor: "",
   date: "",
   university: "[University Name]",
   department: "[Department Name]",
@@ -39,12 +40,22 @@
     #text(1.2em, department)
     
     #v(1fr)
+
+    // University Logo Placeholder
+    #rect(width: 4cm, height: 4cm, stroke: 0.5pt, fill: gray.lighten(80%))[
+      #set align(center + horizon)
+      #text(0.8em, style: "italic", [University Logo \ Placeholder])
+    ]
+    
+    #v(1fr)
     
     #block(text(weight: 700, 2.5em, title))
     
     #v(1fr)
     
     #text(1.5em, author) \
+    #v(0.5em)
+    #text(1.1em, [Supervisor: #supervisor]) \
     #v(1em)
     #text(1.2em, [A Thesis Submitted in Partial Fulfillment of the Requirements for the Degree of]) \
     #text(1.2em, weight: 700, degree)

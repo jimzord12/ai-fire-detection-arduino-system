@@ -4,7 +4,7 @@ The research presented in this thesis makes several significant contributions to
 
 === Multi-Modal Sensor Fusion for High-Fidelity Discrimination
 
-The primary contribution of this work is the empirical demonstration of 100% class separability between genuine fire events, ambient conditions, and common false alarm triggers using a heterogeneous five-sensor array. While traditional systems often struggle with the "heat paradox" or chemical overlap between smoke and steam, this research shows that the intelligent fusion of MOS gas sensors, IR flame detection, and environmental context provides a robust physical "fingerprint" of combustion @fonollosa2018chemical. The identification of the Carbon Monoxide (CO) sensor as a "truth sensor" within the fusion model provides a validated strategy for vetoing spurious alarms, a significant advancement over binary detection logic @wang2023fire.
+The primary contribution of this work is the empirical demonstration of 100% class separability between genuine fire events, ambient conditions, and common false alarm triggers using a heterogeneous five-sensor array. While traditional systems often struggle with the "heat paradox" or chemical overlap between smoke and steam, this research shows that the intelligent fusion of MOS gas sensors, IR flame detection, and environmental context provides a robust physical "fingerprint" of combustion @fonollosa2018chemical. The identification of the Carbon Monoxide (CO) sensor as a "truth sensor" within the fusion model provides a validated strategy for vetoing spurious alarms, a significant advancement over binary detection logic @LIU2023103733.
 
 === Optimized TinyML Deployment on Resource-Constrained Hardware
 

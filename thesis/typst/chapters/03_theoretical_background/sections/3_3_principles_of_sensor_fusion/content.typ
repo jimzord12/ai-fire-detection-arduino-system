@@ -12,7 +12,7 @@ Data-level fusion involves the direct integration of raw sensor signals. This ap
 
 ===== Decision-Level Fusion
 
-Decision-level fusion involves combining the independent outputs of multiple classifiers or heuristic rules. In the autonomous node, this manifests as the integration of TinyML model probabilities with hard threshold checks from specific "truth sensors." For example, a "fire" classification from the neural network may only trigger a high-confidence alarm if it is confirmed by a secondary heuristic, such as a localized CO spike or a persistent flame flicker signal @wang2023fire. This hybrid approach enhances the system's robustness against transient sensor noise and isolated model errors.
+Decision-level fusion involves combining the independent outputs of multiple classifiers or heuristic rules. In the autonomous node, this manifests as the integration of TinyML model probabilities with hard threshold checks from specific "truth sensors." For example, a "fire" classification from the neural network may only trigger a high-confidence alarm if it is confirmed by a secondary heuristic, such as a localized CO spike or a persistent flame flicker signal @LIU2023103733. This hybrid approach enhances the system's robustness against transient sensor noise and isolated model errors.
 
 ==== Redundant and Complementary Fusion
 

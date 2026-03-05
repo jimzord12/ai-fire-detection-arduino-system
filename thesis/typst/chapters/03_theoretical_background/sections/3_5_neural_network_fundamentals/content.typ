@@ -15,7 +15,7 @@ where $w_i$ represents the synaptic weights, $b$ is the bias term, and $sigma$ i
 Activation functions introduce the non-linearity necessary for the network to approximate complex functions.
 
 - *Rectified Linear Unit (ReLU)*: In the hidden layers, the ReLU function, defined as $f(x) = max(0, x)$, is commonly employed. ReLU is computationally efficient for TinyML applications as it involves only a simple thresholding operation, and it mitigates the vanishing gradient problem during training @sailesh2022novel.
-- *Softmax*: For multi-class classification, the output layer typically utilizes the Softmax activation function. Softmax squashes a vector of $K$ real values into a probability distribution consisting of $K$ probabilities proportional to the exponentials of the input numbers. This allows the autonomous node to interpret the model's output as the confidence or probability of each class (fire, no_fire, or false_alarm) @wang2023fire.
+- *Softmax*: For multi-class classification, the output layer typically utilizes the Softmax activation function. Softmax squashes a vector of $K$ real values into a probability distribution consisting of $K$ probabilities proportional to the exponentials of the input numbers. This allows the autonomous node to interpret the model's output as the confidence or probability of each class (fire, no_fire, or false_alarm) @LIU2023103733.
 
 === Training via Backpropagation and Gradient Descent
 
@@ -25,4 +25,4 @@ Optimization is achieved through Backpropagation, an algorithm that calculates t
 
 === Non-Linear Multi-Class Discrimination
 
-The strength of the MLP in fire detection lies in its ability to identify cross-modal correlations. While a simple heuristic might fail to distinguish cooking fumes from smoke, a trained MLP can learn that a rise in VOCs accompanied by stable CO levels and the absence of IR flicker most likely represents a false alarm @wang2023fire. This capacity for non-linear discrimination is what enables the autonomous node to achieve high precision and a low false-alarm rate across diverse environmental scenarios.
+The strength of the MLP in fire detection lies in its ability to identify cross-modal correlations. While a simple heuristic might fail to distinguish cooking fumes from smoke, a trained MLP can learn that a rise in VOCs accompanied by stable CO levels and the absence of IR flicker most likely represents a false alarm @LIU2023103733. This capacity for non-linear discrimination is what enables the autonomous node to achieve high precision and a low false-alarm rate across diverse environmental scenarios.

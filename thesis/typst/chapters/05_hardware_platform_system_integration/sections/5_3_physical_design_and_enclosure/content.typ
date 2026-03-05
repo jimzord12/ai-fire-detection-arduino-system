@@ -18,4 +18,4 @@ As detailed in previous sections, the MOS gas sensors operate at high internal t
 
 ==== Optical Alignment for Flame Detection
 
-The physical design also accounts for the line-of-sight requirements of the infrared flame sensor. The enclosure features a dedicated optical aperture with a clear IR-transparent window or an unobstructed opening, aligned to provide a 60-degree field of view @wang2023fire. This positioning ensures that the IR sensor can capture radiant emissions from open flames while being protected from mechanical damage and dust accumulation.
+The physical design also accounts for the line-of-sight requirements of the infrared flame sensor. The enclosure features a dedicated optical aperture with a clear IR-transparent window or an unobstructed opening, aligned to provide a 60-degree field of view @LIU2023103733. This positioning ensures that the IR sensor can capture radiant emissions from open flames while being protected from mechanical damage and dust accumulation.

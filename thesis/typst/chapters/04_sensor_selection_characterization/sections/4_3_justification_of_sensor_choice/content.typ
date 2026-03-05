@@ -8,7 +8,7 @@ The primary justification for selecting the DFRobot Fermion MEMS gas sensor seri
 
 === Selectivity and the "Truth Sensor" Strategy
 
-While sensitivity ensures detection, selectivity is critical for discrimination. The inclusion of the SEN0564 MEMS Carbon Monoxide (CO) sensor is a strategic choice justified by its high selectivity for CO, a universal product of incomplete combustion. As demonstrated in the project's data analysis, CO levels remain near baseline in common false alarm scenarios such as cooking steam, aerosol sprays, or cleaning alcohol, whereas they spike significantly during genuine fire events @wang2023fire. By designating the CO sensor as a "truth sensor" within the fusion model, the node can effectively "veto" high readings from the more cross-sensitive smoke and VOC sensors if a corresponding CO rise is not detected, significantly reducing the false positive rate.
+While sensitivity ensures detection, selectivity is critical for discrimination. The inclusion of the SEN0564 MEMS Carbon Monoxide (CO) sensor is a strategic choice justified by its high selectivity for CO, a universal product of incomplete combustion. As demonstrated in the project's data analysis, CO levels remain near baseline in common false alarm scenarios such as cooking steam, aerosol sprays, or cleaning alcohol, whereas they spike significantly during genuine fire events @LIU2023103733. By designating the CO sensor as a "truth sensor" within the fusion model, the node can effectively "veto" high readings from the more cross-sensitive smoke and VOC sensors if a corresponding CO rise is not detected, significantly reducing the false positive rate.
 
 === Redundancy and Contextual Validation
 
