@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 # sync-bib.sh: Consolidates section-level bibliography files into the global thesis bibliography.
 
 # Configuration

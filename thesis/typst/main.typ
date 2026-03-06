@@ -6,6 +6,8 @@
   title: "Autonomous Multi-Sensor Fire Detection Node Using Sensor Fusion and TinyML",
   author: "Author Name",
   supervisor: "Prof. Dr. [Supervisor Name]",
+  university: "European University Cyprus",
+  department: "DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING",
   date: "February 2026",
   acknowledgments: [
     First and foremost, I would like to express my deepest gratitude to my supervisor, [Supervisor's Name], for their invaluable guidance, patience, and constant encouragement throughout the development of this research. Their expertise in embedded systems and artificial intelligence, along with their insightful critiques, were instrumental in shaping the trajectory of this thesis.

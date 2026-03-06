@@ -41,11 +41,8 @@
     
     #v(1fr)
 
-    // University Logo Placeholder
-    #rect(width: 4cm, height: 4cm, stroke: 0.5pt, fill: gray.lighten(80%))[
-      #set align(center + horizon)
-      #text(0.8em, style: "italic", [University Logo \ Placeholder])
-    ]
+    // University Logo
+    #image("../assets/euc-logo.png", height: 4cm)
     
     #v(1fr)
     
