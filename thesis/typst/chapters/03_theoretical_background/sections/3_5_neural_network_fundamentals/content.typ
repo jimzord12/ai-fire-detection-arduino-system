@@ -6,7 +6,7 @@ Artificial Neural Networks (ANNs), specifically Multi-Layer Perceptrons (MLPs), 
 
 The fundamental building block of an ANN is the artificial neuron, a computational unit that models the weighted summation of inputs followed by a non-linear activation. For a given input vector $x$, the neuron computes an output $y$ as:
 
-$y = sigma(sum_(i=1)^n w_i x_i + b)$
+$ y = sigma(sum_(i=1)^n w_i x_i + b) $
 
 where $w_i$ represents the synaptic weights, $b$ is the bias term, and $sigma$ is the activation function @sailesh2022novel. In an MLP, these neurons are organized into a structured hierarchy consisting of an input layer, one or more hidden layers, and an output layer. The hidden layers enable the network to learn complex, high-dimensional decision boundaries that are inaccessible to linear classifiers @pathan2024multisensory.
 

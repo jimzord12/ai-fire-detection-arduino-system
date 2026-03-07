@@ -87,4 +87,5 @@ More detailed notes (Markdown) exist in the same docs tree:
 - `thesis/typst/docs/typst/usage/SETTINGS_AND_METADATA.md`
 - `thesis/typst/docs/typst/usage/FIGURES.md`
 - `thesis/typst/docs/typst/usage/TABLES.md`
+- `thesis/typst/docs/typst/usage/MATH.md`
 - `thesis/typst/docs/typst/usage/BIBLIOGRAPHY.md`
