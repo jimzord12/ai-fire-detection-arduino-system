@@ -10,3 +10,6 @@ This research aims to evaluate the effectiveness and feasibility of an autonomou
 
 + *How does three-class classification (fire/no_fire/false_alarm) compare to binary classification in reducing false positives?*
   This question investigates the architectural decision to explicitly include a "false_alarm" class in the model training. It seeks to determine if providing the model with labeled examples of common nuisance triggers (e.g., cooking fumes, alcohol vapors) results in a more robust decision boundary and a lower rate of spurious alerts compared to traditional binary models.
+
++ *To what extent can a hybrid decision architecture mitigate the generalization limits of TinyML models in safety-critical edge applications?*
+  This question examines the performance gap between laboratory-trained models and real-world edge deployment, specifically focusing on "Clean Fire" signatures and environmental IR noise. It investigates whether a hybrid approach, combining probabilistic AI inference with deterministic hardware safety overrides and heuristic suppression, provides a more reliable and resilient safety margin than pure machine learning alone.

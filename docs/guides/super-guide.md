@@ -746,17 +746,24 @@ void loop() {
 
 ### 8.4 Upload and Test
 
-1. Upload this sketch to your Arduino R4
-2. Open Serial Monitor (115200 baud)
-3. You should see predictions like:
-   ```
-   Predictions:
-   Idle: 0.923
-   Fire: 0.042
-   Noise: 0.035
-   ```
-4. Test by introducing fire conditions (safely!)
-5. Watch for "Fire" probability to rise above 0.80
+1. Upload the production sketch (`fire-detection-main.ino`) to your Arduino R4.
+2. Open Serial Monitor (**115200 baud**).
+3. You will see real-time debug output including `[AI Probe]` data and CSV-formatted sensor readings.
+
+#### **Understanding the Hybrid Decision Logic**
+
+The system employs a multi-stage verification process to ensure accuracy and safety:
+
+- **Stage 1: AI Inference**: The model analyzes a 2-second window of data. If the "Fire" probability is **> 0.70**, it proceeds to verification.
+- **Stage 2: Visual/Physical Verification**: The system checks real-time sensor values. If AI says fire, but **Smoke < 180** AND **Flame < 150**, the alarm is suppressed (filtering out "clean" IR noise like sunlight).
+- **Stage 3: Critical Override**: If the Flame sensor detects an intense source (**> 800**), the alarm triggers **instantly**, bypassing AI hesitation (useful for clean-burning lighters).
+- **Stage 4: Temporal Debouncing**: The alarm requires **3 consecutive detections** to sound. Once triggered, it uses a **temporal decay** (decrements by 1 each cycle) to "cool down" instead of instantly shutting off.
+
+#### **Serial Monitor Debugging**
+
+- **`[AI Probe] Fire: X.XX | No-Fire: X.XX | Flame: XXX`**: Shows the model's internal confidence levels.
+- **`[Suppressing] ...`**: Indicates the AI was fooled (likely by sunlight), but the hardware safety check prevented a false alarm.
+- **`>>> ALARM TRIGGERED! <<<`**: Final confirmation of an active fire state.
 
 ### 8.5 Alert Integration
 

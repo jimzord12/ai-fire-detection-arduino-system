@@ -6,5 +6,4 @@
 #include "sections/7_3_model_architecture_and_training/content.typ"
 #include "sections/7_4_arduino_firmware_development/content.typ"
 #include "sections/7_5_heuristic_post_processing_and_hybrid_triggering_logic/content.typ"
-#include "sections/7_6_logic_for_alarm_triggering/content.typ"
 #include "sections/7_7_quantization_strategy/content.typ"

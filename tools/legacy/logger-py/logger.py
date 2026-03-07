@@ -24,6 +24,10 @@ baud = config["baud"]
 
 
 def _parse_row(line: str) -> list[str] | None:
+    # Skip debug and probe messages
+    if line.startswith(("[", ">")):
+        return None
+
     # Common formats:
     # - "92346,VOC,642"
     # - "92346,642"

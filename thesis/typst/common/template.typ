@@ -141,5 +141,15 @@
   set page(numbering: "1")
   counter(page).update(1)
   set heading(numbering: "1.1")
+
+  // Figure styling: Bold "Figure X" or "Table X"
+  show figure.caption: it => [
+    *#it.supplement #context it.counter.display()*: #it.body
+  ]
+
+  // Math equation styling: Centered and numbered
+  set math.equation(numbering: "(1)")
+  show math.equation.where(block: true): it => align(center, it)
+  
   body
 }

@@ -1,8 +1,16 @@
 # AI Fire Detection System Using Arduino UNO R4 WiFi
 
-This project utilizes the Arduino UNO R4 WiFi microcontroller in conjunction with various DFRobot sensors to create an AI-powered fire detection system. The system leverages the HuskyLens AI Machine Vision Sensor for real-time object recognition and tracking, alongside multiple environmental sensors to monitor smoke, flame, VOCs, CO levels, temperature, and humidity.
+An autonomous multi-sensor fire detection node leveraging **Hybrid Hardware-AI Fusion** for intelligent fire detection with minimal false alarms. The system combines TinyML (Edge Impulse) with deterministic safety overrides to ensure reliable detection even when environmental conditions challenge the AI model.
 
 Quick orientation for contributors/agents: see [REPO_AGENT.md](REPO_AGENT.md).
+
+## Key Features
+
+- **Three-Class Classification**: Distinguishes between `fire`, `no_fire`, and common `false_alarm` triggers (steam, spray, cooking).
+- **Hybrid Fusion Logic**: Combines Edge Impulse AI inference with real-time hardware overrides for high-intensity flame detection.
+- **Safety Overrides**: Built-in deterministic checks (e.g., Flame > 800) bypass AI hesitancy for immediate response in critical scenarios.
+- **Temporal Debouncing**: Intelligent alarm triggering with a 3-count verification and a gradual "cooling down" period to prevent oscillating alarms.
+- **Multi-Sensor Array**: Fuses data from Smoke, VOC, CO, Flame, Temperature, and Humidity sensors.
 
 ## Project Structure
 

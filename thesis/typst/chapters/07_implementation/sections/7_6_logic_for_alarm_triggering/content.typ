@@ -2,7 +2,7 @@
 
 The alarm triggering mechanism within the Fire Detection System's firmware (`fire-detection-main.ino`) is designed to be robust and reliable, minimizing false positives while ensuring prompt response to genuine fire threats. This logic integrates the probabilistic output of the TinyML model with heuristic rules and temporal stability checks, forming a multi-layered decision-making process. The primary goal is to translate the system's "Fire" classification into a tangible alarm state (e.g., activating a siren or visual indicator).
 
-==== Confidence Thresholds
+=== Confidence Thresholds
 
 At the core of the alarm decision is the confidence derived from the Edge Impulse model's inference. The `runEiInferenceAndSetLed()` function extracts the probability (`fireProb`) associated with the "fire" class from the `ei_impulse_result_t`. Two key confidence thresholds govern the model's contribution to the alarm:
 
@@ -11,7 +11,7 @@ At the core of the alarm decision is the confidence derived from the Edge Impuls
 
 The `_fireThreshold` acts as the first gate in the alarm logic, ensuring that only high-confidence "fire" predictions from the TinyML model are considered for further processing.
 
-==== Smoothing and Temporal Debouncing
+=== Smoothing and Temporal Debouncing
 
 To prevent spurious alarms caused by transient sensor noise or brief environmental fluctuations, the system incorporates a smoothing mechanism in the form of temporal debouncing. This ensures that a detected "fire" condition is persistent over a short period before escalating to a full alarm.
 

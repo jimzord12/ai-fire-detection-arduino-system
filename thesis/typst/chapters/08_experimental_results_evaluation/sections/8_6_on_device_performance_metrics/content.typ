@@ -2,7 +2,7 @@
 
 The ultimate validation of a TinyML solution lies in its performance on the target edge device. For the autonomous multi-sensor fire detection node, evaluating on-device metrics such as inference latency, memory footprint (RAM/Flash usage), and power consumption is crucial for assessing its feasibility, responsiveness, and longevity in real-world deployments. This section analyzes these key performance indicators in the context of the Arduino UNO R4 WiFi (Renesas RA4M1) microcontroller, which hosts the Edge Impulse-generated TinyML model.
 
-==== Inference Latency (ms)
+=== Inference Latency (ms)
 
 Inference latency is the time taken for the microcontroller to execute the deployed machine learning model and produce a prediction from a given set of sensor data. For critical applications like fire detection, low latency is paramount to ensure timely alerts.
 
@@ -12,7 +12,7 @@ Inference latency is the time taken for the microcontroller to execute the deplo
 
 The consistent execution within the sampling interval ensures that the system can continuously monitor the environment and react promptly to potential fire threats.
 
-==== RAM/Flash Usage
+=== RAM/Flash Usage
 
 Memory footprint is a critical constraint for microcontrollers. TinyML models must be highly optimized to fit within the limited RAM (Random Access Memory) and Flash memory (for program storage) available on devices like the Arduino UNO R4 WiFi.
 
@@ -22,7 +22,7 @@ Memory footprint is a critical constraint for microcontrollers. TinyML models mu
 
 The careful optimization ensures the entire system, including the ML model, operates effectively within the constrained memory resources of the Arduino UNO R4 WiFi.
 
-==== Power Consumption Analysis
+=== Power Consumption Analysis
 
 Power consumption is a paramount concern for autonomous, battery-powered edge devices. Minimizing energy usage directly translates to extended operational lifetimes and reduced maintenance.
 

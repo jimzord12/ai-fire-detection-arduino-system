@@ -8,6 +8,7 @@ Your work assignment mentions a "Robotic Platform" (25% grade). Since you are bu
   - _"Autonomous Sensing Node"_
   - _"Edge Intelligence Unit"_
   - _"Cyber-Physical Fire System"_
+  - _"Hybrid Hardware-AI Decision Fusion Node"_
 - **The "Platform" Argument:**
   - A robot is defined by **Autonomy** (Deciding to alarm without cloud help) and **Perception** (Sensors).
   - Emphasize the **UNO R4 WiFi Architecture**: The Renesas chip acts as the "Brain" (Reflexes), and the ESP32 acts as the "Radio" (Telemetry). This is a robotic controller architecture.
@@ -28,6 +29,14 @@ Your work assignment mentions a "Robotic Platform" (25% grade). Since you are bu
   - Cite immediately while writing: `@author2024fire` or `#cite("paper_id")`.
 
 ## 3. Academic Content Checklist
+
+### The "Clean Fire" Paradox (Chapter 8 & 9)
+
+This is a high-value contribution for your thesis:
+- **The Problem:** A TinyML model trained on "Smoky Fusion" fires may ignore a "Clean" flame (like a lighter) because it doesn't see the smoke it expects.
+- **The Solution:** Implement a **Hybrid Logic Layer**.
+- **Academic Hook:** Discuss the "Model Generalization Gap" and why **Deterministic Hardware Overrides** (e.g., Flame > 800) are mandatory for safety-critical edge systems.
+- **Terminology:** Use **"Heuristic Suppression"** to describe how the system filters out sunlight/glare that fools the AI.
 
 ### The "Ablation Study" (Chapter 8)
 

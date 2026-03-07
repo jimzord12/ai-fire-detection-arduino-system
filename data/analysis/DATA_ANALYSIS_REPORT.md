@@ -132,3 +132,23 @@ Ranking of sensors by their contribution to the classification model:
 
 The data analysis confirms that the selected sensor suite provides overlapping but complementary information that allows for perfect classification of fire events versus common false alarms in the current dataset. The fusion of chemical (VOC/CO), particulate (Smoke), thermal (Temp), and optical (Flame) data creates a highly resilient detection signature.
 
+## 10. Post-Deployment Validation & The "Clean Fire" Paradox
+
+While laboratory metrics showed 100% accuracy, real-world edge deployment revealed a critical "Validation Gap" in the model's generalization capabilities.
+
+### 10.1 The Fusion Conflict
+Testing with a clean-burning butane lighter (0.5m distance) produced a strong IR signature (Flame ~900) but negligible Smoke and CO spikes. 
+- **Observation:** The TinyML model, having over-fitted to the "Smoky Fusion" signature of laboratory fires, incorrectly classified the pure flame as `no_fire` or suppressed it as noise.
+- **Scientific Insight:** High-accuracy models can become "too smart," effectively ignoring life-threatening signatures that don't match the exact multi-sensor fusion pattern learned during training.
+
+### 10.2 Ambient Noise (The Sunlight Challenge)
+The model demonstrated vulnerability to direct sunlight near windows, which mimics the IR flicker of a flame. Without samples of "High IR No-Fire" in the training set, the raw AI model prone to false positives in sunny environments.
+
+### 10.3 The Hybrid Solution: Hardware-AI Fusion
+To resolve the paradox, the system logic was upgraded from pure AI inference to a **Hybrid Decision Matrix**:
+1. **Deterministic Override:** A hard threshold (Flame > 800) triggers the alarm regardless of AI confidence, ensuring "clean" fires are never missed.
+2. **Heuristic Suppression:** If the AI reports fire but both Smoke and Flame are at baseline levels, the alarm is suppressed as "Likely Sunlight."
+3. **Temporal Debouncing:** A 3-count verification and gradual temporal decay were implemented to stabilize the system against transient noise.
+
+**Conclusion for Future Work:** 100% lab accuracy is a baseline, but safety-critical systems require deterministic hardware safeguards to mitigate the generalization limits of TinyML models.
+

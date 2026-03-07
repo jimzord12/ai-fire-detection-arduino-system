@@ -173,15 +173,15 @@ _(Critical Chapter for "Robotic Platform" Grade)_
 - Data Forwarder Sketch (Data Collection) (~250 words)
 - Real-Time Inference Sketch (Deployment) (~350 words)
 
-#### 7.5 Heuristic Post-Processing and Hybrid Triggering Logic (~600 words) - _Information Source: Web Academic Search & Codebase (firmware/main/fire-detection-main/fire-detection-main.ino)_
+#### 7.5 Hybrid Hardware-AI Decision Fusion (~600 words) - _Information Source: Web Academic Search & Codebase (firmware/main/fire-detection-main/fire-detection-main.ino)_
 
-- Combining ML Probabilities with Hard Thresholds (Visual/Heuristic Confirmation) (~350 words)
-- Temporal Debouncing (Consecutive Detection Requirements) (~250 words)
+- Integrating TinyML Inference with Deterministic Safety Overrides (~350 words)
+- The "Clean Fire" Paradox: Why Hardware Overrides are Necessary for Generalization (~250 words)
 
-#### 7.6 Logic for Alarm Triggering (~350 words) - _Information Source: Codebase (firmware/main/fire-detection-main/fire-detection-main.ino)_
+#### 7.6 Temporal Debouncing and Alarm Persistence (~350 words) - _Information Source: Codebase (firmware/main/fire-detection-main/fire-detection-main.ino)_
 
-- Smoothing (~200 words)
-- Confidence Thresholds (~150 words)
+- Consecutive Detection Requirements (3-count debounce) (~200 words)
+- Temporal Decay Logic for "Cooling Down" States (~150 words)
 
 #### 7.7 Quantization Strategy (~300 words) - _Information Source: Web Academic Search & Codebase (model/edge-impulse-model/)_
 

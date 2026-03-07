@@ -7,4 +7,5 @@
 #include "sections/8_4_ablation_study/content.typ"
 #include "sections/8_5_environment_specific_performance/content.typ"
 #include "sections/8_6_on_device_performance_metrics/content.typ"
-#include "sections/8_7_comparison_with_baseline_approaches/content.typ"
+#include "sections/8_7_validation_of_clean_fire_detection/content.typ"
+#include "sections/8_8_comparison_with_baseline_approaches/content.typ"

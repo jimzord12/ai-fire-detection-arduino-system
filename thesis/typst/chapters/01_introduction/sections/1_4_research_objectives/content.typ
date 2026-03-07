@@ -7,5 +7,6 @@ The central objective of this research is to design, implement, and evaluate an 
 + *To collect and label a comprehensive multi-class dataset* encompassing genuine fire scenarios, ambient environmental conditions, and diverse false alarm triggers.
 + *To train and optimize a quantized neural network* (TinyML) using the Edge Impulse platform, capable of three-class classification with minimal latency on the target hardware.
 + *To evaluate the system's performance* in terms of classification accuracy, false alarm rejection, and on-device resource utilization (latency, RAM, Flash).
++ *To develop and evaluate a hybrid hardware-AI decision fusion model* that combines probabilistic TinyML inference with deterministic hardware safety overrides and heuristic suppression to ensure life-safety reliability and mitigate the generalization limits of laboratory-trained machine learning models.
 
 Through the fulfillment of these objectives, this research contributes a validated framework for the next generation of autonomous, high-fidelity fire detection nodes suitable for edge deployment in smart building ecosystems.

@@ -27,18 +27,25 @@ The learning rate was initialised at 0.0005. An excessively large learning rate 
 
 The table below summarises the final hyperparameter configuration:
 
-| Hyperparameter           | Value                     |
-| ------------------------ | ------------------------- |
-| Hidden layers            | 2                         |
-| Neurons per hidden layer | 32                        |
-| Activation (hidden)      | ReLU                      |
-| Output activation        | Softmax                   |
-| Dropout rate             | 0.25                      |
-| Optimiser                | Adam                      |
-| Learning rate            | 0.0005                    |
-| Training cycles (epochs) | 100                       |
-| Batch size               | 32                        |
-| Loss function            | Categorical cross-entropy |
+#figure(
+  table(
+    columns: (1.5fr, 1fr),
+    inset: 10pt,
+    align: horizon,
+    [*Hyperparameter*], [*Value*],
+    [Hidden layers], [2],
+    [Neurons per hidden layer], [32],
+    [Activation (hidden)], [ReLU],
+    [Output activation], [Softmax],
+    [Dropout rate], [0.25],
+    [Optimiser], [Adam],
+    [Learning rate], [0.0005],
+    [Training cycles (epochs)], [100],
+    [Batch size], [32],
+    [Loss function], [Categorical cross-entropy],
+  ),
+  caption: [Final Neural Network Hyperparameter Configuration],
+) <table-hyperparameters>
 
 The model was trained and validated using the train/test split managed by Edge Impulse. Upon completion of training, validation accuracy and loss were recorded, together with the per-class F1 score and the confusion matrix, which were used to verify that no single class dominated the training signal @alajlan2022tinyml.
 

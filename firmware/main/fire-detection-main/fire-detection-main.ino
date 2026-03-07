@@ -53,9 +53,10 @@ private:
     float _features[EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE];
     size_t _feature_ix = 0;
 
-    // Thresholds you can tune later
-    const float _fireThreshold = 0.70f;     // LED ON if fire prob >= this
-    const float _uncertainThreshold = 0.50f; // optional: treat as uncertain
+    // Thresholds and Debounce
+    const float _fireThreshold = 0.70f;     
+    int _consecutiveFireCount = 0;
+    const int _maxFireCount = 5;
 
     void printCell(String text, int width, bool last = false) {
         Serial.print(text);
@@ -209,57 +210,65 @@ private:
     void runEiInferenceAndSetLed() {
         signal_t signal;
         int err = numpy::signal_from_buffer(_features, EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE, &signal);
-        if (err != 0) { digitalWrite(LED_BUILTIN, LOW); return; }
+        if (err != 0) { return; }
 
         ei_impulse_result_t result = { 0 };
         err = run_classifier(&signal, &result, false);
-        if (err != EI_IMPULSE_OK) { digitalWrite(LED_BUILTIN, LOW); return; }
+        if (err != EI_IMPULSE_OK) { return; }
 
         float fireProb = 0.0f;
+        float noFireProb = 0.0f;
+        float falseAlarmProb = 0.0f;
+
         for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
-            if (strcmp(result.classification[ix].label, "fire") == 0) {
-                fireProb = result.classification[ix].value;
-                break;
-            }
+            if (strcmp(result.classification[ix].label, "fire") == 0) fireProb = result.classification[ix].value;
+            if (strcmp(result.classification[ix].label, "no_fire") == 0) noFireProb = result.classification[ix].value;
+            if (strcmp(result.classification[ix].label, "false_alarm") == 0) falseAlarmProb = result.classification[ix].value;
         }
 
         // --- HYBRID SAFETY CHECK ---
-        // Retrieve raw values from the feature buffer (using your confirmed indices)
-        // Ix0: Smoke, Ix1: VOC, Ix2: CO, Ix3: Flame
-        float rawSmoke = _features[0];
-        float rawFlame = _features[3];
+        float currentSmoke = (float)analogRead(A0);
+        float currentFlame = (float)analogRead(A3);
 
-        // Define what YOU consider a "Visual/Physical" Fire signature
-        // Smoke > 200 (Baseline is ~90) OR Flame > 100 (Baseline is 0)
-        // bool visualConfirmation = (rawSmoke > 200) || (rawFlame > 500);
-        bool visualConfirmation = (rawSmoke > 60) || (rawFlame > 500); // For Testing
+        bool smokeActive = (currentSmoke > 180); 
+        bool flameActive = (currentFlame > 150);
+        bool visualConfirmation = smokeActive || flameActive;
 
-        // Debug prints to help you tune
-        // Serial.print("Prob:"); Serial.print(fireProb);
-        // Serial.print(" Smoke:"); Serial.print(rawSmoke);
-        // Serial.print(" Flame:"); Serial.println(rawFlame);
+        // CRITICAL OVERRIDE: If flame is insanely high, trigger regardless of AI
+        bool criticalOverride = (currentFlame > 800);
+
+        // Debug AI Thought Process
+        Serial.print("[AI Probe] Fire: "); Serial.print(fireProb, 2);
+        Serial.print(" | No-Fire: "); Serial.print(noFireProb, 2);
+        Serial.print(" | Flame: "); Serial.println(currentFlame);
 
         // --- LOGIC UPDATE ---
-        // Only count as fire if Model is sure (> 70%) AND we see Smoke or Light
-        if (fireProb >= _fireThreshold && visualConfirmation) {
-            static int consecutiveFireCount = 0;
-            consecutiveFireCount++;
-            Serial.print("[EI] Fire Confirmed (AI + Sensors). Count: ");
-            Serial.println(consecutiveFireCount);
+        if ((fireProb >= _fireThreshold && visualConfirmation) || criticalOverride) {
+            _consecutiveFireCount++;
+            if (_consecutiveFireCount > _maxFireCount) _consecutiveFireCount = _maxFireCount;
 
-            if (consecutiveFireCount >= 3) { // Debounce 3 times
+            if (criticalOverride) Serial.print(">>> CRITICAL OVERRIDE: INTENSE FLAME DETECTED! <<< ");
+            Serial.print("[SYSTEM] Fire Confirmed. Confidence Level: ");
+            Serial.println(_consecutiveFireCount);
+
+            if (_consecutiveFireCount >= 3) {
                 digitalWrite(LED_BUILTIN, HIGH);
                 Serial.println(">>> ALARM TRIGGERED! <<<");
-                consecutiveFireCount = 3;
             }
         } else {
-            // Reset if AI drops OR if sensors don't agree
-            static int consecutiveFireCount = 0;
-            consecutiveFireCount = 0;
-            digitalWrite(LED_BUILTIN, LOW);
+            // Gradual decay if fire not detected
+            if (_consecutiveFireCount > 0) {
+                _consecutiveFireCount--;
+                Serial.print("[INFO] Clearing... Level: ");
+                Serial.println(_consecutiveFireCount);
+            }
+            
+            if (_consecutiveFireCount == 0) {
+                digitalWrite(LED_BUILTIN, LOW);
+            }
 
             if (fireProb >= _fireThreshold && !visualConfirmation) {
-                 Serial.println("[Suppressing] Model says Fire (High CO), but no Smoke/Flame detected.");
+                 Serial.println("[Suppressing] AI thinks Fire, but physical sensors see no Smoke/Flame (likely Sunlight).");
             }
         }
     }

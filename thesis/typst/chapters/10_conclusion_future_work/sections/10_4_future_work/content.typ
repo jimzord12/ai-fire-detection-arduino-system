@@ -2,6 +2,10 @@
 
 The development of the autonomous multi-sensor fire detection node provides a foundation for several promising avenues of future research. As the field of edge intelligence evolves, the integration of advanced connectivity protocols, remote management capabilities, and cooperative sensing strategies will be essential for scaling the system to complex, large-scale environments.
 
+=== Retraining for Generalization and Edge-Case Robustness
+
+The "Clean Fire" Paradox and "Sunlight Vulnerability" identified during post-deployment validation highlight the need for more diverse training datasets. Future work should focus on collecting and labeling specific "High IR, Low Smoke" scenarios—such as direct solar glare, window reflections, and clean butane/alcohol combustion—to improve the AI model's internal generalization. Integrating these edge cases directly into the training pipeline would allow the system to reduce its reliance on deterministic hardware overrides while maintaining a high safety-critical detection confidence.
+
 === Remote Model Management and Over-the-Air (OTA) Updates
 
 A critical next step for the autonomous sensing node is the implementation of robust Over-the-Air (OTA) update mechanisms. In practical deployment scenarios, manually accessing each node for firmware updates is labor-intensive and inefficient. Future work should focus on utilizing the secondary co-processor to perform background updates of the TinyML model. This would allow for the seamless redeployment of optimized neural networks as new training data is collected and processed in the cloud @hymel2023edge.

@@ -1,12 +1,12 @@
 == Problem Statement <sec:problem_statement>
 
-==== Background and Problem Statement
+=== Background and Problem Statement
 
 The prevalence of false alarms in traditional fire detection systems remains a critical challenge for emergency response efficiency and public safety trust. Legacy detectors, primarily relying on single-parameter sensing like ionization or photoelectric smoke detection, often fail to distinguish between genuine combustion events and common environmental "nuisance" triggers such as cooking steam, aerosols, or cleaning vapors. This lack of granularity leads to significant economic loss and "alarm fatigue," where occupants may ignore or even disable life-safety systems. Consequently, there is an urgent need for intelligent, multi-sensor detection platforms capable of local, high-fidelity discrimination between fire and non-fire conditions.
 
 Furthermore, while multi-modal sensing offers a potential solution, the requirement for high-frequency sampling and real-time processing historically necessitated centralized computing architectures. Such architectures introduced unacceptable latencies and relied on persistent network connectivity, which can be compromised during a fire. The problem, therefore, is not only to improve detection accuracy but to do so within the constraints of an autonomous, edge-deployed sensing node that can perform complex sensor fusion and machine learning inference locally on a low-power microcontroller.
 
-==== Scope and Limitations
+=== Scope and Limitations
 
 This research focuses on the development and evaluation of a stationary autonomous sensing node based on the Arduino UNO R4 WiFi platform. The scope is limited to the detection of incipient fire stages and the mitigation of common indoor false alarm triggers through TinyML-driven multi-sensor fusion.
 

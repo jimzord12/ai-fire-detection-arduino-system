@@ -2,7 +2,7 @@
 
 The embedded software, or firmware, forms the intelligence layer of the autonomous sensing node, orchestrating sensor readings, data preprocessing, TinyML inference, and alarm triggering logic. Developed within the Arduino IDE ecosystem and compiled for the Arduino UNO R4 WiFi's Renesas RA4M1 microcontroller, the firmware is structured to manage both data collection (for model training) and real-time inference (for deployment). This section details the development of two primary firmware components: the Data Forwarder Sketch and the Real-Time Inference Sketch.
 
-==== Data Forwarder Sketch (Data Collection)
+=== Data Forwarder Sketch (Data Collection)
 
 The Data Forwarder Sketch, exemplified by aspects of the `fire-detection-main.ino` firmware, serves as a crucial tool for acquiring raw sensor data in a structured format suitable for TinyML model training. While `fire-detection-main.ino` is primarily an inference sketch, it retains a `logData()` function which mimics the functionality required for data forwarding during collection phases. This `logData()` function is responsible for:
 
@@ -13,7 +13,7 @@ The Data Forwarder Sketch, exemplified by aspects of the `fire-detection-main.in
 
 For dedicated data collection, a simplified version of this logic, often found in `the sensor integration examples` like `analog_smoke_sensor.ino` or `temp_humidity_sensor.ino`, can be used in conjunction with host-side scripts (e.g., `the automated data collection utility`). These examples demonstrate basic sensor readout for individual sensors, forming the building blocks of a comprehensive data forwarder. The `the data collection script` script leverages this serial output to capture and store labeled raw data, essential for building the three-class classification dataset.
 
-==== Real-Time Inference Sketch (Deployment)
+=== Real-Time Inference Sketch (Deployment)
 
 The `fire-detection-main.ino` firmware's core functionality is its role as the Real-Time Inference Sketch, enabling on-device TinyML model execution for autonomous fire detection. This sketch integrates the trained Edge Impulse model and orchestrates the inference process.
 
