@@ -1,3 +1,0 @@
-description = "This command has been superseded by the 'thesis-section-crafting' skill. To create a thesis section, please use a natural language prompt that triggers the skill (e.g., 'Create thesis section 1.1')."
-
-prompt = "Please activate the 'thesis-section-crafting' skill to create the section specified by the arguments."
