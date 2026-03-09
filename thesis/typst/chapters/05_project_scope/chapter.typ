@@ -7,6 +7,8 @@ This chapter defines the problem domain, states the research questions, and prov
 #include "sections/5_3_research_questions/content.typ"
 
 == Literature Review
+A systematic review of current academic literature was conducted to establish the state of the art in fire detection, MEMS sensing, and TinyML integration. This section summarizes the findings and identifies the research gaps addressed by this work.
+
 #include "sections/5_4_literature_review/sections/2_1_literature_selection_strategy/content.typ"
 #include "sections/5_4_literature_review/sections/2_2_evolution_of_fire_detection_and_mems_technology/content.typ"
 #include "sections/5_4_literature_review/sections/2_3_sensor_fusion_and_tinyml_at_the_edge/content.typ"

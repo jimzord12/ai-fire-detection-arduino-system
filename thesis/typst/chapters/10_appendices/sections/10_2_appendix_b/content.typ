@@ -1,9 +1,9 @@
-== Appendix B: Raw Data Samples (CSV) <appendix:raw-data>
+=== Appendix B: Raw Data Samples (CSV) <appendix:raw-data>
 Excerpts from the raw CSV datasets for each of the three classification classes (Idle, Fire, Noise) are provided to illustrate the feature space.
 
 To illustrate the nature of the training data, snippets from each of the three classification classes (Fire, No Fire, and False Alarm) are presented below. These samples represent the raw sensor outputs prior to feature engineering and windowing in the TinyML pipeline.
 
-=== 1. Fire Dataset (Sample)
+==== 1. Fire Dataset (Sample)
 _Source: fire__close_low_vent_20260125_212033_1.csv_
 
 #figure(
@@ -19,7 +19,7 @@ _Source: fire__close_low_vent_20260125_212033_1.csv_
   caption: [Raw sensor data captured during a fire scenario (smoldering fire at close range). Note the high values for Smoke, VOC, and CO.],
 ) <table-raw-fire-sample>
 
-=== 2. No Fire (Ambient) Dataset (Sample)
+==== 2. No Fire (Ambient) Dataset (Sample)
 _Source: no_fire__base_room_air_20260118_201221_1.csv_
 
 #figure(
@@ -35,7 +35,7 @@ _Source: no_fire__base_room_air_20260118_201221_1.csv_
   caption: [Raw sensor data captured during normal ambient room conditions. Values represent the stable environmental baseline.],
 ) <table-raw-no-fire-sample>
 
-=== 3. False Alarm Dataset (Sample)
+==== 3. False Alarm Dataset (Sample)
 _Source: false_alarm__spray_20260201_150429_1.csv_
 
 #figure(
@@ -51,7 +51,7 @@ _Source: false_alarm__spray_20260201_150429_1.csv_
   caption: [Raw sensor data captured during a false alarm scenario (aerosol spray). Note the high VOC but low CO levels compared to the fire dataset.],
 ) <table-raw-false-alarm-sample>
 
-=== Data Column Definitions
+==== Data Column Definitions
 
 - *Timestamp*: Milliseconds since Arduino startup.
 - *Smoke, VOC, CO*: Raw analog sensor readings (10-bit ADC, range 0-1023).

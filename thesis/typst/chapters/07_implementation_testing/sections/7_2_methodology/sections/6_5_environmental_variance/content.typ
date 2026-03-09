@@ -1,8 +1,8 @@
-== Environmental Variance
+=== Environmental Variance
 
 The robustness of an autonomous fire detection system is fundamentally linked to its ability to generalize across diverse environmental conditions. Because the chemical and physical signatures of fire are highly dependent on ambient variables—such as background air quality, ventilation rates, and thermal gradients—the data collection methodology must incorporate a wide range of environmental variance. This section details the strategy used to capture this variance, ensuring that the machine learning model can distinguish between fire events and "no_fire" ambient noise across different deployment scenarios.
 
-=== Spatial and Contextual Variance
+==== Spatial and Contextual Variance
 
 To build a representative dataset, sensor data was collected in three distinct environmental contexts, each presenting a unique set of challenges for sensor fusion:
 
@@ -18,6 +18,6 @@ To build a representative dataset, sensor data was collected in three distinct e
 
 By recording "no_fire" baselines in each of these environments, the system ensures that the TinyML model learns to ignore localized background drift and seasonal variations in temperature and humidity.
 
-=== Rejection of Location-Specific Bias
+==== Rejection of Location-Specific Bias
 
 A critical risk in multi-sensor fire detection is the development of location-specific bias, where a model may inadvertently learn the unique background signature of a specific room rather than the universal signature of fire. To mitigate this, the "no_fire" class includes samples from diverse zones recorded at different times of day @LIU2023103733. This approach ensures that the decision boundary for the "fire" class is defined by the correlated rise in combustion products rather than absolute thresholds that might only be valid in a single, controlled laboratory setting. Furthermore, the inclusion of variable airflow during fire scenarios validates the system's performance in semi-open environments, where traditional detectors often fail due to smoke dilution @meleti2024obscured.

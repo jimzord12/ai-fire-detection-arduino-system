@@ -1,8 +1,8 @@
-== Sampling Parameters
+=== Sampling Parameters
 
 The selection of appropriate sampling parameters — encompassing both the data acquisition rate and the temporal window over which observations are aggregated — is a foundational decision in any embedded time-series classification system. In the context of multi-sensor fire detection, these parameters govern whether the node captures the transient chemical signatures of combustion, the characteristic flicker dynamics of an open flame, and the slower thermal and gas-concentration drifts that distinguish genuine fire from nuisance events. Critically, the chosen parameters must simultaneously satisfy the physical requirements of each sensing modality and remain within the computational budget of a Cortex-M4 microcontroller running a quantized neural network in real time.
 
-=== Sampling Frequency
+==== Sampling Frequency
 
 The Nyquist–Shannon sampling theorem states that a signal must be sampled at a rate strictly greater than twice the highest frequency component of interest in order to avoid aliasing artefacts during reconstruction and feature extraction @samanta2024optimizing. In the context of infrared flame sensing, this constraint has concrete physical significance: turbulent, uncontrolled flames exhibit a wide-band flicker spectrum spanning 1–13 Hz, with the characteristic central frequency of approximately 10 Hz reported consistently in the combustion literature @toreyin2012wavelet. To satisfy the Nyquist condition for content up to the 13 Hz upper bound, a minimum acquisition rate of 26 Hz would be theoretically required for the IR channel alone; however, the present system adopts a unified, cross-modal sampling rate of 10 Hz (i.e., one sample vector every 100 ms) as a deliberate engineering trade-off.
 
@@ -10,7 +10,7 @@ This decision is justified by the response characteristics of the chemical sensi
 
 From a system-resource perspective, a 10 Hz sampling rate also aligns with the computational throughput of the Renesas RA4M1 (Cortex-M4 at 48 MHz) running the Edge Impulse inference engine. Research has demonstrated that reducing data acquisition rates on TinyML platforms can decrease RAM usage and inference latency by approximately 60–74% with minimal classification accuracy loss @samanta2024optimizing. The 10 Hz rate provides a 100 ms inter-sample interval that is comfortably shorter than the sub-second transient signatures associated with flaming combustion onset, while remaining well within the real-time budget required for continuous, non-blocking inference on the target hardware.
 
-=== Window Size and Overlap Strategy
+==== Window Size and Overlap Strategy
 
 Once the per-sample cadence is established, the second critical parameter is the temporal window: the contiguous block of consecutive samples that is assembled into a single labeled instance and presented to the digital signal processing (DSP) block and subsequent classifier.
 

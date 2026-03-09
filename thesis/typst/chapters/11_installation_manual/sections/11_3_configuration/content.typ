@@ -1,6 +1,6 @@
-== Configuration
+=== Configuration
 
-=== Edge Impulse Connection
+==== Edge Impulse Connection
 To integrate the local hardware with the TinyML training pipeline:
 
 1. Connect the Arduino via USB with the `fire-detection-main` firmware running.
@@ -9,7 +9,7 @@ To integrate the local hardware with the TinyML training pipeline:
 4. When prompted for sensor axes names, provide: `timestamp, smoke, voc, co, flame, temp, humid`.
 5. Verify that data is streaming successfully in the Edge Impulse Studio dashboard.
 
-=== Local Serial Logging
+==== Local Serial Logging
 For local data analysis without the Edge Impulse cloud:
 
 1. Configure the serial baud rate to 115200.

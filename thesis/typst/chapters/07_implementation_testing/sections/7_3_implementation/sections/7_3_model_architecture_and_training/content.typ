@@ -1,8 +1,8 @@
-== Model Architecture and Training
+=== Model Architecture and Training
 
 This section describes the neural network topology designed for three-class fire event classification and documents the hyperparameter tuning process conducted within the Edge Impulse platform. The goal is to arrive at a compact, Cortex-M4-compatible model that reliably discriminates between fire, no_fire, and false_alarm while satisfying the on-device inference budget of less than 100 ms.
 
-=== Neural Network Topology Design
+==== Neural Network Topology Design
 
 The classification model follows a fully connected, feed-forward architecture — commonly referred to as a multi-layer perceptron (MLP) — operating on the spectral feature vector produced by the DSP block. This architectural choice is well-motivated by the structured, tabular nature of the fused sensor feature space: because the input consists of pre-computed spectral statistics rather than raw spatial data, convolutional or recurrent layers would introduce unnecessary parameter overhead without proportional accuracy gains on resource-constrained hardware @alajlan2022tinyml. The primary constraint imposed by the target necessitates that the model's weight footprint remain well under the available Flash budget.
 
@@ -17,7 +17,7 @@ The Rectified Linear Unit (ReLU) activation function is used for all hidden laye
 
 The output layer uses Softmax normalisation, which converts raw logit scores into probability distributions that sum to unity. This is particularly valuable in a safety-critical detection context because the softmax output directly supports confidence-threshold gating: an alarm is only escalated when the fire class probability exceeds a defined threshold, rather than relying solely on an argmax decision @xiao2023hybrid. The three-class formulation is a deliberate departure from binary fire/no-fire paradigms; prior work has demonstrated that distinguishing smouldering and false-alarm-inducing scenarios as separate classes systematically improves overall classification accuracy @li2022research.
 
-=== Hyperparameter Tuning Results
+==== Hyperparameter Tuning Results
 
 Hyperparameter optimisation was conducted iteratively using the Edge Impulse platform. The parameters explored include the number of hidden layers and neurons per layer, learning rate, dropout rate, and the number of training epochs. The Adam optimiser was selected throughout all trials. Adam computes per-parameter adaptive learning rates, which has consistently demonstrated faster convergence and superior generalisation compared to vanilla stochastic gradient descent in classification tasks on small tabular datasets @xiao2023hybrid.
 

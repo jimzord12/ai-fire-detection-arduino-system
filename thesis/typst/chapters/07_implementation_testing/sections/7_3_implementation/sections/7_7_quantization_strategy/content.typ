@@ -1,8 +1,8 @@
-== Quantization Strategy
+=== Quantization Strategy
 
 The deployment of trained neural networks on resource-constrained microcontrollers demands a reduction in model size and computational overhead without sacrificing classification accuracy. Model quantization addresses this challenge by converting the high-precision 32-bit floating-point (Float32) weight representations produced during training into lower-precision integer formats, most commonly 8-bit integers (Int8), before embedding the model into device firmware. This section examines the rationale for choosing Int8 post-training quantization (PTQ) in the present system, characterizes the trade-offs between Float32 and Int8 precision, and describes how quantization interacts with the deployment pipeline.
 
-=== Float32 vs. Int8: Precision, Memory, and Latency Trade-offs
+==== Float32 vs. Int8: Precision, Memory, and Latency Trade-offs
 
 Neural network weights trained under standard conditions are encoded in 32-bit single-precision floating-point format, which provides a wide dynamic range more than sufficient to represent the gradients and activations encountered during optimization @novac2021quantization. At inference time on a general-purpose Cortex-M4 microcontroller, however, this precision is unnecessary and expensive. The target core contains a hardware floating-point unit (FPU), but the resulting model consumes four bytes per weight parameter and stresses the limited memory budgets.
 
@@ -10,7 +10,7 @@ Int8 quantization maps each Float32 weight and activation to a signed 8-bit inte
 
 The principal cost of Int8 quantization is a potential accuracy degradation arising from quantization error. Because the full floating-point dynamic range must be compressed into 256 discrete integer levels, subtle differences between closely spaced weight values may collapse to the same integer bucket, introducing rounding noise @novac2021quantization. In practice, however, this degradation is modest: published literature consistently reports that post-training quantization to Int8 incurs an accuracy loss of approximately 0.1%–2% relative to the Float32 baseline @novac2021quantization. For the three-class fire detection classifier developed in this project, the accuracy gap is expected to remain within this acceptable margin.
 
-=== Post-Training Quantization via Edge Impulse
+==== Post-Training Quantization via Edge Impulse
 
 The quantization strategy adopted in this project is post-training quantization (PTQ), in which the model is trained to full convergence using Float32 arithmetic and then quantized offline before deployment. PTQ is computationally inexpensive and requires no modification to the training procedure; calibration of the scale factors uses the existing training dataset @novac2021quantization. This approach contrasts with quantization-aware training (QAT), which requires more complex training workflows.
 

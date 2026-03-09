@@ -1,20 +1,20 @@
-== Rationale for Three-Class Classification
+=== Rationale for Three-Class Classification
 
 The decision to frame fire detection as a three-class classification problem—distinguishing between fire, no_fire, and false_alarm—is a deliberate design choice motivated by the demonstrable inadequacy of binary approaches in the presence of real-world nuisance sources. This section articulates the theoretical and empirical grounds for this classification schema, drawing on the literature on false alarm prevalence, the chemical similarity between nuisance and fire events, and the comparative performance of binary versus multi-class models in sensor-based fire detection systems.
 
-=== The Limitations of Binary Classification in Practical Fire Detection
+==== The Limitations of Binary Classification in Practical Fire Detection
 
 The dominant paradigm in early sensor-based fire detection has historically been binary classification: a system either declares a fire state or a no-fire state. While conceptually straightforward, this formulation conflates two phenomenologically distinct non-fire conditions—genuine ambient environments and nuisance events—under a single negative class. Research has observed that gas-sensor arrays trained on binary fire/no-fire models still produced a high false alarm rate when exposed to nuisance scenarios not seen during training @fonollosa2018chemical. This finding underscores a structural weakness of the binary model: since nuisance events can produce sensor signatures that partially overlap with incipient fire signatures, collapsing both ambient and nuisance conditions into a single no-fire class forces the decision boundary to occupy an ambiguous and poorly defined feature subspace.
 
 The prevalence of false alarms carries significant real-world consequences that further justify a more granular classification approach. False alarms from automatic fire detection systems are estimated to cost approximately £1 billion per year in certain regions @fonollosa2018chemical. In such an environment, a binary classifier that cannot distinguish between a cooking-induced smoke plume and actual combustion is operationally unreliable; occupants habituate to frequent spurious alarms and may disable or ignore detection systems altogether.
 
-=== Chemical and Thermal Overlap Between Nuisance and Fire Events
+==== Chemical and Thermal Overlap Between Nuisance and Fire Events
 
 The core technical challenge motivating the three-class design is the degree to which common false alarm sources produce sensor responses that mimic early fire conditions. Cooking fumes, for instance, generate aerosols and elevated temperatures that activate optical smoke sensors and thermal detectors in ways that are nearly indistinguishable from smoldering fires at the single-sensor level. Research has demonstrated this overlap empirically in a gas sensor array study, where even well-calibrated multivariate models struggled to maintain separation between fire and nuisance when the underlying chemical signatures shared common compounds @solorzano2021early.
 
 Similar overlap has been documented at the algorithmic level. Research has reported that in a multi-class fire perception system, the most common misclassification involved confusing smoldering with no-fire observations, precisely because early-stage smoldering produces gradual, low-amplitude sensor trends that are difficult to distinguish from ambient drift @li2022research. This characteristic makes smoldering events the most dangerous scenario for a binary system, since the fire state is most likely to be suppressed under the dominant no-fire class until combustion products reach hazardous concentrations.
 
-=== Three-Class Classification as a Design Solution
+==== Three-Class Classification as a Design Solution
 
 Introducing an explicit false_alarm class directly addresses the shortcomings described above by providing the model with labeled training examples of nuisance events—cooking fumes, alcohol vapors, steam, and intense infrared illumination—that share partial sensor signatures with fire but lack the complete multivariate profile of genuine combustion. This expands the decision space such that the classifier must learn a distinct, dedicated region for nuisance phenomena rather than allowing those observations to contaminate either the fire or the no_fire boundary.
 

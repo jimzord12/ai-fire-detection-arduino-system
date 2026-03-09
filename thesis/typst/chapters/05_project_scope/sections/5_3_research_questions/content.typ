@@ -1,4 +1,4 @@
-== Research Questions <sec:research_questions>
+=== Research Questions <sec:research_questions>
 
 This research aims to evaluate the effectiveness and feasibility of an autonomous sensing node for fire detection. To guide the investigation, the following research questions have been formulated:
 

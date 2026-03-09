@@ -1,4 +1,4 @@
-== False Alarm Mitigation and Research Synthesis
+=== False Alarm Mitigation and Research Synthesis
 
 The mitigation of false alarms remains the primary driver for innovation in fire detection systems. Current literature identifies a significant gap in the ability of traditional detectors to distinguish between genuine combustion and common indoor nuisance events, such as cooking aerosols, water steam, and alcohol-based cleaning vapors. These events often produce physical signatures—elevated particulate counts and VOC spikes—that mimic the early stages of a fire, leading to high rates of spurious triggers @fonollosa2018chemical.
 

@@ -1,4 +1,4 @@
-== Evolution of Fire Detection and MEMS Technology
+=== Evolution of Fire Detection and MEMS Technology
 
 The technological trajectory of fire detection has evolved from simple thermal triggers to sophisticated multi-modal sensing platforms. Early fire safety relied on ionization and photoelectric sensors, which, while effective at identifying smoke particles, lacked the intelligence to contextualize the environment. The primary limitation of these legacy systems is their reliance on static thresholding of a single physical parameter, making them highly susceptible to false alarms from non-fire aerosols, such as cooking steam or dust @fonollosa2018chemical.
 

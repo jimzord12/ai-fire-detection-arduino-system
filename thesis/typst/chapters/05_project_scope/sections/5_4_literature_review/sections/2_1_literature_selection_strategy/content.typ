@@ -1,4 +1,4 @@
-== Literature Selection Strategy
+=== Literature Selection Strategy
 
 The comprehensive literature review undertaken for this thesis systematically examined scholarly works published between 2015 and the present, ensuring an up-to-date understanding of advancements in intelligent fire detection systems. The primary focus of this selection strategy was threefold: multi-modal sensing, the application of TinyML for edge deployment, and innovative approaches to false alarm reduction. This targeted approach aimed to identify research that addresses the limitations of conventional fire detection systems, particularly their susceptibility to false positives.
 

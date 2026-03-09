@@ -1,14 +1,14 @@
-== Test Environment Description
+=== Test Environment Description
 
 The experimental setup for data collection and model evaluation was designed to ensure rigorous and reproducible conditions for characterizing fire, no-fire, and false alarm scenarios. This section details the hardware and software components, physical environment, and operational workflow that constituted the test environment. The controlled nature of the setup was crucial for generating a high-quality dataset suitable for training and validating the TinyML-based fire detection system.
 
-=== Hardware and Software Configuration
+==== Hardware and Software Configuration
 
 The central hardware component of the test environment was the Arduino UNO R4 WiFi microcontroller board, serving as the autonomous sensing node. This board was connected via USB to a host PC, which facilitated data logging and interaction with the Edge Impulse platform. The sensor array comprised five DFRobot MEMS sensors: smoke (analog A0), VOC (analog A1), CO (analog A2), flame (analog A3), and an AHT20 for temperature and humidity (I2C via A4/A5). All sensors were calibrated and their operational status was verified prior to data collection.
 
 On the software side, the Arduino UNO R4 WiFi was programmed with a custom data collection firmware (a variant of `the production firmware source`, optimized for 10 Hz serial output). The host PC ran the Edge Impulse Data Forwarder, a utility responsible for streaming live sensor data from the Arduino's serial port to the Edge Impulse Studio. The Edge Impulse Studio served as the primary platform for data management, labeling (fire, no_fire, false_alarm), feature engineering, model training, and deployment. All necessary drivers and serial communication software were ensured to be operational.
 
-=== Physical Setup and Scenario Execution
+==== Physical Setup and Scenario Execution
 
 The physical environment for data collection was carefully controlled to simulate various real-world scenarios while maintaining safety. Key aspects of the physical setup and scenario execution included:
 
@@ -19,7 +19,7 @@ The physical environment for data collection was carefully controlled to simulat
 
 The workflow for each scenario (as detailed in `the established data collection protocols`) involved initializing the sensor array, starting the Edge Impulse Data Forwarder stream, triggering the specific scenario condition, allowing a brief stabilization period (2–3 seconds), and then capturing 10-second samples. Each scenario was typically repeated 30 times to build a statistically significant dataset.
 
-=== Quality Assurance and Data Verification
+==== Quality Assurance and Data Verification
 
 To ensure the high quality and integrity of the collected data, several Quality Assurance (QA) checks were integrated into the data collection process:
 

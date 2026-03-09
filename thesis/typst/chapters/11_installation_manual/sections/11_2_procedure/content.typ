@@ -1,6 +1,6 @@
-== Installation Procedure
+=== Installation Procedure
 
-=== Hardware Assembly
+==== Hardware Assembly
 The sensing node is assembled by connecting the multi-sensor suite to the Arduino UNO R4 WiFi as specified in the following wiring schedule:
 
 1. *Smoke Sensor (MEMS)*: VCC to 5V, GND to GND, AOUT to Analog Pin A0.
@@ -11,7 +11,7 @@ The sensing node is assembled by connecting the multi-sensor suite to the Arduin
 
 Care must be taken to ensure that the total current draw of the sensors does not exceed the limits of the Arduino's 5V regulator. For extended experimental sessions, an external 5V power supply is recommended.
 
-=== Firmware Upload
+==== Firmware Upload
 The production firmware is located in the `firmware/main/fire-detection-main/` directory. To deploy the system:
 
 1. Open the `.ino` file in the Arduino IDE.

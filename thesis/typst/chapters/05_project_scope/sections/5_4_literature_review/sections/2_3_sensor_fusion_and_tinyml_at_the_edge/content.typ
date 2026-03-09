@@ -1,4 +1,4 @@
-== Sensor Fusion and TinyML at the Edge
+=== Sensor Fusion and TinyML at the Edge
 
 The challenge of reliable fire detection is increasingly being addressed through the convergence of sensor fusion and Tiny Machine Learning (TinyML). Sensor fusion refers to the integration of data from multiple heterogeneous sensors to improve classification accuracy and robustness beyond what is possible with single-modality systems. In the context of fire detection, this involves identifying the cross-correlations between gas concentrations, IR radiation, and environmental variables @pathan2024multisensory.
 

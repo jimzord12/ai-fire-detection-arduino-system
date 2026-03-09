@@ -1,4 +1,4 @@
-== Summary of Key Findings
+=== Summary of Key Findings
 
 This thesis presented the development and evaluation of an autonomous multi-sensor fire detection node, leveraging sensor fusion and TinyML to achieve robust and reliable fire detection with a significant reduction in false alarms. The research successfully demonstrated that an intelligent, edge-deployed sensing node can overcome the limitations of traditional single-parameter systems. The key findings are summarized below:
 

@@ -1,4 +1,4 @@
-== Class-Specific Data Collection Scenarios
+=== Class-Specific Data Collection Scenarios
 
 To develop a robust multi-sensor fire detection system capable of distinguishing between actual fire events, normal ambient conditions, and common false alarms, a meticulously planned data collection methodology was employed. This approach focused on generating a comprehensive dataset encompassing three distinct classes: "Fire," "No-Fire," and "False Alarm." Each class was characterized by specific environmental scenarios designed to capture a wide range of relevant sensor signatures.
 
@@ -20,7 +20,7 @@ To develop a robust multi-sensor fire detection system capable of distinguishing
 
 The data collection adhered to strict protocols to ensure consistency, reproducibility, and safety, utilizing the automated data collection scripts (`the automated data collection utility`) for standardized sampling.
 
-=== Fire Class: Paper, Wood, Cloth Burns
+==== Fire Class: Paper, Wood, Cloth Burns
 
 The "Fire" class aimed to capture the multi-sensor signatures of genuine combustion events under varying conditions. This involved controlled burns of common household materials to simulate realistic fire scenarios. The goal was to generate data where flame, smoke, CO, VOC, and temperature/humidity sensors would exhibit characteristic responses indicative of active fire.
 
@@ -46,7 +46,7 @@ The "Fire" class aimed to capture the multi-sensor signatures of genuine combust
 
 Each fire scenario was conducted to capture multi-sensor data at a sampling rate of 10 Hz over a specific duration, ensuring a rich temporal dataset for model training. The raw data for the "Fire" class is organized under `the fire dataset directory`.
 
-=== No-Fire Class: Idle Office, Kitchen Ambient
+==== No-Fire Class: Idle Office, Kitchen Ambient
 
 The "No-Fire" class aimed to establish a robust baseline of normal environmental conditions. This data is critical for training the model to recognize the absence of fire and differentiate it from both true fire events and false alarms. The scenarios focused on common indoor environments without any fire hazards or nuisance sources.
 
@@ -57,7 +57,7 @@ The "No-Fire" class aimed to establish a robust baseline of normal environmental
 
 These scenarios provided a comprehensive representation of non-fire conditions, allowing the model to learn the expected variations in sensor readings in a stable, non-alarming environment. The raw data for the "No-Fire" class is stored in `the ambient environment dataset directory`.
 
-=== False-Alarm Class: Cooking Fumes, Alcohol Vapors, Intense IR Light
+==== False-Alarm Class: Cooking Fumes, Alcohol Vapors, Intense IR Light
 
 The "False Alarm" class is specifically designed to address the project's key innovation: distinguishing common nuisance events from actual fires. These scenarios mimic typical false alarm triggers that often plague traditional fire detection systems, aiming to capture their unique multi-sensor fingerprints.
 

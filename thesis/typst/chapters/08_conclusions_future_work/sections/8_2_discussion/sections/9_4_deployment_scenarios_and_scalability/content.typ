@@ -1,8 +1,8 @@
-== Deployment Scenarios and Scalability
+=== Deployment Scenarios and Scalability
 
 This section examines the practical pathway from the laboratory prototype to real-world installation, addressing the economic viability of individual nodes, the architectural principles governing multi-node scale-out, and the regulatory constraints that any deployed fire safety system must navigate.
 
-=== Cost Analysis per Node
+==== Cost Analysis per Node
 
 The bill of materials (BOM) for a single Autonomous Sensing Node is determined by the Arduino UNO R4 WiFi platform and its five DFRobot MEMS sensor peripherals. The Arduino UNO R4 WiFi retails at approximately USD 27.50 @arduino2023. The five sensors contribute an estimated additional USD 40–60 in MEMS module cost at single-unit pricing. Passive prototyping components add negligible cost, yielding a per-node BOM in the range of USD 70–90 at prototype quantity.
 
@@ -27,7 +27,7 @@ The Renesas RA4M1 operates at 48 MHz with 256 kB Flash and 32 kB RAM, while the 
 
 The principal driver of deployment economics is not per-node BOM but installation density. Prior studies on wireless sensor deployments report reliable coverage in commercial building environments. For a representative 3,000 m2 structure, the hardware cost remains competitive with the expectation of significant unit-cost reduction under volume procurement.
 
-=== Mesh Network Topology for Multi-Node Systems
+==== Mesh Network Topology for Multi-Node Systems
 
 A single Autonomous Sensing Node operating in isolation provides point-coverage fire detection; scalable building-wide protection requires multiple nodes to be integrated into a coherent monitoring fabric. The radio co-processor natives supports both WiFi and Bluetooth, enabling two complementary topologies: a star topology in which each unit publishes MQTT telemetry directly to a broker, and a hybrid mesh topology using ESP-NOW as the intra-node transport. The latter pattern decouples sensing from connectivity, substantially reducing channel contention in dense deployments.
 
@@ -35,13 +35,13 @@ Location awareness across a multi-node installation is implemented as Static Loc
 
 The Asymmetric Multi-Processing architecture is directly applicable to multi-node mesh deployment: the RA4M1 Brain executes TinyML inference and manages sensor acquisition, while the ESP32-S3 Radio handles wireless telemetry asynchronously. This separation ensures that transient WiFi congestion does not interrupt local inference, preserving the reflexive detection capability of the node even during network partitions.
 
-=== Ease of Model Deployment and Software Lifecycle
+==== Ease of Model Deployment and Software Lifecycle
 
 A significant advantage of the TinyML approach on the Arduino UNO R4 platform is the streamlined deployment workflow provided by the Edge Impulse ecosystem. The laboratory prototype demonstrates that a trained model can be exported as a standard Arduino library, which is then integrated into the firmware via the "Add .ZIP Library" functionality of the Arduino IDE. This process encapsulates the complex C++ inference engine and neural network weights into a single, portable unit.
 
 The transition from a high-level research model to an embedded production firmware is further optimized through code-level refinements during deployment. Specifically, the implementation of a temporal debounce filter (requiring three consecutive positive detections) and a hybrid logic layer (corroborating AI predictions with raw sensor thresholds for smoke and flame) significantly improves on-device stability. This demonstrates that the autonomous sensing node can be updated and refined with minimal technical friction, supporting a rapid iterative development cycle for future fire detection scenarios.
 
-=== Certification Challenges (UL/CE)
+==== Certification Challenges (UL/CE)
 
 The pathway from a research prototype to a commercially deployable fire safety product is governed by stringent regulatory frameworks. In the European market, multi-sensor fire detectors must comply with the EN 54 series of standards, which mandate third-party conformity assessment. North American market equivalents are imposed by UL standards such as UL 268 for smoke detectors @srivastava2025intelligent.
 
