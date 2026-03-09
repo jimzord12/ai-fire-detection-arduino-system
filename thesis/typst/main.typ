@@ -3,14 +3,16 @@
 #import "common/global_glossary.typ": global_glossary_data
 
 #show: project.with(
-  title: "Autonomous Multi-Sensor Fire Detection Node Using Sensor Fusion and TinyML",
-  author: "Author Name",
-  supervisor: "Prof. Dr. [Supervisor Name]",
+  title: "An AI Robotic System that will Identify Fire Occurrence in Various Environments",
+  subtitle: "",
+  author: "TAXIARCHIS PAPADIMITRIOU",
+  supervisor: "Pericles Cheng",
   university: "European University Cyprus",
   department: "DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING",
-  date: "February 2026",
+  discipline: "Artificial Intelligence",
+  date: "March 2026",
   acknowledgments: [
-    First and foremost, I would like to express my deepest gratitude to my supervisor, [Supervisor's Name], for their invaluable guidance, patience, and constant encouragement throughout the development of this research. Their expertise in embedded systems and artificial intelligence, along with their insightful critiques, were instrumental in shaping the trajectory of this thesis.
+    First and foremost, I would like to express my deepest gratitude to my supervisor, Pericles Cheng, for their invaluable guidance, patience, and constant encouragement throughout the development of this research. Their expertise in embedded systems and artificial intelligence, along with their insightful critiques, were instrumental in shaping the trajectory of this thesis.
 
     I am also indebted to the technical staff at the Faculty of Engineering for providing the necessary laboratory resources and hardware support required for the experimental phase of this project. Special thanks are due to my peers and colleagues for the stimulating discussions and for providing a supportive environment that fostered critical thinking and technical rigor.
 
@@ -24,8 +26,8 @@
         #line(length: 100%, stroke: 0.5pt)
         #v(-0.5em)
         #align(center)[
-          Author Name \
-          February 2026
+          TAXIARCHIS PAPADIMITRIOU \
+          March 2026
         ]
       ]
     ]
@@ -50,16 +52,26 @@
 )
 
 // Chapters
-#include "chapters/01_introduction/chapter.typ"
-#include "chapters/02_literature_review/chapter.typ"
-#include "chapters/03_theoretical_background/chapter.typ"
-#include "chapters/04_sensor_selection_characterization/chapter.typ"
-#include "chapters/05_hardware_platform_system_integration/chapter.typ"
-#include "chapters/06_data_collection_methodology/chapter.typ"
-#include "chapters/07_implementation/chapter.typ"
-#include "chapters/08_experimental_results_evaluation/chapter.typ"
-#include "chapters/09_discussion/chapter.typ"
-#include "chapters/10_conclusion_future_work/chapter.typ"
+#include "chapters/04_introduction/chapter.typ"
+#include "chapters/05_project_scope/chapter.typ"
+#include "chapters/06_analysis_design/chapter.typ"
+#include "chapters/07_implementation_testing/chapter.typ"
+#include "chapters/08_conclusions_future_work/chapter.typ"
 
-// Bibliography
-#bibliography("bibliography.bib", style: "apa")
+// --- Back Matter ---
+#set heading(numbering: none)
+
+// Bibliography (Section 9)
+= Bibliography <ch:bibliography>
+#bibliography("bibliography.bib", style: "apa", title: none)
+
+// Appendices (Section 10)
+#include "chapters/10_appendices/chapter.typ"
+
+// Manuals (Sections 11 & 12)
+#include "chapters/11_installation_manual/chapter.typ"
+#include "chapters/12_user_manual/chapter.typ"
+
+// Final Codebase & Data Repositories
+// Firmware Source Code: [GITHUB_REPO_LINK_FIRMWARE]
+// Collected Sensor Dataset (CSV): [GITHUB_REPO_LINK_DATA]

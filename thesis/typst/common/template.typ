@@ -1,11 +1,13 @@
 #let project(
   title: "",
+  subtitle: "",
   author: "",
   supervisor: "",
   date: "",
-  university: "[University Name]",
-  department: "[Department Name]",
-  degree: "Bachelor of Engineering",
+  university: "European University Cyprus",
+  department: "School of Sciences | Department of Computer Science and Engineering",
+  degree: "Master of Science",
+  discipline: "Computer Science and Engineering",
   abstract: [],
   acknowledgments: [],
   abbreviations: (),
@@ -19,8 +21,25 @@
   set page(
     paper: "a4",
     margin: (x: 2.5cm, y: 2.5cm),
-    numbering: "i",
+    numbering: "1",
     number-align: center,
+    footer: context {
+      let page_num = counter(page).at(here()).first()
+      if page_num > 2 {
+        set text(8pt, style: "italic")
+        stack(
+          line(length: 100%, stroke: 0.5pt),
+          v(0.2em),
+          grid(
+            columns: (1fr, 1fr),
+            align(left, title),
+            align(right, author)
+          ),
+          v(0.5em),
+          align(center, counter(page).display(page.numbering))
+        )
+      }
+    }
   )
 
   // Set text properties
@@ -34,67 +53,60 @@
   show heading: set block(below: 1.5em)
   show outline: set block(below: 1.5em)
 
-  // Title Page
+  // Title Page (EUC Template Style)
   align(center)[
-    #text(1.5em, weight: 700, university) \
-    #text(1.2em, department)
+    // Row #1: Long EUC Logo + Department
+    #image("../assets/euc-logo-long.png", width: 100%)
+    #v(0.5em)
+    #text(1.1em, weight: 500, department)
+    
+    #v(4fr)
+
+    // Row #2: Thesis Title
+    #block(text(weight: 700, 2.2em, title))
     
     #v(1fr)
 
-    // University Logo
-    #image("../assets/euc-logo.png", height: 4cm)
+    // Row #3: SubTitle (only if applicable)
+    #if subtitle != "" {
+      text(1.5em, italic(subtitle))
+    }
     
-    #v(1fr)
-    
-    #block(text(weight: 700, 2.5em, title))
-    
-    #v(1fr)
-    
-    #text(1.5em, author) \
+    #v(4fr)
+
+    // Row #4: Master of Science in <discipline>
+    #text(1.4em, weight: 500, [Master of Science]) \
     #v(0.5em)
-    #text(1.1em, [Supervisor: #supervisor]) \
-    #v(1em)
-    #text(1.2em, [A Thesis Submitted in Partial Fulfillment of the Requirements for the Degree of]) \
-    #text(1.2em, weight: 700, degree)
+    #text(1.3em, [In #discipline])
     
-    #v(2fr)
+    #v(4fr)
     
-    #date
+    // Row #5: Author's Name
+    #text(1.6em, weight: 700, author)
+    
+    #v(4fr)
+    
+    // Row #6: © Enter the month and year
+    #text(1.2em, [© #date])
   ]
 
   pagebreak()
 
-  // Footer setup (starting after title page)
-  set page(
-    footer: context [
-      #set text(8pt, style: "italic")
-      #line(length: 100%, stroke: 0.5pt)
-      #grid(
-        columns: (1fr, 1fr),
-        align(left, title),
-        align(right, author)
-      )
-      #v(-0.5em)
-      #align(center, counter(page).display(page.numbering))
-    ]
-  )
-
-  // Acknowledgments
+  // 1 Acknowledgments
   if acknowledgments != [] {
-    heading(level: 1, outlined: false)[Acknowledgments]
+    heading(level: 1, outlined: true)[Acknowledgements]
     acknowledgments
     pagebreak()
   }
 
-  // Abstract
-  heading(level: 1, outlined: false)[Abstract]
+  // 2 Abstract
+  heading(level: 1, outlined: true)[Abstract]
   abstract
-
   pagebreak()
 
-  // Table of Contents
-  outline(title: [Table of Contents], depth: 3, indent: auto)
-
+  // 3 Table of Contents
+  heading(level: 1, outlined: true)[Table of Contents]
+  outline(title: none, depth: 3, indent: auto)
   pagebreak()
 
   // List of Figures
@@ -102,7 +114,6 @@
     title: [List of Figures],
     target: figure.where(kind: image),
   )
-
   pagebreak()
 
   // List of Tables
@@ -110,7 +121,6 @@
     title: [List of Tables],
     target: figure.where(kind: table),
   )
-
   pagebreak()
 
   // Abbreviations
@@ -138,8 +148,6 @@
   }
 
   // Main Body
-  set page(numbering: "1")
-  counter(page).update(1)
   set heading(numbering: "1.1")
 
   // Figure styling: Bold "Figure X" or "Table X"
