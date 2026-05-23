@@ -171,7 +171,16 @@ docs/research/data-collection/  → Detailed collection protocols
 
 ---
 
-## Testing & Validation
+## Pragmatic Collaboration & Communication
+
+To maintain high academic and technical standards, agents must adhere to the following collaboration protocol:
+
+1. **Accuracy Over Autonomy**: Prioritize technical and academic accuracy over autonomous completion. Never "fill in" missing data (e.g., bibliographic authors, technical specifications) with placeholders or generic information.
+2. **Stop and Ask**: If a task requires information that is not available in the current context or cannot be retrieved autonomously with high confidence, **stop and ask the user**.
+3. **Transparent Limitations**: Be explicit about what you can and cannot do. If a request is partially outside your capabilities, fulfill the possible parts and clearly state the requirements for the rest.
+4. **Pragmatic Workflow**: Focus on practical, usable results. Avoid conversational filler and prioritize high-signal communication that directly advances the project goals.
+
+---
 
 **Manual Testing**:
 
