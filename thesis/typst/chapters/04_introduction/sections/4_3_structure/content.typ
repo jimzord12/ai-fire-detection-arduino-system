@@ -1,14 +1,17 @@
 == Thesis Organization <sec:organization>
 
-This thesis is structured into ten chapters, following the logical progression of the research from theoretical foundations to implementation and evaluation:
+This thesis is structured into twelve sections, following the standard European University Cyprus (EUC) academic format:
 
-- *Chapter 1: Introduction* provides the research context, problem statement, research questions, and objectives.
-- *Chapter 2: Literature Review* examines existing work in fire detection, sensor fusion, and TinyML, identifying the gaps this research seeks to address.
-- *Chapter 3: Theoretical Background* outlines the physics of the sensors used and the mathematical principles behind sensor fusion and neural networks.
-- *Chapter 4: Sensor Selection and Characterization* details the technical rationale for choosing specific sensors and their performance characteristics.
-- *Chapter 5: Hardware Platform and System Integration* describes the autonomous node architecture and the integration of components on the Arduino UNO R4 WiFi.
-- *Chapter 6: Data Collection Methodology* explains the experimental setup, safety protocols, and the strategy for creating a labeled multi-class dataset.
-- *Chapter 7: Implementation* details the Edge Impulse pipeline, neural network training, and the development of the Arduino firmware.
-- *Chapter 8: Experimental Results and Evaluation* presents the classification performance, ablation studies, and on-device resource metrics.
-- *Chapter 9: Discussion* interprets the findings, discusses the strengths and limitations of the approach, and addresses ethical and safety considerations.
-- *Chapter 10: Conclusion and Future Work* summarizes the key contributions and proposes avenues for further research.
+- *Section 1: Acknowledgements* provides formal gratitude to the supervisors and supporting institutions.
+- *Section 2: Abstract* offers a high-level summary of the research methodology and key findings.
+- *Section 3: Theoretical Background* establishes the historical evolution of fire sensing, the advancements in Edge AI/TinyML, and the physical principles of multi-modal sensing.
+- *Section 4: Introduction* (this chapter) provides the research context, significance, and specific objectives.
+- *Section 5: Project Scope* defines the problem statement, research questions, and the boundaries of the system design.
+- *Section 6: Analysis and Design* details the theoretical basis for sensor selection, characterization, and the hardware-software architecture.
+- *Section 7: Implementation and Testing* explains the data collection methodology, the TinyML training pipeline, and the experimental validation results.
+- *Section 8: Conclusions and Future Work* synthesizes the research findings, addresses the "Clean Fire" paradox, and proposes future research directions.
+- *Section 9: Bibliography* lists all academic and technical sources cited throughout the document.
+- *Section 10: Appendices* contains supplementary materials, including technical schematics and raw dataset samples.
+- *Section 11: Installation Manual* provides a step-by-step guide for setting up the hardware and software environment.
+- *Section 12: User Manual* details the operation, maintenance, and data collection procedures for the autonomous node.
+

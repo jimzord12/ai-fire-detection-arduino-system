@@ -52,6 +52,7 @@
 )
 
 // Chapters
+#include "chapters/03_theoretical_background/chapter.typ"
 #include "chapters/04_introduction/chapter.typ"
 #include "chapters/05_project_scope/chapter.typ"
 #include "chapters/06_analysis_design/chapter.typ"

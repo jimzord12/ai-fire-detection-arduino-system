@@ -1,0 +1,22 @@
+== Evolution of Multi-Sensor Fire Detection <sec:evolution_of_sensing>
+
+The detection of fire has historically relied on the observation of isolated physical or chemical markers, such as smoke particulate density or discrete temperature thresholds. While these methods provided a foundational layer of safety for the built environment, the inherent lack of contextual awareness in single-parameter sensing has consistently led to high false alarm rates and delayed detection of non-traditional combustion events. This section traces the evolution from these legacy thresholding systems to the modern paradigm of intelligent multi-sensor fusion, which forms the theoretical basis for the _Autonomous Sensing Node_ developed in this research.
+
+=== Historical Context of Single-Threshold Detection
+
+Early fire detection infrastructure was characterized by a "binary threshold" philosophy. Detectors were designed to trigger an alarm state only when a specific environmental variable exceeded a pre-defined limit. Ionization and photoelectric smoke detectors, for instance, monitor the interruption of an electrical current or the scattering of light by particulate matter, respectively. While robust in controlled environments, these sensors are incapable of distinguishing between the carbonaceous soot of an active fire and the non-combustion aerosols produced by cooking, steam, or industrial dust @fonollosa2018chemical. This technological limitation has historically necessitated a trade-off between sensitivity and reliability, often resulting in systems that are either overly prone to nuisance alarms or dangerously unresponsive to "clean-burning" fires that produce minimal smoke.
+
+=== The Shift Toward Multi-Modal Sensor Fusion
+
+The limitations of single-modality systems led to the development of sensor fusion architectures, where multiple independent sensing channels are integrated into a single decision-making framework. The integration of chemical gas sensors—specifically targeting Carbon Monoxide (CO) and Volatile Organic Compounds (VOC)—alongside traditional smoke and thermal sensors has significantly enhanced the ability of systems to identify the chemical signature of combustion @wang2025enhanced. Unlike smoke particles, which can be mechanically filtered or obstructed, gas phase markers diffuse rapidly and provide an earlier indication of smoldering or incomplete combustion. Research by @fonollosa2018chemical emphasizes that MEMS-based gas sensors allow for the creation of compact sensor arrays that can monitor multiple combustion byproducts simultaneously, providing a "physical fingerprint" that is far more resistant to environmental noise than any single-sensor approach.
+
+=== Modern Intelligent Fire Sensing Paradigms
+
+Recent advancements in Edge Intelligence and Tiny Machine Learning (TinyML) have further transformed the fire detection landscape. Rather than relying on simple deterministic logic (e.g., IF Smoke > X AND Heat > Y), modern _Autonomous Sensing Nodes_ employ probabilistic models that learn the complex, non-linear correlations between different sensor inputs. Systems utilizing Neural Networks and Support Vector Machines (SVM) can identify the temporal patterns associated with fire growth, distinguishing them from the transient spikes typical of false alarms @su2022research @zhang2024multi. Furthermore, the use of hybrid feature fusion—combining raw sensor data with spectral analysis or temporal derivatives—allows for high-sensitivity detection even in the presence of intense background noise @wang2023hybrid. This transition from static hardware to software-defined sensing units enables a more resilient and adaptive fire safety infrastructure, capable of operating with minimal human intervention.
+
+=== Section Glossary
+
+- **Autonomous Sensing Node**: A decentralized sensing unit capable of performing local data processing, pattern recognition, and decision-making without external supervision.
+- **Sensor Fusion**: The process of combining data from multiple sensors to achieve more accurate and reliable information than could be obtained from any individual sensor.
+- **Nuisance Alarm**: A false alarm triggered by a non-fire event that mimics one or more fire signatures, such as cooking steam or cigarette smoke.
+- **Multi-Modal Sensing**: An approach that utilizes diverse sensing technologies (e.g., gas, optical, thermal) to monitor different physical or chemical aspects of a single phenomenon.

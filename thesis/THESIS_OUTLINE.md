@@ -11,8 +11,10 @@
 ## 2. Abstract
 - High-level summary of the multi-sensor fusion approach, TinyML implementation, and classification results (Fire/No-Fire/False Alarm).
 
-## 3. Table of Contents
-- Automatically generated.
+## 3. Theoretical Background
+- **3.1 Evolution of Multi-Sensor Fire Detection**: Historical shift from thresholding to fusion.
+- **3.2 Edge Intelligence and TinyML**: Theoretical advancements in decentralized fire sensing.
+- **3.3 Multi-Modal Sensing Principles**: Physics and chemistry of CO, VOC, and IR flame detection.
 
 ## 4. Introduction
 - **4.1 Overview**: Background on fire detection challenges and the shift towards edge intelligence.
@@ -24,8 +26,7 @@
 - **5.1 Introduction**: Context of the research.
 - **5.2 Problem Statement**: Limitations of current smoke-only detectors and the cost of false alarms.
 - **5.3 Research Questions**: Can multi-sensor fusion reliably distinguish between cooking fumes and actual combustion?
-- **5.4 Literature Review**: Analysis of existing TinyML and sensor fusion research.
-- **5.5 Summary**: Justification for the proposed system boundaries.
+- **5.4 Summary**: Justification for the proposed system boundaries.
 
 ## 6. Analysis and Design
 - **6.1 Introduction**: Overview of the sensing architecture.

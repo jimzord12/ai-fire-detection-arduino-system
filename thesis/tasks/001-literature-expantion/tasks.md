@@ -12,22 +12,20 @@ This document tracks the systematic expansion of the thesis literature backgroun
 ## Completed Tasks ✅
 - [x] **Initial Audit**: Evaluated existing Chapter 4 introduction and Chapter 3 notes against professor's feedback.
 - [x] **Strategy Definition**: Created a multi-phase expansion plan (`plan.md`) focusing on narrative synthesis and cross-chapter anchoring.
-- [x] **New Literature Acquisition**: Identified and acquired 8 high-impact academic papers (2015–2025) covering:
-    - Combustion markers and sensor cross-sensitivity.
-    - TinyML optimization on Cortex-M4 architectures.
-    - Socio-economic and behavioral impacts of the "Cry Wolf" effect.
+- [x] **New Literature Acquisition**: Identified and acquired 8 high-impact academic papers (2015–2025).
+- [x] **Section 3.1 Drafting**: Synthesis of the historical evolution of fire sensing (thresholding vs. fusion).
+- [x] **Section 3.2 Drafting**: Technical justification for Edge Intelligence and TinyML.
+- [x] **Section 3.3 Drafting**: Theoretical foundation for multi-modal sensing (CO/VOC/Flame).
+- [x] **Cross-Chapter Anchoring**: Injected newly acquired citations into Chapters 4-5 to justify technical parameters and problem significance.
 - [x] **Bibliography Standardization**: Generated a centralized `bibliography.bib` with verified DOIs and Hayagriva-compatible entries.
 
 ## Active Tasks 📝
-- [ ] **Section 3.1 Drafting**: Synthesis of the historical evolution of fire sensing (thresholding vs. fusion).
-- [ ] **Section 3.2 Drafting**: Technical justification for Edge Intelligence and TinyML.
-- [ ] **Section 3.3 Drafting**: Theoretical foundation for multi-modal sensing (CO/VOC/Flame).
+(none)
 
 ## Pending Tasks ⏳
-- [ ] **Cross-Chapter Anchoring**: Inject newly acquired citations into Chapters 4-8 to justify technical parameters (10Hz sampling, TinyML quantization).
-- [ ] **Reference Validation**: Execute `ref-tools/verify-references.ts` to confirm source integrity.
-- [ ] **Global Synchronization**: Run `sync-bib.sh` to ensure all modular references are unified.
-- [ ] **Thesis Re-Compilation**: Generate final PDF for review.
+- [x] **Reference Validation**: All 45 cited keys matched in `bibliography.bib`; 0 missing references. 21 unused bib entries identified (not critical). 11 entries missing DOIs (vendor docs / non-journal sources — acceptable).
+- [x] **Thesis Re-Compilation**: `typst compile main.typ` succeeded → `main.pdf` (8.4 MB). Only warnings are cosmetic (`**` formatting in glossary terms + deprecated cetz `path` call).
+
 
 ---
 

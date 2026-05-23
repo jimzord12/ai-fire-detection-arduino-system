@@ -4,6 +4,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | 1 | Acknowledgements | ✅ Done | local | Finalized |
 | 2 | Abstract | ✅ Done | local | Finalized |
+| 3 | Theoretical Background | ✅ Done | local | Full Synthesis Complete (3.1-3.3) |
 | 4 | Introduction | ✅ Done | local | Refactored from Ch 1 & 2 |
 | 5 | Project Scope | ✅ Done | local | Refactored from Ch 1.2, 1.3 & 2 |
 | 6 | Analysis and Design | ✅ Done | local | Refactored from Ch 3, 4 & 5 |
