@@ -22,6 +22,20 @@ struct SensorConfig {
     float threshold2;
 };
 
+/**
+ * @brief Single sensor snapshot read once per tick.
+ * Eliminates redundant analogRead() and I2C calls across functions.
+ */
+struct SensorSnapshot {
+    int   smoke;    // A0 raw ADC
+    int   voc;      // A1 raw ADC
+    int   co;       // A2 raw ADC
+    int   flame;    // A3 raw ADC
+    float temp;     // AHT20 temperature (°C), 0.0f if not ready
+    float humidity; // AHT20 relative humidity (%RH), 0.0f if not ready
+    bool  ahtReady; // whether temp/humidity values are valid
+};
+
 // --- Configuration ---
 static const SensorConfig SENSOR_MAP[] = {
     {"Smoke", SensorType::ANALOG, A0, -1, 900.0f, -1.0f},
@@ -32,7 +46,7 @@ static const SensorConfig SENSOR_MAP[] = {
 };
 
 const int BAUD_RATE = 115200;
-const bool DISABLE_LOGS = false;
+const bool DISABLE_LOGS = true;
 
 class FireDetectionSystem {
 private:
@@ -54,9 +68,43 @@ private:
     size_t _feature_ix = 0;
 
     // Thresholds and Debounce
-    const float _fireThreshold = 0.70f;     
+    const float _fireThreshold = 0.70f;
     int _consecutiveFireCount = 0;
     const int _maxFireCount = 5;
+
+    // Physical confirmation thresholds (for hybrid safety check)
+    static constexpr int SMOKE_CONFIRM_THRESHOLD = 180;
+    static constexpr int FLAME_CONFIRM_THRESHOLD = 150;
+    static constexpr int CO_CONFIRM_THRESHOLD    = 180;
+
+    // Critical override thresholds (bypass AI entirely)
+    static constexpr int FLAME_CRITICAL_THRESHOLD = 800;
+    static constexpr int CO_CRITICAL_THRESHOLD    = 400;
+
+    // Sensor count derived from SENSOR_MAP
+    static constexpr size_t SENSOR_COUNT = sizeof(SENSOR_MAP) / sizeof(SENSOR_MAP[0]);
+
+    /**
+     * @brief Read all sensors exactly once per tick.
+     * @return SensorSnapshot with current raw values.
+     */
+    SensorSnapshot readAllSensors() {
+        SensorSnapshot snap;
+        snap.smoke = analogRead(A0);
+        snap.voc   = analogRead(A1);
+        snap.co    = analogRead(A2);
+        snap.flame = analogRead(A3);
+
+        snap.ahtReady = _ahtInitialized && _aht.startMeasurementReady(true);
+        if (snap.ahtReady) {
+            snap.temp     = _aht.getTemperature_C();
+            snap.humidity = _aht.getHumidity_RH();
+        } else {
+            snap.temp     = 0.0f;
+            snap.humidity = 0.0f;
+        }
+        return snap;
+    }
 
     void printCell(String text, int width, bool last = false) {
         Serial.print(text);
@@ -68,32 +116,72 @@ private:
         Serial.println("+------------+----------+------------+----------+");
     }
 
+    /**
+     * @brief Result of testing a single sensor during self-test.
+     * Stored during the single pass, then used for display - no re-reading.
+     */
+    struct SelfTestResult {
+        bool  passed;
+        const char* name;
+        const char* typeStr;
+        const char* pinStr;
+    };
+
     bool performSelfTest() {
+        SelfTestResult results[SENSOR_COUNT];
         bool allOk = true;
         _failedSensors = "";
+        bool ahtProbed = false;  // Guard: _aht.begin() called at most once
 
-        for (const auto& s : SENSOR_MAP) {
-            bool currentPassed = false;
+        // --- Single pass: test each sensor and store results ---
+        for (size_t i = 0; i < SENSOR_COUNT; i++) {
+            const auto& s = SENSOR_MAP[i];
+            results[i].name    = s.name;
+            results[i].passed  = false;
+            results[i].typeStr = "";
+            results[i].pinStr  = "";
 
             if (s.type == SensorType::ANALOG) {
+                results[i].typeStr = " ANALOG";
+
+                if      (s.pinSDA == A0) results[i].pinStr = "A0";
+                else if (s.pinSDA == A1) results[i].pinStr = "A1";
+                else if (s.pinSDA == A2) results[i].pinStr = "A2";
+                else if (s.pinSDA == A3) results[i].pinStr = "A3";
+                else                     results[i].pinStr = "??";
+
                 int val = analogRead(s.pinSDA);
-                if (val > 0 && val < 1025) currentPassed = true;
+                results[i].passed = (val >= 0 && val < 1025);
             }
             else if (s.type == SensorType::I2C) {
+                results[i].typeStr = " I2C";
+                results[i].pinStr  = "A4/A5";
+
+                // Probe I2C address first (non-destructive)
                 Wire.beginTransmission(0x38);
-                if (Wire.endTransmission() == 0 && _aht.begin() == 0) {
-                    currentPassed = true;
-                    _ahtInitialized = true;
+                bool devicePresent = (Wire.endTransmission() == 0);
+
+                if (devicePresent && !ahtProbed) {
+                    // _aht.begin() called at most ONCE during self-test
+                    if (_aht.begin() == 0) {
+                        results[i].passed = true;
+                        _ahtInitialized = true;
+                    }
+                    ahtProbed = true;
+                } else if (devicePresent && ahtProbed) {
+                    // Device is present but we already called begin(); trust prior result
+                    results[i].passed = _ahtInitialized;
                 }
             }
 
-            if (!currentPassed) {
+            if (!results[i].passed) {
                 allOk = false;
                 if (_failedSensors.length() > 0) _failedSensors += ", ";
                 _failedSensors += s.name;
             }
         }
 
+        // --- Display results from stored data (no re-reading) ---
         if (!allOk) {
             Serial.println("\n[SYSTEM] Initializing Hardware Self-Test...\n");
 
@@ -102,35 +190,12 @@ private:
             Serial.println();
             printDivider();
 
-            for (const auto& s : SENSOR_MAP) {
-                bool currentPassed = false;
-                String typeStr = (s.type == SensorType::ANALOG) ? " ANALOG" : " I2C";
-                String pinStr;
-
-                if (s.type == SensorType::ANALOG) {
-                    if (s.pinSDA == A0) pinStr = "A0";
-                    else if (s.pinSDA == A1) pinStr = "A1";
-                    else if (s.pinSDA == A2) pinStr = "A2";
-                    else if (s.pinSDA == A3) pinStr = "A3";
-                    else pinStr = String(s.pinSDA);
-
-                    int val = analogRead(s.pinSDA);
-                    if (val >= 0 && val < 1025) currentPassed = true;
-                }
-                else if (s.type == SensorType::I2C) {
-                    pinStr = "A4/A5";
-                    Wire.beginTransmission(0x38);
-                    if (Wire.endTransmission() == 0 && _aht.begin() == 0) {
-                        currentPassed = true;
-                        _ahtInitialized = true;
-                    }
-                }
-
-                String statusStr = currentPassed ? "[ OK ]" : "[FAIL]";
-                printCell(typeStr, 10);
-                printCell(s.name, 8);
-                printCell(pinStr, 10);
-                printCell(statusStr, 8, true);
+            for (size_t i = 0; i < SENSOR_COUNT; i++) {
+                const char* statusStr = results[i].passed ? "[ OK ]" : "[FAIL]";
+                printCell(results[i].typeStr, 10);
+                printCell(results[i].name,    8);
+                printCell(results[i].pinStr,  10);
+                printCell(statusStr,          8, true);
                 Serial.println();
             }
             printDivider();
@@ -157,57 +222,52 @@ private:
         }
     }
 
-    // Your original CSV logger kept as-is (useful for debugging)
-    void logData() {
-        bool ahtReady = _ahtInitialized && _aht.startMeasurementReady(true);
-
+    /**
+     * @brief Log sensor data in CSV format for Python logger.
+     * Format: millis,smoke,voc,co,flame,temp,hum  (unchanged from v1.0)
+     */
+    void logData(const SensorSnapshot& snap) {
         Serial.print(millis());
         Serial.print(",");
-        Serial.print(analogRead(A0));  // smoke
+        Serial.print(snap.smoke);
         Serial.print(",");
-        Serial.print(analogRead(A1));  // voc
+        Serial.print(snap.voc);
         Serial.print(",");
-        Serial.print(analogRead(A2));  // co
+        Serial.print(snap.co);
         Serial.print(",");
-        Serial.print(analogRead(A3));  // flame
+        Serial.print(snap.flame);
         Serial.print(",");
 
-        if (ahtReady) {
-            Serial.print(_aht.getTemperature_C(), 2); // temp
+        if (snap.ahtReady) {
+            Serial.print(snap.temp, 2);
             Serial.print(",");
-            Serial.print(_aht.getHumidity_RH(), 2);   // hum
+            Serial.print(snap.humidity, 2);
         } else {
             Serial.print("ERR,ERR");
         }
         Serial.println();
     }
 
-    // 3) Minimal helper: read sensors (once) and push into EI buffer
-    void pushSampleToEiBuffer() {
-        // If AHT fails, we still must push numeric values (no "ERR" strings allowed)
-        float temp = 0.0f;
-        float hum  = 0.0f;
-
-        bool ahtReady = _ahtInitialized && _aht.startMeasurementReady(true);
-        if (ahtReady) {
-            temp = _aht.getTemperature_C();
-            hum  = _aht.getHumidity_RH();
-        }
-
-        // Axis order MUST match what you used in Edge Impulse:
-        // smoke, voc, co, flame, temp, hum
-        _features[_feature_ix + 0] = (float)analogRead(A0);
-        _features[_feature_ix + 1] = (float)analogRead(A1);
-        _features[_feature_ix + 2] = (float)analogRead(A2);
-        _features[_feature_ix + 3] = (float)analogRead(A3);
-        _features[_feature_ix + 4] = temp;
-        _features[_feature_ix + 5] = hum;
+    /**
+     * @brief Push a single sample into the EI feature buffer.
+     * Axis order: smoke, voc, co, flame, temp, hum (must match Edge Impulse model)
+     */
+    void pushSampleToEiBuffer(const SensorSnapshot& snap) {
+        _features[_feature_ix + 0] = (float)snap.smoke;
+        _features[_feature_ix + 1] = (float)snap.voc;
+        _features[_feature_ix + 2] = (float)snap.co;
+        _features[_feature_ix + 3] = (float)snap.flame;
+        _features[_feature_ix + 4] = snap.temp;
+        _features[_feature_ix + 5] = snap.humidity;
 
         _feature_ix += EI_CLASSIFIER_RAW_SAMPLES_PER_FRAME;
     }
 
-    // 4) Helper: run inference and debounce the output
-    void runEiInferenceAndSetLed() {
+    /**
+     * @brief Run Edge Impulse inference and apply hybrid safety check.
+     * Uses SensorSnapshot (no re-reading) and validates with Smoke + Flame + CO.
+     */
+    void runEiInferenceAndSetLed(const SensorSnapshot& snap) {
         signal_t signal;
         int err = numpy::signal_from_buffer(_features, EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE, &signal);
         if (err != 0) { return; }
@@ -227,27 +287,39 @@ private:
         }
 
         // --- HYBRID SAFETY CHECK ---
-        float currentSmoke = (float)analogRead(A0);
-        float currentFlame = (float)analogRead(A3);
+        // CO is the "Truth Sensor" — most reliable differentiator between
+        // real combustion and false alarms (spray/steam show high VOC/Smoke
+        // but negligible CO).  (Ref: DATA_ANALYSIS_REPORT.md §5)
+        bool smokeActive = (snap.smoke > SMOKE_CONFIRM_THRESHOLD);
+        bool flameActive = (snap.flame > FLAME_CONFIRM_THRESHOLD);
+        bool coActive    = (snap.co    > CO_CONFIRM_THRESHOLD);
 
-        bool smokeActive = (currentSmoke > 180); 
-        bool flameActive = (currentFlame > 150);
-        bool visualConfirmation = smokeActive || flameActive;
+        bool physicalConfirmation = smokeActive || flameActive || coActive;
 
-        // CRITICAL OVERRIDE: If flame is insanely high, trigger regardless of AI
-        bool criticalOverride = (currentFlame > 800);
+        // CRITICAL OVERRIDE: If flame or CO is dangerously high, trigger regardless of AI
+        bool criticalOverride = (snap.flame > FLAME_CRITICAL_THRESHOLD)
+                             || (snap.co    > CO_CRITICAL_THRESHOLD);
 
         // Debug AI Thought Process
         Serial.print("[AI Probe] Fire: "); Serial.print(fireProb, 2);
         Serial.print(" | No-Fire: "); Serial.print(noFireProb, 2);
-        Serial.print(" | Flame: "); Serial.println(currentFlame);
+        Serial.print(" | False-Alarm: "); Serial.println(falseAlarmProb, 2);
+        Serial.print("[Sensors] Smoke: "); Serial.print(snap.smoke);
+        Serial.print(" | VOC: "); Serial.print(snap.voc);
+        Serial.print(" | CO: "); Serial.print(snap.co);
+        Serial.print(" | Flame: "); Serial.println(snap.flame);
 
         // --- LOGIC UPDATE ---
-        if ((fireProb >= _fireThreshold && visualConfirmation) || criticalOverride) {
+        if ((fireProb >= _fireThreshold && physicalConfirmation) || criticalOverride) {
             _consecutiveFireCount++;
             if (_consecutiveFireCount > _maxFireCount) _consecutiveFireCount = _maxFireCount;
 
-            if (criticalOverride) Serial.print(">>> CRITICAL OVERRIDE: INTENSE FLAME DETECTED! <<< ");
+            if (criticalOverride) {
+                Serial.print(">>> CRITICAL OVERRIDE: ");
+                if (snap.flame > FLAME_CRITICAL_THRESHOLD) Serial.print("INTENSE FLAME");
+                if (snap.co    > CO_CRITICAL_THRESHOLD)    Serial.print("DANGEROUS CO");
+                Serial.println(" DETECTED! <<<");
+            }
             Serial.print("[SYSTEM] Fire Confirmed. Confidence Level: ");
             Serial.println(_consecutiveFireCount);
 
@@ -262,13 +334,17 @@ private:
                 Serial.print("[INFO] Clearing... Level: ");
                 Serial.println(_consecutiveFireCount);
             }
-            
+
             if (_consecutiveFireCount == 0) {
                 digitalWrite(LED_BUILTIN, LOW);
             }
 
-            if (fireProb >= _fireThreshold && !visualConfirmation) {
-                 Serial.println("[Suppressing] AI thinks Fire, but physical sensors see no Smoke/Flame (likely Sunlight).");
+            if (fireProb >= _fireThreshold && !physicalConfirmation) {
+                Serial.print("[Suppressing] AI thinks Fire, but physical sensors see no ");
+                Serial.print("Smoke/Flame/CO (likely Sunlight). ");
+                Serial.print("[Smoke:"); Serial.print(snap.smoke);
+                Serial.print(" Flame:"); Serial.print(snap.flame);
+                Serial.print(" CO:"); Serial.println(snap.co);
             }
         }
     }
@@ -305,19 +381,20 @@ public:
         if (currentMillis - _lastTick >= _sampleInterval) {
             _lastTick = currentMillis;
 
-            // Keep your CSV logger (optional, but helpful while validating)
-            if (!DISABLE_LOGS) logData();
+            // READ SENSORS ONCE per tick - all consumers share this snapshot
+            SensorSnapshot snap = readAllSensors();
 
-            // Fill the EI window
-            pushSampleToEiBuffer();
+            // Pass snapshot to all consumers
+            if (!DISABLE_LOGS) logData(snap);
+            pushSampleToEiBuffer(snap);
 
             // When we have enough samples for one window, run inference
             if (_feature_ix >= EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE) {
-                runEiInferenceAndSetLed();
-                _feature_ix = 0; // “snapshot” inference; minimal change approach
+                runEiInferenceAndSetLed(snap);
+                _feature_ix = 0;
             }
 
-            // AHT20 re-init attempt (your original logic)
+            // AHT20 re-init attempt
             if (!_ahtInitialized &&
                 (currentMillis - _lastAhtReinitAttempt >= _ahtReinitInterval)) {
                 _lastAhtReinitAttempt = currentMillis;
